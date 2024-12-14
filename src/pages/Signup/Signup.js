@@ -2,6 +2,24 @@ import React, { useState } from "react";
 import "../../index.css";
 import mohsen from "../../assets/picture.png";
 
+function validateNationalCode(code) {
+  const digits = code.split('').map(Number); 
+  const controlDigit = digits[9]; 
+  
+  let weightedSum = 0;
+  for (let i = 0; i < 9; i++) {
+    weightedSum += digits[i] * (10 - i);
+  }
+
+  const remainder = weightedSum % 11;
+
+  if (remainder < 2) {
+    return controlDigit === remainder;
+  } else {
+    return controlDigit === (11 - remainder);
+  }
+}
+
 const Signup = ({ onSwitch }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -33,6 +51,8 @@ const Signup = ({ onSwitch }) => {
       newErrors.nationalcode = "National code is required.";
     } else if (!/^\d{10}$/.test(formData.nationalcode)) {
       newErrors.nationalcode = "National code must be a 10-digit number.";
+    } else if (!validateNationalCode(formData.nationalcode)) {
+      newErrors.nationalcode = "Not a valid national code!";
     }
     if (!formData.phone.trim()) newErrors.phone = "Phone number is required.";
     if (!formData.password.trim()) {
