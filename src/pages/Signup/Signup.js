@@ -21,6 +21,14 @@ function validateNationalCode(code) {
   }
 }
 
+const convertToEnglishDigits = (input) => {
+  const persianDigits = /[\u06F0-\u06F9]/g; // Persian digits ۰-۹
+  const arabicDigits = /[\u0660-\u0669]/g;  // Arabic digits ٠-٩
+  return input
+    .replace(persianDigits, (d) => d.charCodeAt(0) - 0x06f0) // Convert Persian to English
+    .replace(arabicDigits, (d) => d.charCodeAt(0) - 0x0660); // Convert Arabic to English
+};
+
 const Signup = ({ onSwitch, onBackToLanding }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -43,6 +51,9 @@ const Signup = ({ onSwitch, onBackToLanding }) => {
   const validateForm = () => {
     const newErrors = {};
 
+    const englishPhone = convertToEnglishDigits(formData.phone.trim());
+    const englishNationalCode = convertToEnglishDigits(formData.nationalcode.trim());
+
     if (!formData.name.trim()) newErrors.name = "Name is required.";
 
     if (!formData.lastname.trim()) newErrors.lastname = "Lastname is required.";
@@ -53,18 +64,18 @@ const Signup = ({ onSwitch, onBackToLanding }) => {
 
     if (!formData.nationalcode.trim()) {
       newErrors.nationalcode = "National code is required.";
-    } else if (!/^\d{10}$/.test(formData.nationalcode)) {
+    } else if (!/^\d{10}$/.test(englishNationalCode)) {
       newErrors.nationalcode = "National code must be a 10-digit number.";
-    } else if (!validateNationalCode(formData.nationalcode)) {
+    } else if (!validateNationalCode(englishNationalCode)) {
       newErrors.nationalcode = "Not a valid national code!";
     }
 
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required.";
-    } else if (!/^09\d{9}$/.test(formData.phone.trim())) {
+    } else if (!/^09\d{9}$/.test(englishPhone)) {
       newErrors.phone = "Phone number is not valid. It must be an 11-digit number starting with '09'.";
     }
-    
+
     if (!formData.password.trim()) {
       newErrors.password = "Password is required.";
     } else if (
