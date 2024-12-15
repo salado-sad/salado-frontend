@@ -58,7 +58,12 @@ const Signup = ({ onSwitch, onBackToLanding }) => {
 
     if (!formData.lastname.trim()) newErrors.lastname = "Lastname is required.";
 
-    if (!formData.email.trim()) newErrors.email = "Email is required.";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      newErrors.email = "Email is not valid. Please enter a valid email address.";
+    }
+    
 
     if (!formData.birthdate.trim()) newErrors.birthdate = "Birth date is required.";
 
