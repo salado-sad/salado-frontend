@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "../../index.css";
+import logo from "../../assets/logo.png"; // Add your logo here
 import mohsen from "../../assets/picture.png";
 
-const Login = ({ onSwitch }) => {
+const Login = ({ onSwitch, onBackToLanding }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -65,6 +66,14 @@ const Login = ({ onSwitch }) => {
 
   return (
     <div className="login-container">
+      {/* Back to Home Button with Logo */}
+      <div className="back-to-landing">
+        <button onClick={onBackToLanding} className="back-to-landing-btn">
+          <img src={logo} alt="Salado Logo" className="logo-button" />
+          <span className="salado-name">Salado</span>
+        </button>
+      </div>
+
       <div className="login-form">
         <h1>Welcome back!</h1>
         <p>Enter your Credentials to access your account</p>
@@ -95,9 +104,6 @@ const Login = ({ onSwitch }) => {
           {errors.password && <p className="field-error">{errors.password}</p>}
 
           <div className="options">
-            {/* <label>
-              <input type="checkbox" /> Remember for 30 days
-            </label> */}
             <a href="#" className="forgot-password">
               forgot password
             </a>

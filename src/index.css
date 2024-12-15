@@ -222,4 +222,47 @@ code {
   display: block;
 }
 
+.back-to-landing {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  padding-bottom: 20px; /* Add padding below the button */
+  border-bottom: 1px solid #ccc; /* Draw a thin line below the button */
+  width: max-content; /* Ensure the border only spans the button's content */
+}
 
+.back-to-landing-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Spacing between logo and text */
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.back-to-landing-btn:hover {
+  filter: brightness(0.9); /* Slight darkening effect on hover */
+}
+
+.logo-button {
+  width: 40px;
+  height: 40px;
+}
+
+.salado-name {
+  font-size: 1.2rem;
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.back-to-landing-btn:focus {
+  outline: none;
+}
+
+/* Ensure some spacing between the button and the form content */
+.signup-form {
+  margin-top: 80px; /* Adjust this value as needed */
+}

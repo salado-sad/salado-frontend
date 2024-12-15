@@ -1,0 +1,134 @@
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Navbar Styles */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f8f8;
+    padding: 1rem 2rem;
+    border-bottom: 2px solid #4CAF50;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4CAF50;
+  }
+  
+  .menu a {
+    margin: 0 1rem;
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+  
+  .menu a:hover {
+    color: #4CAF50;
+  }
+  
+  .signin-btn {
+    padding: 0.5rem 1rem;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .signin-btn:hover {
+    background-color: #45a049;
+  }
+  
+  /* Hero Section Styles */
+  .hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 2rem;
+    background-color: #f4f4f4;
+  }
+  
+  .hero-content h1 {
+    font-size: 2.5rem;
+    color: #4CAF50;
+  }
+  
+  .hero-content p {
+    font-size: 1.2rem;
+    margin: 1rem 0;
+  }
+  
+  .cta-btn {
+    padding: 0.8rem 2rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .cta-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .hero-image {
+    max-width: 400px;
+    border-radius: 10px;
+  }
+  
+  /* Footer Styles */
+  .footer {
+    background-color: #333;
+    color: white;
+    padding: 1rem 0;
+  }
+  
+  .footer ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+  }
+  
+  .footer li {
+    margin: 0 1rem;
+  }
+  
+  .footer a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+  
+  .footer a:hover {
+    text-decoration: underline;
+  }
+
+  /* Description Section Styles */
+.description {
+  text-align: center;
+  margin: 3rem auto;
+  padding: 0 2rem;
+  max-width: 800px;
+}
+
+.description-paragraph {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.highlighted-motto {
+  font-size: 2rem;
+  font-weight: 400;
+  color: #4CAF50;
+  font-family: "Pacifico", cursive; /* Pacifico Font Applied */
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Depth effect */
+}

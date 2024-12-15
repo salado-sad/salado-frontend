@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../../index.css";
+import logo from "../../assets/logo.png"; // Add your logo here
 import mohsen from "../../assets/picture.png";
 
 function validateNationalCode(code) {
@@ -20,7 +21,7 @@ function validateNationalCode(code) {
   }
 }
 
-const Signup = ({ onSwitch }) => {
+const Signup = ({ onSwitch, onBackToLanding }) => {
   const [formData, setFormData] = useState({
     name: "",
     lastname: "",
@@ -42,11 +43,11 @@ const Signup = ({ onSwitch }) => {
   const validateForm = () => {
     const newErrors = {};
 
-    // Check for empty fields
     if (!formData.name.trim()) newErrors.name = "Name is required.";
     if (!formData.lastname.trim()) newErrors.lastname = "Lastname is required.";
     if (!formData.email.trim()) newErrors.email = "Email is required.";
-    if (!formData.birthdate.trim()) newErrors.birthdate = "Birth date is required.";
+    if (!formData.birthdate.trim())
+      newErrors.birthdate = "Birth date is required.";
     if (!formData.nationalcode.trim()) {
       newErrors.nationalcode = "National code is required.";
     } else if (!/^\d{10}$/.test(formData.nationalcode)) {
@@ -54,15 +55,20 @@ const Signup = ({ onSwitch }) => {
     } else if (!validateNationalCode(formData.nationalcode)) {
       newErrors.nationalcode = "Not a valid national code!";
     }
-    if (!formData.phone.trim()) newErrors.phone = "Phone number is required.";
+    if (!formData.phone.trim())
+      newErrors.phone = "Phone number is required.";
     if (!formData.password.trim()) {
       newErrors.password = "Password is required.";
-    } else if (formData.password.length < 6 || !/\d/.test(formData.password)) {
-      newErrors.password = "Password must be at least 6 characters long and include at least one number.";
+    } else if (
+      formData.password.length < 6 ||
+      !/\d/.test(formData.password)
+    ) {
+      newErrors.password =
+        "Password must be at least 6 characters long and include at least one number.";
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Return true if no errors
+    return Object.keys(newErrors).length === 0; 
   };
 
   const handleSubmit = async (e) => {
@@ -70,12 +76,10 @@ const Signup = ({ onSwitch }) => {
     setErrorMessage("");
     setSuccessMessage("");
 
-    // Validate the form
     if (!validateForm()) {
       return;
     }
 
-    // Proceed with backend request if validation passes
     try {
       const response = await fetch("https://api.salado.mghgm.ir/auth/signup", {
         method: "POST",
@@ -87,10 +91,10 @@ const Signup = ({ onSwitch }) => {
 
       if (response.status === 201) {
         const data = await response.json();
-        setSuccessMessage(data.message); // "User created successfully"
+        setSuccessMessage(data.message);
       } else if (response.status === 400) {
         const data = await response.json();
-        setErrorMessage(data.error); // "You fu*ck up x field"
+        setErrorMessage(data.error);
       } else {
         setErrorMessage("Something went wrong. Please try again.");
       }
@@ -101,6 +105,14 @@ const Signup = ({ onSwitch }) => {
 
   return (
     <div className="signup-container">
+      {/* Back to Home Button with Logo */}
+      <div className="back-to-landing">
+        <button onClick={onBackToLanding} className="back-to-landing-btn">
+          <img src={logo} alt="Salado Logo" className="logo-button" />
+          <span className="salado-name">Salado</span>
+        </button>
+      </div>
+
       <div className="signup-form">
         <h1>Get Started Now</h1>
         <p>Create an account to enjoy all the features</p>
@@ -154,7 +166,9 @@ const Signup = ({ onSwitch }) => {
             value={formData.nationalcode}
             onChange={handleChange}
           />
-          {errors.nationalcode && <p className="field-error">{errors.nationalcode}</p>}
+          {errors.nationalcode && (
+            <p className="field-error">{errors.nationalcode}</p>
+          )}
 
           <label htmlFor="phone">Phone Number</label>
           <input
@@ -176,15 +190,7 @@ const Signup = ({ onSwitch }) => {
           />
           {errors.password && <p className="field-error">{errors.password}</p>}
 
-          {/* <div className="options">
-            <label>
-              <input type="checkbox" /> I agree to the terms & policy
-            </label>
-          </div> */}
-
-          <button type="submit" className="signup-btn">
-            Signup
-          </button>
+          <button type="submit" className="signup-btn">Signup</button>
         </form>
         <div className="login-link">
           Already have an account? <button onClick={onSwitch}>Login</button>
