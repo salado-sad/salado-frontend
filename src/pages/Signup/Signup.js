@@ -44,10 +44,13 @@ const Signup = ({ onSwitch, onBackToLanding }) => {
     const newErrors = {};
 
     if (!formData.name.trim()) newErrors.name = "Name is required.";
+
     if (!formData.lastname.trim()) newErrors.lastname = "Lastname is required.";
+
     if (!formData.email.trim()) newErrors.email = "Email is required.";
-    if (!formData.birthdate.trim())
-      newErrors.birthdate = "Birth date is required.";
+
+    if (!formData.birthdate.trim()) newErrors.birthdate = "Birth date is required.";
+
     if (!formData.nationalcode.trim()) {
       newErrors.nationalcode = "National code is required.";
     } else if (!/^\d{10}$/.test(formData.nationalcode)) {
@@ -55,8 +58,13 @@ const Signup = ({ onSwitch, onBackToLanding }) => {
     } else if (!validateNationalCode(formData.nationalcode)) {
       newErrors.nationalcode = "Not a valid national code!";
     }
-    if (!formData.phone.trim())
+
+    if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required.";
+    } else if (!/^09\d{9}$/.test(formData.phone.trim())) {
+      newErrors.phone = "Phone number is not valid. It must be an 11-digit number starting with '09'.";
+    }
+    
     if (!formData.password.trim()) {
       newErrors.password = "Password is required.";
     } else if (
