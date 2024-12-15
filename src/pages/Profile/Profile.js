@@ -14,7 +14,8 @@ const Profile = ({ onLogout }) => {
 
       try {
         const token = localStorage.getItem("authToken"); // Token from localStorage
-        const response = await fetch("https://api.salado.mghgm.ir/auth/profile", {
+        // const response = await fetch("https://api.salado.mghgm.ir/auth/profile", {
+        const response = await fetch("https://localhost:8000/auth/profile/", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
