@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "../../index.css";
 import logo from "../../assets/logo.png"; // Add your logo here
-import mohsen from "../../assets/picture.png";
+import salad from "../../assets/salad.png";
 
-const Login = ({ onSwitch, onBackToLanding }) => {
+const Login = ({ onSwitch, onBackToLanding, onForgotPassword }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -104,9 +104,14 @@ const Login = ({ onSwitch, onBackToLanding }) => {
           {errors.password && <p className="field-error">{errors.password}</p>}
 
           <div className="options">
-            <a href="#" className="forgot-password">
-              forgot password
-            </a>
+            {/* Link to Forget Password Page */}
+            <button
+              type="button"
+              className="forgot-password"
+              onClick={onForgotPassword}
+            >
+              Forgot Password
+            </button>
           </div>
 
           <button type="submit" className="login-btn">Login</button>
@@ -119,7 +124,7 @@ const Login = ({ onSwitch, onBackToLanding }) => {
 
       <div className="image-section">
         <img
-          src={mohsen}
+          src={salad}
           alt="Background"
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />

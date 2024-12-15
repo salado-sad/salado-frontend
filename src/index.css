@@ -248,12 +248,12 @@ code {
 }
 
 .logo-button {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
 }
 
 .salado-name {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: #4CAF50;
   font-weight: bold;
 }
@@ -265,4 +265,18 @@ code {
 /* Ensure some spacing between the button and the form content */
 .signup-form {
   margin-top: 80px; /* Adjust this value as needed */
+}
+
+.forgot-password {
+  background: none;
+  border: none;
+  color: #4CAF50;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.forgot-password:hover {
+  color: #388E3C;
 }

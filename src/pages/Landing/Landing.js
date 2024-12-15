@@ -1,5 +1,6 @@
 import React from "react";
 import "./Landing.css";
+import logo from "../../assets/logo.png";
 
 const Landing = ({ onSwitchToLogin }) => {
   return (
@@ -29,7 +30,7 @@ const Landing = ({ onSwitchToLogin }) => {
           <button className="cta-btn">Explore Salads</button>
         </div>
         <img
-          src="https://via.placeholder.com/400x300"
+          src={logo}
           alt="Salads"
           className="hero-image"
         />

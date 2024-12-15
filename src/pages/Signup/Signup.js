@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../index.css";
 import logo from "../../assets/logo.png"; // Add your logo here
-import mohsen from "../../assets/picture.png";
+import salad from "../../assets/salad.png";
 
 function validateNationalCode(code) {
   const digits = code.split('').map(Number); 
@@ -198,7 +198,7 @@ const Signup = ({ onSwitch, onBackToLanding }) => {
       </div>
 
       <div className="image-section">
-        <img src={mohsen} alt="Background" />
+        <img src={salad} alt="Background" />
       </div>
     </div>
   );
