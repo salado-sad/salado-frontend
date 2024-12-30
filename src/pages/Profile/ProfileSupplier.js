@@ -5,17 +5,23 @@ import "./ProfileSupplier.css";
 import basketIcon from "../../assets/basket-icon.svg";
 import plusIcon from "../../assets/plus-icon.svg";
 import settingsIcon from "../../assets/settings-icon.svg";
-import messageIcon from "../../assets/message-icon.svg";
-import clockIcon from "../../assets/clock-icon.svg";
 import bellIcon from "../../assets/bell-icon.svg";
 import uploadIcon from "../../assets/upload-icon.svg";
+import searchIcon from "../../assets/search-icon.svg";
+import logo from "../../assets/home.svg";
 
-const ProfileSupplier = () => {
+const ProfileSupplier = ({ onLogout }) => {
   const [activePage, setActivePage] = useState("profile");
 
   // Renders the main content based on the active page
   const renderContent = () => {
     if (activePage === "profile") {
+      return (
+        <div className="profile-supplier-banner">
+          <div className="gradient-bar"></div>
+        </div>
+      );
+    } else if (activePage === "search") {
       return (
         <div className="profile-supplier-banner">
           <div className="gradient-bar"></div>
@@ -62,13 +68,33 @@ const ProfileSupplier = () => {
           </div>
         </div>
       );
+    } else if (activePage === "setting") {
+      return (
+        // Todo complete this
+        <h1>Your information will be shown here</h1>
+      );
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken"); // Remove token
+    onLogout(); // Callback to redirect to the login or landing page
   };
 
   return (
     <div className="profile-supplier-container">
       {/* Sidebar */}
       <div className="profile-supplier-sidebar">
+        <button onClick={handleLogout} className="sidebar-icon">
+          <img src={logo} alt="Salado Logo" className="logo-button" />
+        </button>
+
+        <button 
+          className={`sidebar-icon ${activePage === "search" ? "active" : ""}`}
+          onClick={() => setActivePage("search")}
+        >
+          <img src={searchIcon} alt="Search" />
+        </button>
         <button
           className={`sidebar-icon ${activePage === "profile" ? "active" : ""}`}
           onClick={() => setActivePage("profile")}
@@ -81,14 +107,11 @@ const ProfileSupplier = () => {
         >
           <img src={plusIcon} alt="Add" />
         </button>
-        <button className="sidebar-icon">
+        <button 
+          className={`sidebar-icon ${activePage === "setting" ? "active" : ""}`}
+          onClick={() => setActivePage("setting")}
+        >
           <img src={settingsIcon} alt="Settings" />
-        </button>
-        <button className="sidebar-icon">
-          <img src={messageIcon} alt="Messages" />
-        </button>
-        <button className="sidebar-icon">
-          <img src={clockIcon} alt="Clock" />
         </button>
       </div>
 
