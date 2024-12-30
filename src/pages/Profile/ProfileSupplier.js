@@ -1,28 +1,65 @@
 import React, { useState } from "react";
-import "../../index.css";
-import logo from "../../assets/logo.png";
 import "./ProfileSupplier.css";
 
+// Import icons from assets
+import basketIcon from "../../assets/basket-icon.svg";
+import plusIcon from "../../assets/plus-icon.svg";
+import settingsIcon from "../../assets/settings-icon.svg";
+import messageIcon from "../../assets/message-icon.svg";
+import clockIcon from "../../assets/clock-icon.svg";
+import bellIcon from "../../assets/bell-icon.svg";
+import uploadIcon from "../../assets/upload-icon.svg";
 
-const ProfileSupplier = ({ onLogout }) => {
-  const [sidebarOption, setSidebarOption] = useState("profile");
+const ProfileSupplier = () => {
+  const [activePage, setActivePage] = useState("profile");
 
+  // Renders the main content based on the active page
   const renderContent = () => {
-    if (sidebarOption === "profile") {
+    if (activePage === "profile") {
       return (
-        <div className="profile-supplier-details">
-          <h1>Welcome, Supplier!</h1>
-          <p><strong>Full Name:</strong> John Doe</p>
-          <p><strong>Email:</strong> supplier@example.com</p>
-          <p><strong>Company Name:</strong> Example Supplies Inc.</p>
-          <p><strong>Phone:</strong> +1 123 456 7890</p>
+        <div className="profile-supplier-banner">
+          <div className="gradient-bar"></div>
         </div>
       );
-    } else if (sidebarOption === "supplies") {
+    } else if (activePage === "addSupply") {
       return (
-        <div className="supplies-placeholder">
-          <h2>Supplies Management</h2>
-          <p>Manage your supplies here. Add, edit, delete, or search for supplies.</p>
+        <div className="add-supply-container">
+          {/* Add Supplies Page Content */}
+          <div className="add-supply-header">
+            <input type="checkbox" id="change-price" />
+            <label htmlFor="change-price">I Want to change the price</label>
+          </div>
+
+          <div className="add-supply-categories">
+            <select>
+              <option>Man's Wear</option>
+            </select>
+            <select>
+              <option>Bottom Wear</option>
+            </select>
+            <select>
+              <option>Sub Category</option>
+            </select>
+          </div>
+
+          <button className="btn download-btn">Download</button>
+
+          <div className="file-upload">
+            <div className="file-upload-icon">
+              <img src={uploadIcon} alt="Upload" />
+            </div>
+            <p>Drag files here or choose browse to select files</p>
+          </div>
+
+          <div className="catalogue-name">
+            <label htmlFor="catalogue-name">Catalogue Name*</label>
+            <input type="text" id="catalogue-name" placeholder="Enter Your Catalogue Name" />
+          </div>
+
+          <div className="action-buttons">
+            <button className="btn cancel-btn">Cancel</button>
+            <button className="btn upload-btn">Upload</button>
+          </div>
         </div>
       );
     }
@@ -33,24 +70,44 @@ const ProfileSupplier = ({ onLogout }) => {
       {/* Sidebar */}
       <div className="profile-supplier-sidebar">
         <button
-          className={`sidebar-option ${sidebarOption === "profile" ? "active" : ""}`}
-          onClick={() => setSidebarOption("profile")}
+          className={`sidebar-icon ${activePage === "profile" ? "active" : ""}`}
+          onClick={() => setActivePage("profile")}
         >
-          Profile
+          <img src={basketIcon} alt="Basket" />
         </button>
         <button
-          className={`sidebar-option ${sidebarOption === "supplies" ? "active" : ""}`}
-          onClick={() => setSidebarOption("supplies")}
+          className={`sidebar-icon ${activePage === "addSupply" ? "active" : ""}`}
+          onClick={() => setActivePage("addSupply")}
         >
-          Supplies
+          <img src={plusIcon} alt="Add" />
         </button>
-        <button className="sidebar-option logout-btn" onClick={onLogout}>
-          Logout
+        <button className="sidebar-icon">
+          <img src={settingsIcon} alt="Settings" />
+        </button>
+        <button className="sidebar-icon">
+          <img src={messageIcon} alt="Messages" />
+        </button>
+        <button className="sidebar-icon">
+          <img src={clockIcon} alt="Clock" />
         </button>
       </div>
 
       {/* Main Content */}
-      <div className="profile-supplier-content">{renderContent()}</div>
+      <div className="profile-supplier-main">
+        {/* Header */}
+        <div className="profile-supplier-header">
+          <div>
+            <h2>Welcome, Danial</h2>
+            <p>Mon, 30 Dec 2024</p>
+          </div>
+          <div className="profile-notification">
+            <img src={bellIcon} alt="Notifications" />
+          </div>
+        </div>
+
+        {/* Dynamic Content */}
+        {renderContent()}
+      </div>
     </div>
   );
 };

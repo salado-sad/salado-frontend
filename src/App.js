@@ -9,7 +9,7 @@ import Profile from "./pages/Profile/Profile";
 import ProfileSupplier from "./pages/Profile/ProfileSupplier";
 
 function App() {
-  const [page, setPage] = useState("landing");
+  const [page, setPage] = useState("supplier-profile");
 
   return (
     <div>
