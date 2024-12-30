@@ -1,0 +1,79 @@
+.profile-supplier-container {
+    display: flex;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Sidebar Styles */
+  .profile-supplier-sidebar {
+    background-color: #f8f8f8;
+    width: 20%;
+    padding: 2rem;
+    border-right: 2px solid #FFD700; /* Yellow accent */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .sidebar-option {
+    width: 100%;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    background-color: white;
+    border: 1px solid #FFD700; /* Yellow accent */
+    border-radius: 5px;
+    font-size: 1rem;
+    color: black;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .sidebar-option:hover {
+    background-color: #FFD700;
+    color: white;
+  }
+  
+  .sidebar-option.active {
+    background-color: #FFD700;
+    color: white;
+  }
+  
+  .logout-btn {
+    margin-top: auto;
+    background-color: #FF4C4C; /* Logout red */
+    color: white;
+    border: none;
+  }
+  
+  .logout-btn:hover {
+    background-color: #FF0000;
+  }
+  
+  /* Main Content Styles */
+  .profile-supplier-content {
+    flex: 1;
+    padding: 2rem;
+  }
+  
+  .profile-supplier-details h1 {
+    color: #FFD700;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .profile-supplier-details p {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+  }
+  
+  .supplies-placeholder h2 {
+    color: #FFD700;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .supplies-placeholder p {
+    font-size: 1.2rem;
+    color: #555;
+  }
+  

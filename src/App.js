@@ -6,6 +6,7 @@ import LoginSupplier from "./pages/Login/LoginSupplier";
 import LandingPage from "./pages/Landing/Landing";
 import ForgetPassword from "./pages/ForgetPassword/ForgetPassword";
 import Profile from "./pages/Profile/Profile";
+import ProfileSupplier from "./pages/Profile/ProfileSupplier";
 
 function App() {
   const [page, setPage] = useState("landing");
@@ -49,6 +50,9 @@ function App() {
       )}
       {page === "profile" && (
         <Profile onLogout={() => setPage("landing")} />
+      )}
+      {page === "supplier-profile" && (
+        <ProfileSupplier onLogout={() => setPage("landing")} />
       )}
     </div>
   );
