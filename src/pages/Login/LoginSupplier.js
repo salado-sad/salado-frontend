@@ -3,7 +3,7 @@ import "../../index.css";
 import logo from "../../assets/logo.png"; // Add your logo here
 import salad from "../../assets/salad.png";
 
-const Login = ({ onSwitch, onBackToLanding, onForgotPassword }) => {
+const Login = ({ onSwitch, onBackToLanding, onForgotPassword, onLoginSuccess }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -55,6 +55,7 @@ const Login = ({ onSwitch, onBackToLanding, onForgotPassword }) => {
         setSuccessMessage(result.message); // "Login successful"
         console.log("Login successful:", result.message);
         // Add additional logic like redirecting the user here.
+        onLoginSuccess();
       } else if (response.status === 401) {
         setErrorMessage(result.error); // "Invalid credentials"
       } else if (response.status === 403) {

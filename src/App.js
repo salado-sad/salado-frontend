@@ -37,6 +37,8 @@ function App() {
         <LoginSupplier
           onSwitch={() => setPage("supplier-signup")}
           onBackToLanding={() => setPage("landing")}
+          onForgotPassword={() => setPage("forget-password")}
+          onLoginSuccess={() => setPage("supplier-profile")}
         />
       )}
       {page === "supplier-signup" && (
