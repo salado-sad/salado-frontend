@@ -5,6 +5,7 @@ import SignupSupplier from "./pages/Signup/SignupSupplier";
 import LoginSupplier from "./pages/Login/LoginSupplier";
 import LandingPage from "./pages/Landing/Landing";
 import ForgetPassword from "./pages/ForgetPassword/ForgetPassword";
+import Profile from "./pages/Profile/Profile";
 
 function App() {
   const [page, setPage] = useState("landing");
@@ -22,6 +23,7 @@ function App() {
           onSwitch={() => setPage("signup")}
           onBackToLanding={() => setPage("landing")}
           onForgotPassword={() => setPage("forget-password")} // Navigate to Forget Password Page
+          onLoginSuccess={() => setPage("profile")}
         />
       )}
       {page === "signup" && (
@@ -44,6 +46,9 @@ function App() {
       )}
       {page === "forget-password" && (
         <ForgetPassword onBackToLogin={() => setPage("login")} />
+      )}
+      {page === "profile" && (
+        <Profile onLogout={() => setPage("landing")} />
       )}
     </div>
   );
