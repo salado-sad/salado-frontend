@@ -132,3 +132,39 @@
   letter-spacing: 1px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Depth effect */
 }
+
+/* Supplier Section Styles */
+.supplier-section {
+  text-align: center;
+  background-color: #f4f4f4;
+  padding: 2rem;
+  margin-top: 2rem;
+  border-top: 1px solid #333;
+}
+
+.supplier-section h2 {
+  font-size: 2rem;
+  color: #4CAF50;
+  margin-bottom: 1rem;
+}
+
+.supplier-section p {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.supplier-signin-btn {
+  padding: 0.8rem 1.5rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.supplier-signin-btn:hover {
+  background-color: #45a049;
+}

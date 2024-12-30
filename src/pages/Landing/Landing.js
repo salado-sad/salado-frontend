@@ -2,7 +2,7 @@ import React from "react";
 import "./Landing.css";
 import logo from "../../assets/logo.png";
 
-const Landing = ({ onSwitchToLogin }) => {
+const Landing = ({ onSwitchToLogin, onSwitchToSupplierLogin }) => {
   return (
     <div>
       {/* Navbar */}
@@ -46,6 +46,15 @@ const Landing = ({ onSwitchToLogin }) => {
             week, Salado is here to make eating healthy effortless and enjoyable.
         </p>
         <p className="highlighted-motto">"Freshness Redefined."</p>
+      </section>
+
+      {/* Supplier Section */}
+      <section className="supplier-section">
+        <h2>Are you a supplier?</h2>
+        <p>Access your dashboard to manage orders and inventory.</p>
+        <button className="supplier-signin-btn" onClick={onSwitchToSupplierLogin}>
+          Supplier Sign In
+        </button>
       </section>
 
       {/* Footer */}
