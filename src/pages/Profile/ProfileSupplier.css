@@ -155,6 +155,7 @@
   text-align: center;
   border-radius: 10px;
   margin-bottom: 20px;
+  max-width: 300px;
 }
 
 .file-upload-icon img {
@@ -163,15 +164,72 @@
   margin-bottom: 10px;
 }
 
-.catalogue-name {
-  margin-bottom: 20px;
+.catalogue-name,
+.product-info {
+  margin-bottom: 15px;
+}
+
+.catalogue-name label,
+.product-measurement label,
+.product-quantity label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
 }
 
 .catalogue-name input {
-  width: 100%;
-  padding: 10px;
+  width: 300px; /* Adjusted width */
+  padding: 8px;
+  font-size: 14px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+.product-info {
+  display: flex;
+  gap: 15px; /* Reduced gap for closer alignment */
+  align-items: flex-start; /* Align all items at the top */
+}
+
+.product-quantity {
+  flex: 1;
+}
+
+.product-quantity input {
+  width: 150px; /* Consistent width with measurement input */
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+.product-measurement {
+  flex: 0.4;
+}
+
+.measurement-input-group {
+  display: flex;
+  gap: 10px; /* Space between input and dropdown */
+  align-items: center; /* Vertically align input and dropdown */
+}
+
+.measurement-input-group input {
+  width: 150px; /* Adjusted width for compact layout */
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.measurement-input-group select {
+  width: 150px; /* Consistent width with input */
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .action-buttons {
