@@ -108,7 +108,7 @@ const Signup = ({ onSwitch, onBackToLanding }) => {
     try {
       // const response = await fetch("https://api.salado.mghgm.ir/auth/signup", {
       // TODO fix API endpoint
-      const response = await fetch("http://localhost:8000/auth/signup_supplier/", {
+      const response = await fetch("http://localhost:8000/auth/signup/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

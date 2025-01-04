@@ -42,7 +42,7 @@ const Login = ({ onSwitch, onBackToLanding, onForgotPassword, onLoginSuccess }) 
     try {
       // const response = await fetch("https://api.salado.mghgm.ir/auth/login", {
       // TODO fix API endpoint
-      const response = await fetch("http://localhost:8000/auth/signin_supplier/", {
+      const response = await fetch("http://localhost:8000/auth/signin/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
