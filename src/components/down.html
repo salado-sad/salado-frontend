@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>We'll Be Back Soon!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #f7f7f7;
+      color: #333;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .container {
+      padding: 2rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 1rem;
+      max-width: 120px;
+      height: auto;
+      animation: smooth-shake 3s infinite ease-in-out; /* Add the shake animation */
+    }
+
+    h1 {
+      color: #4CAF50;
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+
+    .refresh-btn {
+      display: inline-block;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      color: white;
+      background-color: #4CAF50;
+      text-decoration: none;
+      border-radius: 5px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .refresh-btn:hover {
+      background-color: #45a049;
+      transform: translateY(-2px);
+    }
+
+    .refresh-btn:active {
+      transform: translateY(0);
+    }
+
+    @keyframes smooth-shake {
+        0%, 100% {
+          transform: translateX(0);
+        }
+        10% {
+          transform: translateX(-8px);
+        }
+        20% {
+          transform: translateX(8px);
+        }
+        30% {
+          transform: translateX(-6px);
+        }
+        40% {
+          transform: translateX(6px);
+        }
+        50% {
+          transform: translateX(-4px);
+        }
+        60% {
+          transform: translateX(4px);
+        }
+        70%, 100% {
+          transform: translateX(0);
+        }
+      }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="./logo.png" alt="Salado Logo" class="logo"> 
+    <h1>We'll Be Back! (I hope)</h1>
+    <p>Our servers are temporarily unavailable. <br>Why? <br>We don't know. Maybe Mohsen got way too angry (for some reason) and pulled the plug or Amirhossein ignored the team too much and we didn't meet the deadline. Or maybe Farid was a bit tipsy last night and accidentally deleted the repo. Maybe Danial got tired of his clown team-members and wanted to end it all. Maybe Emad wanted to see how it feels to not exist through the medium of this website. We just don't know. All we know is we are not available right now. <br>So stop asking questions!</p>
+    <a href="/" class="refresh-btn">Try Again (Won't help)</a>
+  </div>
+</body>
+</html>
