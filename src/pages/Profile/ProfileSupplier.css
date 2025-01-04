@@ -247,3 +247,417 @@
   background-color: #4caf50;
   color: white;
 }
+
+/* Profile Page Styling */
+.profile-page-container {
+  padding: 20px;
+  background-color: #f9fff5; /* Soft green background for the page */
+  border-radius: 10px;
+}
+
+.profile-page-container h2 {
+  font-size: 26px;
+  margin-bottom: 20px;
+  color: #2f7d32; /* Dark green */
+}
+
+.empty-message {
+  font-size: 18px;
+  color: #888888; /* Soft gray text for empty state */
+  background-color: #fff9e9; /* Light yellow background for emphasis */
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Cards Layout */
+.profile-item-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.profile-item-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-header h3 {
+  font-size: 20px;
+  color: #2f7d32; /* Dark green */
+}
+
+.category-badge {
+  background-color: #c8e6c9; /* Light green */
+  color: #2f7d32; /* Dark green */
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+/* Item Info */
+.profile-item-card p {
+  font-size: 14px;
+  margin: 5px 0;
+  color: #666666; /* Subtle grey text for details */
+}
+
+/* Delete Button */
+.delete-item-btn {
+  margin-top: 15px;
+  display: inline-block;
+  padding: 8px 15px;
+  font-size: 14px;
+  background-color: #ff5252; /* Bright red for delete button */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.delete-item-btn:hover {
+  background-color: #ff1744; /* Slightly darker red */
+}
+
+.add-item-container {
+  padding: 20px;
+  background-color: #f9fff5; /* Light green */
+  border-radius: 10px;
+}
+
+.add-item-container h2 {
+  font-size: 26px;
+  margin-bottom: 20px;
+  color: #2f7d32; /* Dark green */
+}
+
+/* Card Styling */
+.add-item-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.add-item-card .input-group {
+  margin-bottom: 15px;
+}
+
+.add-item-card .input-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #2f7d32;
+}
+
+.add-item-card .input-group select,
+.add-item-card .input-group input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.measurement-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.measurement-wrapper select {
+  width: auto;
+}
+
+/* Image Upload */
+.image-preview {
+  position: relative;
+  margin-top: 10px;
+}
+
+.image-preview img {
+  max-width: 100%;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.image-preview button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: #ff5252;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+
+/* Buttons */
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.action-buttons .btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.action-buttons .cancel-btn {
+  background-color: #f8f9fa;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.action-buttons .upload-btn {
+  background-color: #388e3c; /* Dark green */
+  color: white;
+}
+
+.action-buttons .upload-btn:hover {
+  background-color: #2e7d32; /* Slightly darker green */
+}
+
+.action-buttons .cancel-btn:hover {
+  background-color: #e9ecef;
+}
+
+/* Images in Cards */
+.card-image {
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image fits nicely inside the container */
+  border-radius: 10px;
+}
+
+/* Editable Input Fields */
+.editable-input {
+  width: 100%;
+  padding: 5px 8px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  color: #333;
+  background-color: #f9f9f9;
+}
+
+.editable-input:focus {
+  border-color: #2f7d32;
+  outline: none;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.save-btn {
+  padding: 5px 10px;
+  background-color: #4caf50; /* Green */
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background-color: #43a047;
+}
+
+.cancel-btn {
+  padding: 5px 10px;
+  background-color: #f44336; /* Red */
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background-color: #e53935;
+}
+
+/* Edit Button */
+.edit-btn {
+  padding: 5px 10px;
+  border: 1px solid #2f7d32;
+  background-color: white;
+  color: #2f7d32;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background-color: #c8e6c9; /* Light green */
+}
+
+/* Editable Dropdown Styling */
+.editable-dropdown {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #333;
+  background-color: #f9f9f9;
+  margin-bottom: 10px;
+}
+
+.editable-dropdown:focus {
+  border-color: #2f7d32;
+  outline: none;
+}
+
+/* Buttons */
+.save-btn {
+  padding: 8px 12px;
+  background-color: #4caf50; /* Green */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background-color: #43a047;
+}
+
+.cancel-btn {
+  padding: 8px 12px;
+  background-color: #f44336; /* Red */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background-color: #e53935;
+}
+
+/* Delete Button */
+.delete-btn {
+  padding: 8px 12px;
+  background-color: #f44336; /* Bright Red */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f; /* Slightly darker red */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Translucent black background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensures it sits above everything */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 400px;
+  max-width: 90%;
+}
+
+.modal-content h3 {
+  font-size: 18px;
+  color: #f44336; /* Red title to indicate danger */
+  margin-bottom: 15px;
+}
+
+.modal-content p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Modal Buttons */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.confirm-btn {
+  padding: 10px 20px;
+  background-color: #f44336; /* Bright red for confirm */
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.confirm-btn:hover {
+  background-color: #d32f2f; /* Slightly darker red */
+}
+
+.cancel-btn {
+  padding: 10px 20px;
+  background-color: #ddd; /* Neutral gray for cancel */
+  border: none;
+  color: #333;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #ccc;
+}

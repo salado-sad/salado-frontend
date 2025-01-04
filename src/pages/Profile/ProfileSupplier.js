@@ -57,21 +57,56 @@ const ProfileSupplier = ({ onLogout }) => {
   const [productQuantity, setProductQuantity] = useState(0);
   const [productMeasurement, setProductMeasurement] = useState('');
   const [measurementUnit, setMeasurementUnit] = useState('grams');
+  const [addedItems, setAddedItems] = useState([
+    {
+      category: "Fruits",
+      subCategory: "Berries",
+      product: "Strawberry",
+      catalogueName: "Fresh Organic Strawberries",
+      productMeasurement: "1 Kilogram",
+      productQuantity: 25,
+      image: "https://via.placeholder.com/150/FF7F7F/ffffff?text=Strawberry", // Placeholder image for Strawberry
+    },
+    {
+      category: "Vegetables",
+      subCategory: "LeafyGreens",
+      product: "Spinach",
+      catalogueName: "Fresh Farm Spinach",
+      productMeasurement: "500 Grams",
+      productQuantity: 50,
+      image: "https://via.placeholder.com/150/7FFF7F/ffffff?text=Spinach", // Placeholder image for Spinach
+    },
+  ]);
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [editIndex, setEditIndex] = useState(null); // Tracks the index of the item being edited
+  const [deleteIndex, setDeleteIndex] = useState(null); // Tracks the index of the item to delete
+  const [isModalVisible, setModalVisible] = useState(false); // Controls modal visibility
 
   // Handlers
   const handleCategoryChange = (event) => {
     const category = event.target.value;
     setSelectedCategory(category);
-    setSelectedSubCategory("");
-    setSelectedProduct("");
-    setProducts([]);
+    if (category) {
+      const firstSubCategory = Object.keys(data[category])[0];
+      setSelectedSubCategory(firstSubCategory);
+      setProducts(data[category][firstSubCategory]);
+    } else {
+      setSelectedSubCategory("");
+      setSelectedProduct("");
+      setProducts([]);
+    }
   };
 
   const handleSubCategoryChange = (event) => {
     const subCategory = event.target.value;
     setSelectedSubCategory(subCategory);
-    setSelectedProduct("");
-    setProducts(data[selectedCategory][subCategory]);
+    if (subCategory) {
+      setSelectedProduct(data[selectedCategory][subCategory][0]);
+      setProducts(data[selectedCategory][subCategory]);
+    } else {
+      setSelectedProduct("");
+      setProducts([]);
+    }
   };
 
   const handleProductChange = (event) => {
@@ -94,19 +129,45 @@ const ProfileSupplier = ({ onLogout }) => {
     setProductQuantity(event.target.value);
   };
 
-  const handleFileUpload = (event) => {
-    console.log(event.target.files);
-  };
-
   const handleCancel = () => {
     setSelectedCategory("");
     setSelectedSubCategory("");
     setSelectedProduct("");
     setCatalogueName("");
+    setProductMeasurement('');
+    setProductQuantity(0);
+  };
+
+  const validateUploadForm = () => {
+    if (!selectedCategory || !selectedSubCategory || !selectedProduct || !catalogueName || !productMeasurement || !productQuantity) {
+      alert("Please fill out all required fields.");
+      return false;
+    }
+    return true;
   };
 
   const handleUpload = () => {
-    console.log("Uploading:", { selectedCategory, selectedSubCategory, selectedProduct, catalogueName });
+    if (validateUploadForm()) {
+      const newItem = {
+        category: selectedCategory,
+        subCategory: selectedSubCategory,
+        product: selectedProduct,
+        catalogueName,
+        productMeasurement: `${productMeasurement} ${measurementUnit}`,
+        productQuantity,
+        image: uploadedImage, // Include uploaded image
+      };
+  
+      setAddedItems((prevItems) => [...prevItems, newItem]);
+      handleCancel();
+      setUploadedImage(null); // Clear the uploaded image after adding the item
+    }
+  };
+
+  const handleDeleteItem = (index) => {
+    const updatedItems = [...addedItems];
+    updatedItems.splice(index, 1); // Remove the item at the specified index
+    setAddedItems(updatedItems);
   };
 
   const handleLogout = () => {
@@ -114,79 +175,295 @@ const ProfileSupplier = ({ onLogout }) => {
     onLogout();
   };
 
-  // Render functions for each subpage
-  const renderProfilePage = () => (
-    <div className="profile-supplier-banner">
-      <div className="gradient-bar"></div>
-    </div>
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => setUploadedImage(reader.result); // Read image as Base64 string
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const clearImagePreview = () => setUploadedImage(null);
+
+  const handleEditChange = (index, field, value) => {
+    const updatedItems = [...addedItems];
+    updatedItems[index][field] = value;
+    setAddedItems(updatedItems);
+  };
+
+  const handleSubCategoryEditChange = (index, value) => {
+    const updatedItems = [...addedItems];
+    updatedItems[index].subCategory = value;
+    updatedItems[index].product = ""; // Reset product selection if subcategory changes
+    setAddedItems(updatedItems);
+  };
+
+  const handleSaveEdit = (index) => {
+    setEditIndex(null); // Exit edit mode
+  };
+
+  const handleCancelEdit = () => {
+    setEditIndex(null); // Exit edit mode without saving
+  };
+
+  const ConfirmDeleteModal = () => (
+    isModalVisible && (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <h3>Confirm Deletion</h3>
+          <p>Are you sure you want to delete this item? This action cannot be undone.</p>
+          <div className="modal-buttons">
+            <button
+              className="confirm-btn"
+              onClick={() => {
+                handleDeleteItem(deleteIndex); // Confirm deletion
+                setModalVisible(false); // Close the modal
+                setDeleteIndex(null); // Clear the delete index
+              }}
+            >
+              Confirm
+            </button>
+            <button
+              className="cancel-btn"
+              onClick={() => {
+                setModalVisible(false); // Close the modal without deleting
+                setDeleteIndex(null); // Clear the delete index
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   );
 
-  const renderSearchPage = () => (
-    <div className="profile-supplier-banner">
-      <div className="gradient-bar"></div>
+  const renderProfilePage = () => (
+    <div className="profile-page-container">
+      <h2>Your Added Supplies</h2>
+  
+      {addedItems.length === 0 ? (
+        <p className="empty-message">
+          No items added yet. Go to the "Add Supply" page to upload your products.
+        </p>
+      ) : (
+        <div className="profile-item-cards">
+          {addedItems.map((item, index) => (
+            <div className="profile-item-card" key={index}>
+              {/* Image */}
+              {item.image && (
+                <div className="card-image">
+                  <img src={item.image} alt={`${item.product} preview`} />
+                </div>
+              )}
+  
+              {editIndex === index ? (
+                // Editable Mode
+                <>
+                  <div className="card-header">
+                    <select
+                      value={item.category}
+                      onChange={(e) => handleEditChange(index, "category", e.target.value)}
+                      className="editable-dropdown"
+                    >
+                      <option value="">Select Category</option>
+                      {Object.keys(data).map((category) => (
+                        <option key={category} value={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </select>
+  
+                    <select
+                      value={item.subCategory}
+                      onChange={(e) => handleSubCategoryEditChange(index, e.target.value)}
+                      className="editable-dropdown"
+                      disabled={!item.category}
+                    >
+                      <option value="">Select Subcategory</option>
+                      {item.category &&
+                        Object.keys(data[item.category]).map((subCategory) => (
+                          <option key={subCategory} value={subCategory}>
+                            {subCategory}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+  
+                  <div>
+                    <select
+                      value={item.product}
+                      onChange={(e) =>
+                        handleEditChange(index, "product", e.target.value)
+                      }
+                      className="editable-dropdown"
+                      disabled={!item.subCategory}
+                    >
+                      <option value="">Select Product</option>
+                      {item.subCategory &&
+                        data[item.category][item.subCategory].map((product) => (
+                          <option key={product} value={product}>
+                            {product}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+  
+                  <input
+                    type="text"
+                    value={item.catalogueName}
+                    onChange={(e) => handleEditChange(index, "catalogueName", e.target.value)}
+                    className="editable-input"
+                    placeholder="Enter catalogue name"
+                  />
+                  <input
+                    type="text"
+                    value={item.productMeasurement}
+                    onChange={(e) =>
+                      handleEditChange(index, "productMeasurement", e.target.value)
+                    }
+                    className="editable-input"
+                    placeholder="Enter measurement"
+                  />
+                  <input
+                    type="number"
+                    value={item.productQuantity}
+                    onChange={(e) =>
+                      handleEditChange(index, "productQuantity", e.target.value)
+                    }
+                    className="editable-input"
+                    placeholder="Enter quantity"
+                  />
+  
+                  {/* Action Buttons */}
+                  <div className="action-buttons">
+                    <button
+                      className="save-btn"
+                      onClick={() => handleSaveEdit(index)}
+                    >
+                      Save
+                    </button>
+                    <button
+                      className="cancel-btn"
+                      onClick={handleCancelEdit}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="delete-btn"
+                      onClick={() => {
+                        setDeleteIndex(index);
+                        setModalVisible(true);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </>
+              ) : (
+                // Static View Mode
+                <>
+                  <div className="card-header">
+                    <h3>{item.product}</h3>
+                    <span className="category-badge">{item.category}</span>
+                  </div>
+                  <p><strong>Subcategory:</strong> {item.subCategory}</p>
+                  <p><strong>Catalogue Name:</strong> {item.catalogueName}</p>
+                  <p><strong>Measurement:</strong> {item.productMeasurement}</p>
+                  <p><strong>Quantity:</strong> {item.productQuantity}</p>
+  
+                  <div className="action-buttons">
+                    <button
+                      className="edit-btn"
+                      onClick={() => setEditIndex(index)}
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+      <ConfirmDeleteModal />
     </div>
   );
 
   const renderAddSupplyPage = () => (
-    <div className="add-supply-container">
-      <div className="add-supply-categories">
-        <select value={selectedCategory} onChange={handleCategoryChange}>
-          <option value="">Select Category</option>
-          {Object.keys(data).map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
-
-        <select value={selectedSubCategory} onChange={handleSubCategoryChange} disabled={!selectedCategory}>
-          <option value="">Select Sub Category</option>
-          {selectedCategory &&
-            Object.keys(data[selectedCategory]).map((subCategory) => (
-              <option key={subCategory} value={subCategory}>
-                {subCategory}
+    <div className="add-item-container">
+      <h2>Add a New Supply</h2>
+      <div className="add-item-card">
+        {/* Category and Subcategory Selection */}
+        <div className="input-group">
+          <label htmlFor="category">Category*</label>
+          <select id="category" value={selectedCategory} onChange={handleCategoryChange}>
+            <option value="">Select Category</option>
+            {Object.keys(data).map((category) => (
+              <option key={category} value={category}>
+                {category}
               </option>
             ))}
-        </select>
-
-        <select value={selectedProduct} onChange={handleProductChange} disabled={!selectedSubCategory}>
-          <option value="">Select Product</option>
-          {selectedSubCategory &&
-            products.map((product) => (
-              <option key={product} value={product}>
-                {product}
-              </option>
-            ))}
-        </select>
-      </div>
-
-      <div className="file-upload">
-        <div className="file-upload-icon">
-          <img src={uploadIcon} alt="Upload" />
+          </select>
         </div>
-        <p>Drag files here or choose browse to select files</p>
-        <input type="file" onChange={handleFileUpload} />
-      </div>
-
-      <div className="catalogue-name">
-        <label htmlFor="catalogue-name">Catalogue Name*</label>
-        <input
-          type="text"
-          id="catalogue-name"
-          placeholder="Enter Your Catalogue Name"
-          value={catalogueName}
-          onChange={handleCatalogueNameChange}
-        />
-      </div>
-
-      <div className="product-info">
-        <div className="product-measurement">
-          <label htmlFor="product-measurement">Product Measurement*</label>
-          <div className="measurement-input-group">
+  
+        <div className="input-group">
+          <label htmlFor="subcategory">Subcategory*</label>
+          <select
+            id="subcategory"
+            value={selectedSubCategory}
+            onChange={handleSubCategoryChange}
+            disabled={!selectedCategory}
+          >
+            <option value="">Select Subcategory</option>
+            {selectedCategory &&
+              Object.keys(data[selectedCategory]).map((subCategory) => (
+                <option key={subCategory} value={subCategory}>
+                  {subCategory}
+                </option>
+              ))}
+          </select>
+        </div>
+  
+        <div className="input-group">
+          <label htmlFor="product">Product*</label>
+          <select
+            id="product"
+            value={selectedProduct}
+            onChange={handleProductChange}
+            disabled={!selectedSubCategory}
+          >
+            <option value="">Select Product</option>
+            {selectedSubCategory &&
+              products.map((product) => (
+                <option key={product} value={product}>
+                  {product}
+                </option>
+              ))}
+          </select>
+        </div>
+  
+        {/* Catalogue Name */}
+        <div className="input-group">
+          <label htmlFor="catalogue">Catalogue Name*</label>
+          <input
+            type="text"
+            id="catalogue"
+            placeholder="Enter your catalogue name"
+            value={catalogueName}
+            onChange={handleCatalogueNameChange}
+          />
+        </div>
+  
+        {/* Measurement */}
+        <div className="input-group">
+          <label htmlFor="measurement">Product Measurement*</label>
+          <div className="measurement-wrapper">
             <input
               type="number"
-              id="product-measurement"
-              placeholder="Enter value"
+              id="measurement"
+              placeholder="Enter measurement"
               value={productMeasurement}
               onChange={handleProductMeasurementChange}
             />
@@ -203,22 +480,45 @@ const ProfileSupplier = ({ onLogout }) => {
             </select>
           </div>
         </div>
-
-        <div className="product-quantity">
-          <label htmlFor="product-quantity">Product Quantity*</label>
+  
+        {/* Quantity */}
+        <div className="input-group">
+          <label htmlFor="quantity">Product Quantity*</label>
           <input
             type="number"
-            id="product-quantity"
-            placeholder="Enter stock quantity"
+            id="quantity"
+            placeholder="Enter product quantity"
             value={productQuantity}
             onChange={handleProductQuantityChange}
           />
         </div>
-      </div>
-
-      <div className="action-buttons">
-        <button className="btn cancel-btn" onClick={handleCancel}>Cancel</button>
-        <button className="btn upload-btn" onClick={handleUpload}>Upload</button>
+        
+        {/* Image Upload */}
+        <div className="input-group">
+          <label htmlFor="image-upload">Upload Item Image</label>
+          <input
+            type="file"
+            id="image-upload"
+            accept="image/*"
+            onChange={handleImageUpload}
+          />
+          {uploadedImage && (
+            <div className="image-preview">
+              <img src={uploadedImage} alt="Preview" />
+              <button onClick={clearImagePreview}>&times;</button>
+            </div>
+          )}
+        </div>
+  
+        {/* Action Buttons */}
+        <div className="action-buttons">
+          <button className="btn cancel-btn" onClick={handleCancel}>
+            Cancel
+          </button>
+          <button className="btn upload-btn" onClick={handleUpload}>
+            Add Supply
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -227,7 +527,12 @@ const ProfileSupplier = ({ onLogout }) => {
     <h1>Your information will be shown here</h1>
   );
 
-  // Main render function
+  const renderSearchPage = () => (
+    <div>
+      <h1>Search items here</h1>
+    </div>
+  );
+
   const renderContent = () => {
     switch (activePage) {
       case "profile":
