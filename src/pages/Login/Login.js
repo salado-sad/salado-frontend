@@ -7,6 +7,7 @@ const Login = ({ onSwitch, onBackToLanding, onForgotPassword, onLoginSuccess }) 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    role: "customer",
   });
 
   const [errors, setErrors] = useState({});
