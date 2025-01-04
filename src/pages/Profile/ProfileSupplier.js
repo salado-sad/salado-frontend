@@ -545,11 +545,87 @@ const ProfileSupplier = ({ onLogout }) => {
     <h1>Your information will be shown here</h1>
   );
 
-  const renderSearchPage = () => (
-    <div>
-      <h1>Search items here</h1>
-    </div>
-  );
+  const [searchQuery, setSearchQuery] = useState("");
+  const [minQuantity, setMinQuantity] = useState(0);
+  const [maxQuantity, setMaxQuantity] = useState(1000);
+
+  const renderSearchPage = () => {
+  
+    // Filter products based on search query, category, and quantity range
+    const filteredProducts = addedItems.filter((item) => {
+      const matchesSearch = item.product.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = selectedCategory ? item.category === selectedCategory : true;
+      const matchesQuantity = item.productQuantity >= minQuantity && item.productQuantity <= maxQuantity;
+      return matchesSearch && matchesCategory && matchesQuantity;
+    });
+  
+    return (
+      <div className="search-page-container">
+        {/* Search Bar */}
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <img src={searchIcon} alt="Search" className="search-icon" />
+        </div>
+  
+        {/* Filters */}
+        <div className="filters">
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="">All Categories</option>
+            {[...new Set(addedItems.map((item) => item.category))].map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+  
+          <div className="quantity-filter">
+            <label>Quantity Range:</label>
+            <input
+              type="number"
+              placeholder="Min"
+              value={minQuantity}
+              onChange={(e) => setMinQuantity(Number(e.target.value))}
+            />
+            <input
+              type="number"
+              placeholder="Max"
+              value={maxQuantity}
+              onChange={(e) => setMaxQuantity(Number(e.target.value))}
+            />
+          </div>
+        </div>
+  
+        {/* Product Grid */}
+        <div className="product-grid">
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((item, index) => (
+              <div key={index} className="product-card">
+                <div className="card-image">
+                  <img src={item.image} alt={item.product} />
+                </div>
+                <h3>{item.product}</h3>
+                <p>Category: {item.category}</p>
+                <p>Subcategory: {item.subCategory}</p>
+                <p>Quantity: {item.productQuantity}</p>
+                <p>Measurement: {item.productMeasurement}</p>
+                <p>Catalogue: {item.catalogueName}</p>
+              </div>
+            ))
+          ) : (
+            <p className="no-results">No products found.</p>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   const renderContent = () => {
     switch (activePage) {
