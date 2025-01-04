@@ -14,7 +14,6 @@ const Profile = ({ onLogout }) => {
 
       try {
         const token = localStorage.getItem("authToken"); // Token from localStorage
-        // const response = await fetch("https://api.salado.mghgm.ir/auth/profile", {
         const response = await fetch("https://localhost:8000/auth/profile/", {
           method: "GET",
           headers: {
@@ -32,7 +31,17 @@ const Profile = ({ onLogout }) => {
           setError("Failed to fetch profile data. Please try again later.");
         }
       } catch (err) {
-        setError("Failed to connect to the server.");
+        const mockData = {
+          name: "John",
+          lastname: "Doe",
+          email: "john.doe@example.com",
+          birthdate: "1990-01-01",
+          phone: "09912327821",
+          nationalcode: "0025058674",
+          password: "securepassword",
+          role: "customer",
+        };
+        setProfileData(mockData);
       } finally {
         setLoading(false);
       }
@@ -47,27 +56,40 @@ const Profile = ({ onLogout }) => {
   };
 
   return (
-    <div className="profile-container">
-      {/* Back to Home Button */}
-      <div className="back-to-landing">
-        <button onClick={handleLogout} className="back-to-landing-btn">
-          <img src={logo} alt="Salado Logo" className="logo-button" />
-          <span className="salado-name">Salado</span>
+    <div className="profile-page-container">
+      {/* Sidebar */}
+      <div className="sidebar">
+        <button onClick={handleLogout} className="logo-button">
+          <img src={logo} alt="Salado Logo" />
         </button>
       </div>
 
+      {/* Main Content */}
       <div className="profile-content">
-        {loading && <p>Loading your profile...</p>}
+        <div className="profile-header">
+          <h1>Your Profile</h1>
+        </div>
+
+        {loading && <p className="loading-message">Loading your profile...</p>}
         {error && <p className="error-message">{error}</p>}
 
         {!loading && profileData && (
-          <div className="profile-details">
-            <h1>Welcome, {profileData.name}!</h1>
-            <p><strong>Name:</strong> {profileData.name}</p>
-            <p><strong>Email:</strong> {profileData.email}</p>
-            <p><strong>Phone:</strong> {profileData.phone}</p>
-            <p><strong>National Code:</strong> {profileData.nationalcode}</p>
-            <p><strong>Birthdate:</strong> {new Date(profileData.birthdate).toLocaleDateString()}</p>
+          <div className="profile-card">
+            <div className="profile-card-header">
+              <h2>Welcome, {profileData.name}!</h2>
+            </div>
+
+            <div className="profile-card-details">
+              <p><strong>Full Name:</strong> {profileData.name} {profileData.lastname}</p>
+              <p><strong>Email:</strong> {profileData.email}</p>
+              <p><strong>Phone:</strong> {profileData.phone}</p>
+              <p><strong>National Code:</strong> {profileData.nationalcode}</p>
+              <p>
+                <strong>Birthdate:</strong>{" "}
+                {new Date(profileData.birthdate).toLocaleDateString()}
+              </p>
+              <p><strong>Role:</strong> {profileData.role}</p>
+            </div>
           </div>
         )}
       </div>

@@ -6,9 +6,8 @@ import basketIcon from "../../assets/basket-icon.svg";
 import plusIcon from "../../assets/plus-icon.svg";
 import settingsIcon from "../../assets/settings-icon.svg";
 import bellIcon from "../../assets/bell-icon.svg";
-import uploadIcon from "../../assets/upload-icon.svg";
 import searchIcon from "../../assets/search-icon.svg";
-import logo from "../../assets/home.svg";
+import logo from "../../assets/logo_mono.png";
 
 // The data structure for categories, subcategories, and products
 const data = {
@@ -65,7 +64,16 @@ const ProfileSupplier = ({ onLogout }) => {
       catalogueName: "Fresh Organic Strawberries",
       productMeasurement: "1 Kilogram",
       productQuantity: 25,
-      image: "https://via.placeholder.com/150/FF7F7F/ffffff?text=Strawberry", // Placeholder image for Strawberry
+      image: "https://cdn.nyallergy.com/wp-content/uploads/square-1432664914-strawberry-facts1-1200x900.jpeg", // Placeholder image for Strawberry
+    },
+    {
+      category: "Fruits",
+      subCategory: "Citrus",
+      product: "Mandarin",
+      catalogueName: "North Garden",
+      productMeasurement: "200 Grams",
+      productQuantity: 100,
+      image: "https://foodprint.org/wp-content/uploads/2018/10/imageedit_140_9990398976.jpg", // Placeholder image for Strawberry
     },
     {
       category: "Vegetables",
@@ -74,7 +82,7 @@ const ProfileSupplier = ({ onLogout }) => {
       catalogueName: "Fresh Farm Spinach",
       productMeasurement: "500 Grams",
       productQuantity: 50,
-      image: "https://via.placeholder.com/150/7FFF7F/ffffff?text=Spinach", // Placeholder image for Spinach
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEFIf1LwpQrKWxz9lSfn976uLBL9n5g18CUQ&s", // Placeholder image for Spinach
     },
   ]);
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -204,9 +212,6 @@ const ProfileSupplier = ({ onLogout }) => {
     setEditIndex(null); // Exit edit mode
   };
 
-  const handleCancelEdit = () => {
-    setEditIndex(null); // Exit edit mode without saving
-  };
 
   const ConfirmDeleteModal = () => (
     isModalVisible && (
@@ -221,6 +226,7 @@ const ProfileSupplier = ({ onLogout }) => {
                 handleDeleteItem(deleteIndex); // Confirm deletion
                 setModalVisible(false); // Close the modal
                 setDeleteIndex(null); // Clear the delete index
+                setEditIndex(null);
               }}
             >
               Confirm
@@ -564,52 +570,58 @@ const ProfileSupplier = ({ onLogout }) => {
     <div className="profile-supplier-container">
       {/* Sidebar */}
       <div className="profile-supplier-sidebar">
-      <button
-        onClick={handleLogout}
-        className="sidebar-icon logo-button"
-        title="Logout"
-      >
-        <img src={logo} alt="Home Logo" />
-      </button>
-
-      <div className="sidebar-menu">
+        {/* Larger Sidebar Logo */}
         <button
-          className={`sidebar-icon ${activePage === "search" ? "active" : ""}`}
-          onClick={() => setActivePage("search")}
-          title="Search Items"
+          onClick={handleLogout}
+          className="sidebar-icon logo-button"
+          title="Logout"
         >
-          <img src={searchIcon} alt="Search Icon" />
+          <img
+            src={logo}
+            alt="Company Logo"
+            className="sidebar-logo"
+          />
         </button>
-        <button
-          className={`sidebar-icon ${activePage === "profile" ? "active" : ""}`}
-          onClick={() => setActivePage("profile")}
-          title="Your Profile"
-        >
-          <img src={basketIcon} alt="Basket Icon" />
-        </button>
-        <button
-          className={`sidebar-icon ${activePage === "addSupply" ? "active" : ""}`}
-          onClick={() => setActivePage("addSupply")}
-          title="Add Supply"
-        >
-          <img src={plusIcon} alt="Plus Icon" />
-        </button>
-        <button
-          className={`sidebar-icon ${activePage === "setting" ? "active" : ""}`}
-          onClick={() => setActivePage("setting")}
-          title="Settings"
-        >
-          <img src={settingsIcon} alt="Settings Icon" />
-        </button>
+        
+        {/* Sidebar Buttons */}
+        <div className="sidebar-menu">
+          <button
+            className={`sidebar-icon ${activePage === "search" ? "active" : ""}`}
+            onClick={() => setActivePage("search")}
+            title="Search Items"
+          >
+            <img src={searchIcon} alt="Search Icon" />
+          </button>
+          <button
+            className={`sidebar-icon ${activePage === "profile" ? "active" : ""}`}
+            onClick={() => setActivePage("profile")}
+            title="Your Profile"
+          >
+            <img src={basketIcon} alt="Basket Icon" />
+          </button>
+          <button
+            className={`sidebar-icon ${activePage === "addSupply" ? "active" : ""}`}
+            onClick={() => setActivePage("addSupply")}
+            title="Add Supply"
+          >
+            <img src={plusIcon} alt="Plus Icon" />
+          </button>
+          <button
+            className={`sidebar-icon ${activePage === "setting" ? "active" : ""}`}
+            onClick={() => setActivePage("setting")}
+            title="Settings"
+          >
+            <img src={settingsIcon} alt="Settings Icon" />
+          </button>
+        </div>
       </div>
-    </div>
 
       {/* Main Content */}
       <div className="profile-supplier-main">
         {/* Header */}
         <div className="profile-supplier-header">
           <div>
-            <h2>Welcome, Danial</h2>
+            <h2>Welcome, John</h2>
             <p>Mon, 30 Dec 2024</p>
           </div>
           <div className="profile-notification">

@@ -705,9 +705,9 @@
   cursor: pointer;
   padding: 0;
   outline: none;
-  border-radius: 50%; /* Circular button style on hover */
+  border-radius: 50%; /* Guarantee circular hover */
   margin-bottom: 20px; /* Spacing between buttons */
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth effects */
 }
 
 .sidebar-icon img {
@@ -716,13 +716,14 @@
   filter: brightness(0) invert(1); /* White icons */
 }
 
+/* Hover Effect */
 .sidebar-icon:hover {
-  background-color: rgba(255, 255, 255, 0.15); /* Hover effect */
+  background-color: rgba(255, 255, 255, 0.15); /* Subtle overlay */
   transform: scale(1.1); /* Slight zoom on hover */
 }
 
 .sidebar-icon.active {
-  background-color: rgba(255, 255, 255, 0.3); /* Highlight active button */
+  background-color: rgba(76, 175, 80, 0.3); /* Green highlight for active button */
 }
 
 /* Adjust Tooltip Spacing */
@@ -734,4 +735,29 @@
 .profile-supplier-main {
   margin-left: 70px; /* Push content to the right of the sidebar */
   padding: 20px;
+}
+
+/* Sidebar Logo */
+.logo-button {
+  margin-bottom: 30px; /* Space below the logo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* Ensures a full-width container */
+  padding: 10px; /* Sufficient padding for the logo */
+}
+
+.logo-button img {
+  width: 50px; /* Slightly larger logo */
+  height: 50px;
+  object-fit: contain; /* Keeps the logo proportions */
+  border-radius: 50%; /* Circular appearance */
+  padding: 8px;
+  transition: background-color 0.3s, transform 0.3s; /* Smooth hover interactions */
+}
+
+/* Hover Effect */
+.logo-button:hover img {
+  background-color: rgba(255, 255, 255, 0.3); /* Slightly brighter green accent */
+  transform: scale(1.1); /* Slight zoom effect */
 }
