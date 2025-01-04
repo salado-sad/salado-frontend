@@ -661,3 +661,77 @@
 .cancel-btn:hover {
   background-color: #ccc;
 }
+
+/* Sidebar Styling */
+.profile-supplier-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 70px;
+  background: linear-gradient(180deg, #4caf50, #087f23); /* Clean green gradient */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  z-index: 999;
+}
+/* Sidebar Container */
+.profile-supplier-sidebar {
+  position: fixed; /* Ensure the sidebar stays fixed */
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 70px; /* Decide on a fixed width */
+  background: linear-gradient(180deg, #4caf50, #087f23); /* Gradient */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+
+/* Sidebar Button Style */
+.sidebar-icon {
+  width: 50px; /* Ensures buttons are square */
+  height: 50px;
+  display: flex;
+  align-items: center; /* Center icon vertically */
+  justify-content: center; /* Center icon horizontally */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  border-radius: 50%; /* Circular button style on hover */
+  margin-bottom: 20px; /* Spacing between buttons */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.sidebar-icon img {
+  width: 24px; /* Icon size */
+  height: 24px;
+  filter: brightness(0) invert(1); /* White icons */
+}
+
+.sidebar-icon:hover {
+  background-color: rgba(255, 255, 255, 0.15); /* Hover effect */
+  transform: scale(1.1); /* Slight zoom on hover */
+}
+
+.sidebar-icon.active {
+  background-color: rgba(255, 255, 255, 0.3); /* Highlight active button */
+}
+
+/* Adjust Tooltip Spacing */
+.sidebar-icon::after {
+  left: 70px; /* Matches sidebar width for placement */
+}
+
+/* Content Area */
+.profile-supplier-main {
+  margin-left: 70px; /* Push content to the right of the sidebar */
+  padding: 20px;
+}

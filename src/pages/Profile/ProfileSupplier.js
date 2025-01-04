@@ -81,6 +81,7 @@ const ProfileSupplier = ({ onLogout }) => {
   const [editIndex, setEditIndex] = useState(null); // Tracks the index of the item being edited
   const [deleteIndex, setDeleteIndex] = useState(null); // Tracks the index of the item to delete
   const [isModalVisible, setModalVisible] = useState(false); // Controls modal visibility
+  const [originalItem, setOriginalItem] = useState(null); // Stores the original values of the item being edited
 
   // Handlers
   const handleCategoryChange = (event) => {
@@ -346,7 +347,15 @@ const ProfileSupplier = ({ onLogout }) => {
                     </button>
                     <button
                       className="cancel-btn"
-                      onClick={handleCancelEdit}
+                      onClick={() => {
+                        if (originalItem !== null) {
+                          const updatedItems = [...addedItems];
+                          updatedItems[editIndex] = originalItem; // Revert to original values
+                          setAddedItems(updatedItems);
+                        }
+                        setEditIndex(null); // Exit edit mode
+                        setOriginalItem(null); // Clear cached originalItem
+                      }}
                     >
                       Cancel
                     </button>
@@ -376,7 +385,10 @@ const ProfileSupplier = ({ onLogout }) => {
                   <div className="action-buttons">
                     <button
                       className="edit-btn"
-                      onClick={() => setEditIndex(index)}
+                      onClick={() => {
+                        setEditIndex(index); // Enable edit mode
+                        setOriginalItem({ ...addedItems[index] }); // Cache the original values
+                      }}
                     >
                       Edit
                     </button>
@@ -552,23 +564,45 @@ const ProfileSupplier = ({ onLogout }) => {
     <div className="profile-supplier-container">
       {/* Sidebar */}
       <div className="profile-supplier-sidebar">
-        <button onClick={handleLogout} className="sidebar-icon">
-          <img src={logo} alt="Salado Logo" className="logo-button" />
-        </button>
+      <button
+        onClick={handleLogout}
+        className="sidebar-icon logo-button"
+        title="Logout"
+      >
+        <img src={logo} alt="Home Logo" />
+      </button>
 
-        <button className={`sidebar-icon ${activePage === "search" ? "active" : ""}`} onClick={() => setActivePage("search")}>
-          <img src={searchIcon} alt="Search" />
+      <div className="sidebar-menu">
+        <button
+          className={`sidebar-icon ${activePage === "search" ? "active" : ""}`}
+          onClick={() => setActivePage("search")}
+          title="Search Items"
+        >
+          <img src={searchIcon} alt="Search Icon" />
         </button>
-        <button className={`sidebar-icon ${activePage === "profile" ? "active" : ""}`} onClick={() => setActivePage("profile")}>
-          <img src={basketIcon} alt="Basket" />
+        <button
+          className={`sidebar-icon ${activePage === "profile" ? "active" : ""}`}
+          onClick={() => setActivePage("profile")}
+          title="Your Profile"
+        >
+          <img src={basketIcon} alt="Basket Icon" />
         </button>
-        <button className={`sidebar-icon ${activePage === "addSupply" ? "active" : ""}`} onClick={() => setActivePage("addSupply")}>
-          <img src={plusIcon} alt="Add" />
+        <button
+          className={`sidebar-icon ${activePage === "addSupply" ? "active" : ""}`}
+          onClick={() => setActivePage("addSupply")}
+          title="Add Supply"
+        >
+          <img src={plusIcon} alt="Plus Icon" />
         </button>
-        <button className={`sidebar-icon ${activePage === "setting" ? "active" : ""}`} onClick={() => setActivePage("setting")}>
-          <img src={settingsIcon} alt="Settings" />
+        <button
+          className={`sidebar-icon ${activePage === "setting" ? "active" : ""}`}
+          onClick={() => setActivePage("setting")}
+          title="Settings"
+        >
+          <img src={settingsIcon} alt="Settings Icon" />
         </button>
       </div>
+    </div>
 
       {/* Main Content */}
       <div className="profile-supplier-main">
