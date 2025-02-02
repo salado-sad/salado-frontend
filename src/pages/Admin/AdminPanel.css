@@ -1,0 +1,12 @@
+.admin-panel-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+.admin-panel-container h2 {
+    color: #333;
+}
+.admin-panel-container p {
+    color: #555;
+}

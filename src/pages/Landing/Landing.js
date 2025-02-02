@@ -2,7 +2,7 @@ import React from "react";
 import "./Landing.css";
 import logo from "../../assets/logo.png";
 
-const Landing = ({ onSwitchToLogin, onSwitchToSupplierLogin }) => {
+const Landing = ({ onSwitchToLogin, onSwitchToSupplierLogin, onSwitchToAdminLogin }) => {
   return (
     <div>
       {/* Navbar */}
@@ -71,6 +71,9 @@ const Landing = ({ onSwitchToLogin, onSwitchToSupplierLogin }) => {
           </li>
           <li>
             <a href="#contact">Contact Us</a>
+          </li>
+          <li>
+            <a href="#admin" onClick={() => onSwitchToAdminLogin()}>Admin Login</a>
           </li>
         </ul>
       </footer>

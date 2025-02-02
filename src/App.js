@@ -7,6 +7,8 @@ import LandingPage from "./pages/Landing/Landing";
 import ForgetPassword from "./pages/ForgetPassword/ForgetPassword";
 import Profile from "./pages/Profile/Profile";
 import ProfileSupplier from "./pages/Profile/ProfileSupplier";
+import AdminLogin from "./pages/Admin/AdminLogin";
+import AdminPanel from "./pages/Admin/AdminPanel";
 
 function App() {
   const [page, setPage] = useState("landing");
@@ -16,7 +18,8 @@ function App() {
       {page === "landing" && (
         <LandingPage 
           onSwitchToLogin={() => setPage("login")}
-          onSwitchToSupplierLogin={() => setPage("supplier-login")} 
+          onSwitchToSupplierLogin={() => setPage("supplier-login")}
+          onSwitchToAdminLogin={() => setPage("admin-login")}
         />
       )}
       {page === "login" && (
@@ -55,6 +58,15 @@ function App() {
       )}
       {page === "supplier-profile" && (
         <ProfileSupplier onLogout={() => setPage("landing")} />
+      )}
+      {page === "admin-login" && (
+        <AdminLogin
+          onLoginSuccess={() => setPage("admin-panel")} // Admin login success leads to AdminPanel
+          onBackToLanding={() => setPage("landing")}
+        />
+      )}
+      {page === "admin-panel" && (
+        <AdminPanel onLogout={() => setPage("landing")} />
       )}
     </div>
   );
