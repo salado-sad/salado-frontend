@@ -31,14 +31,15 @@ const convertToEnglishDigits = (input) => {
 
 const Signup = ({ onSwitch, onBackToLanding }) => {
   const [formData, setFormData] = useState({
-    name: "",
-    lastname: "",
+    username: "",
+    first_name: "",
+    last_name: "",
     email: "",
-    birthdate: "",
-    nationalcode: "",
-    phone: "",
+    date_of_birth: "",
+    national_code: "",
+    phone_number: "",
     password: "",
-    role: "customer",
+    // role: "customer",
   });
 
   const [errors, setErrors] = useState({});
@@ -52,12 +53,14 @@ const Signup = ({ onSwitch, onBackToLanding }) => {
   const validateForm = () => {
     const newErrors = {};
 
-    const englishPhone = convertToEnglishDigits(formData.phone.trim());
-    const englishNationalCode = convertToEnglishDigits(formData.nationalcode.trim());
+    const englishPhone = convertToEnglishDigits(formData.phone_number.trim());
+    const englishNationalCode = convertToEnglishDigits(formData.national_code.trim());
 
-    if (!formData.name.trim()) newErrors.name = "Name is required.";
+    if (!formData.username.trim()) newErrors.username = "Username is required.";
 
-    if (!formData.lastname.trim()) newErrors.lastname = "Lastname is required.";
+    if (!formData.first_name.trim()) newErrors.first_name = "Firstname is required.";
+
+    if (!formData.last_name.trim()) newErrors.last_name = "Lastname is required.";
 
     if (!formData.email.trim()) {
       newErrors.email = "Email is required.";
@@ -66,20 +69,20 @@ const Signup = ({ onSwitch, onBackToLanding }) => {
     }
     
 
-    if (!formData.birthdate.trim()) newErrors.birthdate = "Birth date is required.";
+    if (!formData.date_of_birth.trim()) newErrors.date_of_birth = "Birth date is required.";
 
-    if (!formData.nationalcode.trim()) {
-      newErrors.nationalcode = "National code is required.";
+    if (!formData.national_code.trim()) {
+      newErrors.national_code = "National code is required.";
     } else if (!/^\d{10}$/.test(englishNationalCode)) {
-      newErrors.nationalcode = "National code must be a 10-digit number.";
+      newErrors.national_code = "National code must be a 10-digit number.";
     } else if (!validateNationalCode(englishNationalCode)) {
-      newErrors.nationalcode = "Not a valid national code!";
+      newErrors.national_code = "Not a valid national code!";
     }
 
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required.";
+    if (!formData.phone_number.trim()) {
+      newErrors.phone_number = "Phone number is required.";
     } else if (!/^09\d{9}$/.test(englishPhone)) {
-      newErrors.phone = "Phone number is not valid. It must be an 11-digit number starting with '09'.";
+      newErrors.phone_number = "Phone number is not valid. It must be an 11-digit number starting with '09'.";
     }
 
     if (!formData.password.trim()) {
@@ -107,7 +110,7 @@ const Signup = ({ onSwitch, onBackToLanding }) => {
 
     try {
       // const response = await fetch("https://api.salado.mghgm.ir/auth/signup", {
-      const response = await fetch("http://localhost:8000/auth/signup/", {
+      const response = await fetch("http://localhost:8000/auth/register/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -145,25 +148,35 @@ const Signup = ({ onSwitch, onBackToLanding }) => {
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         {successMessage && <p className="success-message">{successMessage}</p>}
         <form onSubmit={handleSubmit}>
-          <label htmlFor="name">Name</label>
+          <label htmlFor="username">Username</label>
           <input
             type="text"
-            id="name"
-            placeholder="Enter your name"
-            value={formData.name}
+            id="username"
+            placeholder="Enter your username"
+            value={formData.username}
             onChange={handleChange}
           />
-          {errors.name && <p className="field-error">{errors.name}</p>}
+          {errors.username && <p className="field-error">{errors.username}</p>}
 
-          <label htmlFor="lastname">Lastname</label>
+          <label htmlFor="first_name">Name</label>
           <input
             type="text"
-            id="lastname"
-            placeholder="Enter your lastname"
-            value={formData.lastname}
+            id="first_name"
+            placeholder="Enter your name"
+            value={formData.first_name}
             onChange={handleChange}
           />
-          {errors.lastname && <p className="field-error">{errors.lastname}</p>}
+          {errors.first_name && <p className="field-error">{errors.first_name}</p>}
+
+          <label htmlFor="last_name">Lastname</label>
+          <input
+            type="text"
+            id="last_name"
+            placeholder="Enter your lastname"
+            value={formData.last_name}
+            onChange={handleChange}
+          />
+          {errors.last_name && <p className="field-error">{errors.last_name}</p>}
 
           <label htmlFor="email">Email address</label>
           <input
@@ -175,36 +188,36 @@ const Signup = ({ onSwitch, onBackToLanding }) => {
           />
           {errors.email && <p className="field-error">{errors.email}</p>}
 
-          <label htmlFor="birthdate">Birth Date</label>
+          <label htmlFor="date_of_birth">Birth Date</label>
           <input
             type="date"
-            id="birthdate"
-            value={formData.birthdate}
+            id="date_of_birth"
+            value={formData.date_of_birth}
             onChange={handleChange}
           />
-          {errors.birthdate && <p className="field-error">{errors.birthdate}</p>}
+          {errors.date_of_birth && <p className="field-error">{errors.date_of_birth}</p>}
 
-          <label htmlFor="nationalcode">National Code</label>
+          <label htmlFor="national_code">National Code</label>
           <input
             type="text"
-            id="nationalcode"
+            id="national_code"
             placeholder="Enter your national code"
-            value={formData.nationalcode}
+            value={formData.national_code}
             onChange={handleChange}
           />
-          {errors.nationalcode && (
-            <p className="field-error">{errors.nationalcode}</p>
+          {errors.national_code && (
+            <p className="field-error">{errors.national_code}</p>
           )}
 
-          <label htmlFor="phone">Phone Number</label>
+          <label htmlFor="phone_number">Phone Number</label>
           <input
             type="tel"
-            id="phone"
+            id="phone_number"
             placeholder="Enter your phone number (09XXXXXXXXX)"
-            value={formData.phone}
+            value={formData.phone_number}
             onChange={handleChange}
           />
-          {errors.phone && <p className="field-error">{errors.phone}</p>}
+          {errors.phone_number && <p className="field-error">{errors.phone_number}</p>}
 
           <label htmlFor="password">Password</label>
           <input
