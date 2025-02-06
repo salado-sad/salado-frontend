@@ -1,0 +1,50 @@
+/* src/components/PackageList.css */
+.package-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin: 10px;
+    width: 250px;
+    text-align: center;
+  }
+  
+/* src/components/PackageList.css */
+.package-image {
+    width: 100%;
+    height: 0;
+    padding-top: 100%; /* This creates a square aspect ratio */
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  
+  .package-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .product-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+  }
+  
+  .product-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .product-small-image {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+  }
