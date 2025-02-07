@@ -1,0 +1,94 @@
+/* AddPackage.css */
+
+.add-package {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.add-package h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.add-package form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.add-package input,
+.add-package textarea,
+.add-package select,
+.add-package button {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.add-package textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.add-package .product-details {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+}
+
+.add-package .product-details select,
+.add-package .product-details input {
+    margin-top: 10px;
+}
+
+.add-package button {
+    background-color: #4caf50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-package button:hover {
+    background-color: #45a049;
+}
+
+.add-package .product-details h3,
+.add-package .added-products h4 {
+    margin-bottom: 10px;
+}
+
+.add-package .added-products ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+@media (max-width: 768px) {
+    .add-package {
+        padding: 15px;
+    }
+
+    .add-package input,
+    .add-package textarea,
+    .add-package select,
+    .add-package button {
+        font-size: 14px;
+    }
+}

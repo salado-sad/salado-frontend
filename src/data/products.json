@@ -1,0 +1,51 @@
+{
+    "Vegetables": {
+        "LeafyGreens": ["Romaine Lettuce", "Spinach", "Arugula", "Kale", "Swiss Chard", "Butterhead Lettuce", "Collard Greens", "Watercress", "Mustard Greens"],
+        "Cruciferous": ["Broccoli", "Cauliflower", "Brussels Sprouts", "Cabbage", "Bok Choy", "Kohlrabi", "Collard Greens", "Radishes"],
+        "Root": ["Carrot", "Beetroot", "Turnip", "Radish", "Sweet Potato", "Parsnip", "Rutabaga", "Ginger", "Yam"],
+        "Allium": ["Garlic", "Onion", "Shallots", "Leeks", "Chives", "Scallions", "Green Onion", "Ramps"],
+        "Nightshades": ["Tomato", "Bell Pepper", "Eggplant", "Chili Pepper", "Potato", "Pimentos"],
+        "Legumes": ["Green Beans", "Peas", "Lentils", "Chickpeas", "Black Beans", "Kidney Beans", "Soybeans", "Lima Beans"],
+        "Mushrooms": ["Button Mushroom", "Portobello", "Shiitake", "Cremini", "Oyster", "Enoki"],
+        "Squashes": ["Zucchini", "Butternut Squash", "Acorn Squash", "Pumpkin", "Spaghetti Squash"]
+    },
+    "Fruits": {
+        "Citrus": ["Lemon", "Lime", "Orange", "Grapefruit", "Mandarin", "Tangerine", "Pomelo", "Clementine"],
+        "Tropical": ["Avocado", "Mango", "Pineapple", "Papaya", "Banana", "Coconut", "Passion Fruit", "Lychee", "Dragon Fruit"],
+        "Berries": ["Strawberry", "Blueberry", "Raspberry", "Blackberry", "Goji Berry", "Cranberry", "Mulberry", "Acai Berry"],
+        "StoneFruits": ["Peach", "Plum", "Cherry", "Apricot", "Nectarine", "Mango"],
+        "Pomes": ["Apple", "Pear", "Quince", "Asian Pear"],
+        "Melons": ["Watermelon", "Cantaloupe", "Honeydew", "Galia Melon"]
+    },
+    "Grains": {
+        "WholeGrains": ["Brown Rice", "Quinoa", "Oats", "Barley", "Bulgur", "Millet", "Farro", "Amaranth"],
+        "Pasta": ["Spaghetti", "Fusilli", "Penne", "Macaroni", "Linguine", "Fettuccine", "Lasagna"],
+        "Breads": ["Whole Wheat Bread", "Sourdough", "Rye Bread", "Baguette", "Pita", "Ciabatta", "Naan"]
+    },
+    "Proteins": {
+        "Meat": ["Chicken", "Beef", "Pork", "Lamb", "Turkey", "Duck", "Veal", "Rabbit"],
+        "Seafood": ["Salmon", "Shrimp", "Tuna", "Cod", "Crab", "Lobster", "Mussels", "Oysters", "Halibut"],
+        "PlantBased": ["Tofu", "Tempeh", "Seitan", "Edamame", "Lentils", "Chickpeas"]
+    },
+    "Dairy": {
+        "Milk": ["Cow Milk", "Almond Milk", "Soy Milk", "Oat Milk", "Coconut Milk", "Rice Milk"],
+        "Cheese": ["Cheddar", "Mozzarella", "Feta", "Parmesan", "Brie", "Gouda", "Goat Cheese", "Blue Cheese"],
+        "Yogurt": ["Greek Yogurt", "Regular Yogurt", "Icelandic Yogurt", "Soy Yogurt"]
+    },
+    "HerbsAndSpices": {
+        "Herbs": ["Basil", "Cilantro", "Parsley", "Mint", "Rosemary", "Thyme", "Dill", "Oregano", "Sage", "Tarragon"],
+        "Spices": ["Black Pepper", "Cinnamon", "Cumin", "Turmeric", "Paprika", "Ginger", "Nutmeg", "Clove", "Coriander", "Cardamom", "Allspice", "Saffron"]
+    },
+    "OilsAndVinegars": {
+        "Oils": ["Olive Oil", "Canola Oil", "Sesame Oil", "Coconut Oil", "Sunflower Oil", "Peanut Oil"],
+        "Vinegars": ["Balsamic Vinegar", "Red Wine Vinegar", "Apple Cider Vinegar", "White Vinegar", "Rice Vinegar"]
+    },
+    "NutsAndSeeds": {
+        "Nuts": ["Almonds", "Walnuts", "Cashews", "Pistachios", "Pecans", "Hazelnuts"],
+        "Seeds": ["Chia Seeds", "Flaxseeds", "Pumpkin Seeds", "Sunflower Seeds", "Sesame Seeds"]
+    },
+    "Condiments": {
+        "Sauces": ["Soy Sauce", "Worcestershire Sauce", "Hot Sauce", "Barbecue Sauce", "Ketchup", "Mustard"],
+        "Pastes": ["Tomato Paste", "Curry Paste", "Miso Paste", "Harissa"]
+    }
+}

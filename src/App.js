@@ -11,7 +11,7 @@ import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminPanel from "./pages/Admin/AdminPanel";
 
 function App() {
-  const [page, setPage] = useState("landing");
+  const [page, setPage] = useState("admin-panel");
 
   return (
     <div>
