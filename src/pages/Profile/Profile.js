@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Cookies from "js-cookie";
+
 import "../../index.css";
 import logo from "../../assets/logo.png";
 
@@ -13,11 +15,11 @@ const Profile = ({ onLogout }) => {
       setError("");
 
       try {
-        const token = localStorage.getItem("authToken"); // Token from localStorage
-        const response = await fetch("https://localhost:8000/auth/profile/", {
+        const accessToken = Cookies.get("access_token"); // Token from localStorage
+        const response = await fetch("http://localhost:8000/auth/profile/", {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`,
+            "Authorization": `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
         });

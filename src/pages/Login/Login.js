@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Cookies from "js-cookie";
+
 import "../../index.css";
 import logo from "../../assets/logo.png"; // Add your logo here
 import salad from "../../assets/salad.png";
@@ -41,7 +43,7 @@ const Login = ({ onSwitch, onBackToLanding, onForgotPassword, onLoginSuccess }) 
 
     try {
       // const response = await fetch("https://api.salado.mghgm.ir/auth/login", {
-      const response = await fetch("http://localhost:8000/auth/signin/", {
+      const response = await fetch("http://localhost:8000/auth/token/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,6 +56,14 @@ const Login = ({ onSwitch, onBackToLanding, onForgotPassword, onLoginSuccess }) 
       if (response.status === 200) {
         setSuccessMessage(result.message); // "Login successful"
         console.log("Login successful:", result.message);
+
+        // Set Cookies
+        const accessToken = result.access;
+        const refreshToken = result.refresh;
+
+        Cookies.set('access_token', accessToken, { expires: 1 });
+        Cookies.set('refresh_token', refreshToken, { expires: 7 });
+
         // Add additional logic like redirecting the user here.
         onLoginSuccess();
       } else if (response.status === 401) {
