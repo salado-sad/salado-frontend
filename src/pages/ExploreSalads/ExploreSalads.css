@@ -139,3 +139,83 @@ h2 {
 .clear-cart-btn:hover {
   background-color: #cc0000;
 }
+
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.search-input,
+.price-input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px;
+}
+
+.search-input:focus,
+.price-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.package-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.package-card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.package-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.package-price {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.add-to-cart-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #218838;
+}
+
+.cart-section {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.toggle-cart-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.toggle-cart-btn:hover {
+  background-color: #0056b3;
+}
