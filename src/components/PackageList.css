@@ -1,50 +1,61 @@
-/* src/components/PackageList.css */
+.package-list {
+  padding: 20px;
+}
+
+.package-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
 .package-card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    margin: 10px;
-    width: 250px;
-    text-align: center;
-  }
-  
-/* src/components/PackageList.css */
-.package-image {
-    width: 100%;
-    height: 0;
-    padding-top: 100%; /* This creates a square aspect ratio */
-    object-fit: cover;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    position: relative;
-  }
-  
-  .package-image img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
-  }
-  
-  .product-list {
-    list-style: none;
-    padding: 0;
-    margin: 10px 0;
-  }
-  
-  .product-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-bottom: 5px;
-  }
-  
-  .product-small-image {
-    width: 20px;
-    height: 20px;
-    border-radius: 3px;
-  }
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  position: relative;
+  text-align: center;
+}
+
+.delete-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff4d4f;
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background: #ff7875;
+}
+
+.product-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  text-align: left;
+}
+
+.product-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  background-color: #f8f9fa;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.product-small-image {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  margin-right: 10px;
+  object-fit: cover;
+}

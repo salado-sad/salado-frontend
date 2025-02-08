@@ -1,4 +1,3 @@
-// src/pages/Admin/AdminPanel.js
 import React, { useState } from "react";
 import './AdminPanel.css';
 import PackageList from "../../components/PackageList";
@@ -11,10 +10,9 @@ import bellIcon from "../../assets/bell-icon.svg";
 import searchIcon from "../../assets/search-icon.svg";
 import logo from "../../assets/logo_mono.png";
 
-const AdminPanel = () => {
+const AdminPanel = ({ onLogout }) => {
   const [activePage, setActivePage] = useState("packages");
 
-  // Add initial state for packages
   const [packages, setPackages] = useState([
     {
       name: 'Agha Farid',
@@ -34,7 +32,6 @@ const AdminPanel = () => {
         }
       ]
     }
-    // Additional packages can be added here if needed
   ]);
 
   const handleAddPackage = (newPackage) => {
@@ -55,7 +52,7 @@ const AdminPanel = () => {
   return (
     <div className="admin-panel-container">
       <div className="sidebar">
-        <button className="sidebar-icon">
+        <button className="sidebar-icon" onClick={onLogout} title="Logout">
           <img src={logo} alt="Logo" />
         </button>
         <button className={`sidebar-icon ${activePage === "search" ? "active" : ""}`} onClick={() => setActivePage("search")}>

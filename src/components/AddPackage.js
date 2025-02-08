@@ -1,4 +1,3 @@
-// src/components/AddPackage.js
 import React, { useState } from 'react';
 import './AddPackage.css';
 import data from '../data/products.json'; // Adjust the path as necessary
@@ -9,6 +8,7 @@ const AddPackage = ({ onAddPackage }) => {
     price: '',
     description: '',
     image: '',
+    imageUrl: '', // New field for image URL
     products: []
   });
 
@@ -19,30 +19,6 @@ const AddPackage = ({ onAddPackage }) => {
     setNewPackage((prevState) => ({
       ...prevState,
       [name]: value
-    }));
-  };
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setNewPackage((prevState) => ({
-          ...prevState,
-          image: reader.result
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleProductChange = (e) => {
-    const { name, value } = e.target;
-    setProduct((prevState) => ({
-      ...prevState,
-      [name]: value,
-      ...(name === 'category' && { subcategory: '', name: '' }),
-      ...(name === 'subcategory' && { name: '' })
     }));
   };
 
@@ -59,9 +35,36 @@ const AddPackage = ({ onAddPackage }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (newPackage.name && newPackage.price && newPackage.description) {
-      onAddPackage(newPackage);
-      setNewPackage({ name: '', price: '', description: '', image: '', products: [] });
+      fetch('http://127.0.0.1:8000/management/packages/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: newPackage.name,
+          price: newPackage.price,
+          description: newPackage.description,
+          image: newPackage.imageUrl || newPackage.image, // Use URL if provided
+          products: newPackage.products.map(p => ({ name: p.name, quantity: parseInt(p.quantity, 10) }))
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Package added:', data);
+        setNewPackage({ name: '', price: '', description: '', image: '', imageUrl: '', products: [] });
+      })
+      .catch(error => console.error('Error adding package:', error));
     }
+  };
+
+  const handleProductChange = (e) => {
+    const { name, value } = e.target;
+    setProduct((prevState) => ({
+      ...prevState,
+      [name]: value,
+      ...(name === 'category' && { subcategory: '', name: '' }), // Reset subcategory and name if category changes
+      ...(name === 'subcategory' && { name: '' }) // Reset name if subcategory changes
+    }));
   };
 
   const subcategories = product.category ? Object.keys(data[product.category]) : [];
@@ -95,9 +98,11 @@ const AddPackage = ({ onAddPackage }) => {
           required
         />
         <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
+          type="url"
+          name="imageUrl"
+          placeholder="Image URL"
+          value={newPackage.imageUrl}
+          onChange={handleInputChange}
         />
 
         <div className="product-details">
