@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ExploreSalads.css";
 
 const ExploreSalads = ({ onBackToLanding }) => {
@@ -14,6 +14,38 @@ const ExploreSalads = ({ onBackToLanding }) => {
         ],
       },
     ]);
+
+    // Load cart from localStorage
+    const [cart, setCart] = useState(() => {
+      const savedCart = localStorage.getItem("cart");
+      return savedCart ? JSON.parse(savedCart) : [];
+    });
+
+    const [showCart, setShowCart] = useState(false); // Toggle for cart visibility
+
+    // Save cart to localStorage whenever it updates
+    useEffect(() => {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }, [cart]);
+
+    // Function to add package to cart
+    const addToCart = (pkg) => {
+      setCart((prevCart) => {
+        const existingItem = prevCart.find((item) => item.name === pkg.name);
+        if (existingItem) {
+          return prevCart.map((item) =>
+            item.name === pkg.name ? { ...item, quantity: item.quantity + 1 } : item
+          );
+        } else {
+          return [...prevCart, { ...pkg, quantity: 1 }];
+        }
+      });
+    };
+
+    // Function to clear the cart
+    const clearCart = () => {
+      setCart([]);
+    };
   
     return (
       <div className="package-list">
@@ -32,14 +64,41 @@ const ExploreSalads = ({ onBackToLanding }) => {
                   </li>
                 ))}
               </ul>
+              <button className="add-to-cart-btn" onClick={() => addToCart(pkg)}>
+                +
+              </button>
             </div>
           ))}
         </div>
+
+        <div className="cart-section">
+          <button className="toggle-cart-btn" onClick={() => setShowCart(!showCart)}>
+            {showCart ? "Hide Cart 🛒" : "View Cart 🛒"}
+          </button>
+          {showCart && (
+            <div className="cart-container">
+              <h2>Your Cart</h2>
+              {cart.length === 0 ? (
+                <p>Your cart is empty.</p>
+              ) : (
+                <ul className="cart-list">
+                  {cart.map((item, index) => (
+                    <li key={index} className="cart-item">
+                      <span>{item.name}</span> - <strong>{item.quantity}</strong> pcs
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {cart.length > 0 && <button className="clear-cart-btn" onClick={clearCart}>Clear Cart</button>}
+            </div>
+          )}
+        </div>
+
         <button onClick={onBackToLanding} className="back-button">
-            Back to Home
+          Back to Home
         </button>
       </div>
     );
   };
   
-  export default ExploreSalads;
+export default ExploreSalads;
