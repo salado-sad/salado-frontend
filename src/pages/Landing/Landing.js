@@ -2,7 +2,7 @@ import React from "react";
 import "./Landing.css";
 import logo from "../../assets/logo.png";
 
-const Landing = ({ onSwitchToLogin, onSwitchToSupplierLogin, onSwitchToAdminLogin }) => {
+const Landing = ({ onSwitchToLogin, onSwitchToSupplierLogin, onSwitchToAdminLogin, onExploreSalads }) => {
   return (
     <div>
       {/* Navbar */}
@@ -27,7 +27,7 @@ const Landing = ({ onSwitchToLogin, onSwitchToSupplierLogin, onSwitchToAdminLogi
           <p>
             Customizable salad options crafted to delight your taste buds delivered fresh daily.
           </p>
-          <button className="cta-btn">Explore Salads</button>
+          <button onClick={() => onExploreSalads()} className="cta-btn">Explore Salads</button>
         </div>
         <img
           src={logo}
