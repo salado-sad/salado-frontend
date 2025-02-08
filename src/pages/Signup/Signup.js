@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../index.css";
 import logo from "../../assets/logo.png"; // Add your logo here
 import salad from "../../assets/salad.png";
@@ -29,7 +30,8 @@ const convertToEnglishDigits = (input) => {
     .replace(arabicDigits, (d) => d.charCodeAt(0) - 0x0660); // Convert Arabic to English
 };
 
-const Signup = ({ onSwitch, onBackToLanding }) => {
+const Signup = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     first_name: "",
@@ -136,7 +138,7 @@ const Signup = ({ onSwitch, onBackToLanding }) => {
     <div className="signup-container">
       {/* Back to Home Button with Logo */}
       <div className="back-to-landing">
-        <button onClick={onBackToLanding} className="back-to-landing-btn">
+        <button onClick={() => navigate("/")} className="back-to-landing-btn">
           <img src={logo} alt="Salado Logo" className="logo-button" />
           <span className="salado-name">Salado</span>
         </button>
@@ -232,7 +234,7 @@ const Signup = ({ onSwitch, onBackToLanding }) => {
           <button type="submit" className="signup-btn">Signup</button>
         </form>
         <div className="login-link">
-          Already have an account? <button onClick={onSwitch}>Login</button>
+          Already have an account? <button onClick={() => navigate("/login")}>Login</button>
         </div>
       </div>
 

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 import "../../index.css";
 import logo from "../../assets/logo.png"; // Add your logo here
 import salad from "../../assets/salad.png";
 
-const Login = ({ onSwitch, onBackToLanding, onForgotPassword, onLoginSuccess }) => {
+const Login = ({ onLoginSuccess }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -64,7 +66,8 @@ const Login = ({ onSwitch, onBackToLanding, onForgotPassword, onLoginSuccess }) 
         Cookies.set('refresh_token', refreshToken, { expires: 7 });
 
         // Add additional logic like redirecting the user here.
-        onLoginSuccess();
+        // onLoginSuccess(result.user);
+        navigate("/profile");
       } else if (response.status === 401) {
         setErrorMessage(result.error); // "Invalid credentials"
       } else if (response.status === 403) {
@@ -82,7 +85,7 @@ const Login = ({ onSwitch, onBackToLanding, onForgotPassword, onLoginSuccess }) 
     <div className="login-container">
       {/* Back to Home Button with Logo */}
       <div className="back-to-landing">
-        <button onClick={onBackToLanding} className="back-to-landing-btn">
+        <button onClick={() => navigate("/")} className="back-to-landing-btn">
           <img src={logo} alt="Salado Logo" className="logo-button" />
           <span className="salado-name">Salado</span>
         </button>
@@ -122,7 +125,7 @@ const Login = ({ onSwitch, onBackToLanding, onForgotPassword, onLoginSuccess }) 
             <button
               type="button"
               className="forgot-password"
-              onClick={onForgotPassword}
+              onClick={() => navigate("/forget-password")}
             >
               Forgot Password
             </button>
@@ -132,7 +135,7 @@ const Login = ({ onSwitch, onBackToLanding, onForgotPassword, onLoginSuccess }) 
         </form>
 
         <div className="signup-link">
-          Don't have an account? <button onClick={onSwitch}>Sign Up</button>
+          Don't have an account? <button onClick={() => navigate("/signup")}>Sign Up</button>
         </div>
       </div>
 
