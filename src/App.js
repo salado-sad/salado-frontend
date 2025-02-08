@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Signup from "./pages/Signup/Signup";
 import Login from "./pages/Login/Login";
 import SignupSupplier from "./pages/Signup/SignupSupplier";
@@ -12,7 +12,13 @@ import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminPanel from "./pages/Admin/AdminPanel";
 
 function App() {
-  const [page, setPage] = useState("landing");
+  const [page, setPage] = useState(localStorage.getItem("currentPage") || "landing");
+  const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem("isAuthenticated") === "true");
+
+  useEffect(() => {
+    localStorage.setItem("currentPage", page);
+    localStorage.setItem("isAuthenticated", isAuthenticated);
+  }, [page, isAuthenticated]);
 
   return (
     <div>
@@ -34,7 +40,10 @@ function App() {
           onSwitch={() => setPage("signup")}
           onBackToLanding={() => setPage("landing")}
           onForgotPassword={() => setPage("forget-password")} // Navigate to Forget Password Page
-          onLoginSuccess={() => setPage("profile")}
+          onLoginSuccess={() => {
+            setIsAuthenticated(true);
+            setPage("profile");
+          }}
         />
       )}
       {page === "signup" && (
@@ -48,7 +57,10 @@ function App() {
           onSwitch={() => setPage("supplier-signup")}
           onBackToLanding={() => setPage("landing")}
           onForgotPassword={() => setPage("forget-password")}
-          onLoginSuccess={() => setPage("supplier-profile")}
+          onLoginSuccess={() => {
+            setIsAuthenticated(true);
+            setPage("supplier-profile");
+          }}
         />
       )}
       {page === "supplier-signup" && (
@@ -60,11 +72,19 @@ function App() {
       {page === "forget-password" && (
         <ForgetPassword onBackToLogin={() => setPage("login")} />
       )}
-      {page === "profile" && (
-        <Profile onLogout={() => setPage("landing")} />
+      {isAuthenticated && page === "profile" && (
+        <Profile onLogout={() => {
+          setIsAuthenticated(false);
+          setPage("landing");
+          localStorage.removeItem("isAuthenticated");
+        }} />
       )}
-      {page === "supplier-profile" && (
-        <ProfileSupplier onLogout={() => setPage("landing")} />
+      {isAuthenticated && page === "supplier-profile" && (
+        <ProfileSupplier onLogout={() => {
+          setIsAuthenticated(false);
+          setPage("landing");
+          localStorage.removeItem("isAuthenticated");
+        }} />
       )}
       {page === "admin-login" && (
         <AdminLogin
