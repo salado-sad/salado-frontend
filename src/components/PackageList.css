@@ -59,3 +59,21 @@
   margin-right: 10px;
   object-fit: cover;
 }
+
+.toggle-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.toggle-button.active {
+  background-color: #4caf50; /* Green for active */
+}
+
+.toggle-button.inactive {
+  background-color: #f44336; /* Red for inactive */
+}

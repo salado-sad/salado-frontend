@@ -7,8 +7,7 @@ const AddPackage = ({ onAddPackage }) => {
     name: '',
     price: '',
     description: '',
-    image: '',
-    imageUrl: '', // New field for image URL
+    image: '', // Use for Base64 image data
     products: []
   });
 
@@ -20,6 +19,20 @@ const AddPackage = ({ onAddPackage }) => {
       ...prevState,
       [name]: value
     }));
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewPackage((prevState) => ({
+          ...prevState,
+          image: reader.result // Convert image file to Base64
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const addProduct = () => {
@@ -44,14 +57,14 @@ const AddPackage = ({ onAddPackage }) => {
           name: newPackage.name,
           price: newPackage.price,
           description: newPackage.description,
-          image: newPackage.imageUrl || newPackage.image, // Use URL if provided
+          image: newPackage.image, // Send the encoded image
           products: newPackage.products.map(p => ({ name: p.name, quantity: parseInt(p.quantity, 10) }))
         })
       })
       .then(response => response.json())
       .then(data => {
         console.log('Package added:', data);
-        setNewPackage({ name: '', price: '', description: '', image: '', imageUrl: '', products: [] });
+        setNewPackage({ name: '', price: '', description: '', image: '', products: [] });
       })
       .catch(error => console.error('Error adding package:', error));
     }
@@ -98,11 +111,9 @@ const AddPackage = ({ onAddPackage }) => {
           required
         />
         <input
-          type="url"
-          name="imageUrl"
-          placeholder="Image URL"
-          value={newPackage.imageUrl}
-          onChange={handleInputChange}
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
         />
 
         <div className="product-details">

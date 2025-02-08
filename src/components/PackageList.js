@@ -7,7 +7,11 @@ const PackageList = () => {
   useEffect(() => {
     fetch('http://127.0.0.1:8000/management/packages/')
       .then(response => response.json())
-      .then(data => setPackages(data))
+      .then(data => {
+        // Add isActive property to each package
+        const packagesWithStatus = data.map(pkg => ({ ...pkg, isActive: true }));
+        setPackages(packagesWithStatus);
+      })
       .catch(error => console.error('Error fetching packages:', error));
   }, []);
 
@@ -16,10 +20,15 @@ const PackageList = () => {
       method: 'DELETE',
     })
       .then(() => {
-        // Remove the deleted package from the list
         setPackages(packages.filter(pkg => pkg.id !== id));
       })
       .catch(error => console.error('Error deleting package:', error));
+  };
+
+  const toggleActive = (id) => {
+    setPackages(packages.map(pkg =>
+      pkg.id === id ? { ...pkg, isActive: !pkg.isActive } : pkg
+    ));
   };
 
   return (
@@ -49,6 +58,12 @@ const PackageList = () => {
                   </li>
                 ))}
               </ul>
+              <button
+                className={`toggle-button ${pkg.isActive ? 'active' : 'inactive'}`}
+                onClick={() => toggleActive(pkg.id)}
+              >
+                {pkg.isActive ? 'Deactivate' : 'Activate'}
+              </button>
             </div>
           ))
         ) : (
