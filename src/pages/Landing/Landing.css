@@ -168,3 +168,30 @@
 .supplier-signin-btn:hover {
   background-color: #45a049;
 }
+
+.salads-section {
+  padding: 2rem;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.salads-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.salad-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: left;
+}
+
+.salad-image {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
