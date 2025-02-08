@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ProfileSupplier.css";
 
 // Import icons from assets
@@ -10,9 +10,6 @@ import searchIcon from "../../assets/search-icon.svg";
 import logo from "../../assets/logo_mono.png";
 import data from '../../data/products.json';
 
-// The data structure for categories, subcategories, and products
-// const data = JSON.parse();
-
 const ProfileSupplier = ({ onLogout }) => {
   const [activePage, setActivePage] = useState("profile");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -23,42 +20,21 @@ const ProfileSupplier = ({ onLogout }) => {
   const [productQuantity, setProductQuantity] = useState(0);
   const [productMeasurement, setProductMeasurement] = useState('');
   const [measurementUnit, setMeasurementUnit] = useState('grams');
-  const [addedItems, setAddedItems] = useState([
-    {
-      category: "Fruits",
-      subCategory: "Berries",
-      product: "Strawberry",
-      catalogueName: "Fresh Organic Strawberries",
-      productMeasurement: "1 Kilogram",
-      productQuantity: 25,
-      image: "https://cdn.nyallergy.com/wp-content/uploads/square-1432664914-strawberry-facts1-1200x900.jpeg", // Placeholder image for Strawberry
-    },
-    {
-      category: "Fruits",
-      subCategory: "Citrus",
-      product: "Mandarin",
-      catalogueName: "North Garden",
-      productMeasurement: "200 Grams",
-      productQuantity: 100,
-      image: "https://foodprint.org/wp-content/uploads/2018/10/imageedit_140_9990398976.jpg", // Placeholder image for Strawberry
-    },
-    {
-      category: "Vegetables",
-      subCategory: "LeafyGreens",
-      product: "Spinach",
-      catalogueName: "Fresh Farm Spinach",
-      productMeasurement: "500 Grams",
-      productQuantity: 50,
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEFIf1LwpQrKWxz9lSfn976uLBL9n5g18CUQ&s", // Placeholder image for Spinach
-    },
-  ]);
+  const [addedItems, setAddedItems] = useState([]);
   const [uploadedImage, setUploadedImage] = useState(null);
-  const [editIndex, setEditIndex] = useState(null); // Tracks the index of the item being edited
-  const [deleteIndex, setDeleteIndex] = useState(null); // Tracks the index of the item to delete
-  const [isModalVisible, setModalVisible] = useState(false); // Controls modal visibility
-  const [originalItem, setOriginalItem] = useState(null); // Stores the original values of the item being edited
+  const [editIndex, setEditIndex] = useState(null); 
+  const [deleteIndex, setDeleteIndex] = useState(null); 
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [originalItem, setOriginalItem] = useState(null); 
 
-  // Handlers
+  // Fetch products when the component mounts
+  useEffect(() => {
+    fetch('http://[Host]/vendors/products/')
+      .then(response => response.json())
+      .then(data => setProducts(data))
+      .catch(error => console.error('Error fetching products:', error));
+  }, []);
+
   const handleCategoryChange = (event) => {
     const category = event.target.value;
     setSelectedCategory(category);
@@ -125,24 +101,42 @@ const ProfileSupplier = ({ onLogout }) => {
   const handleUpload = () => {
     if (validateUploadForm()) {
       const newItem = {
+        name: selectedProduct,
         category: selectedCategory,
-        subCategory: selectedSubCategory,
-        product: selectedProduct,
-        catalogueName,
-        productMeasurement: `${productMeasurement} ${measurementUnit}`,
-        productQuantity,
-        image: uploadedImage, // Include uploaded image
+        subcategory: selectedSubCategory,
+        catalogue_name: catalogueName,
+        price: "0",
+        stock_quantity: productQuantity,
+        product_measurement: productMeasurement,
+        measurement_unit: measurementUnit,
       };
   
-      setAddedItems((prevItems) => [...prevItems, newItem]);
+      fetch('http://[Host]/vendors/products/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newItem)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Product added:', data);
+        // Refresh products list
+        fetch('http://[Host]/vendors/products/')
+          .then(response => response.json())
+          .then(data => setAddedItems(data))
+          .catch(error => console.error('Error fetching products:', error));
+      })
+      .catch(error => console.error('Error adding product:', error));
+  
       handleCancel();
-      setUploadedImage(null); // Clear the uploaded image after adding the item
+      setUploadedImage(null);
     }
   };
 
   const handleDeleteItem = (index) => {
     const updatedItems = [...addedItems];
-    updatedItems.splice(index, 1); // Remove the item at the specified index
+    updatedItems.splice(index, 1); 
     setAddedItems(updatedItems);
   };
 
@@ -155,7 +149,7 @@ const ProfileSupplier = ({ onLogout }) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = () => setUploadedImage(reader.result); // Read image as Base64 string
+      reader.onload = () => setUploadedImage(reader.result);
       reader.readAsDataURL(file);
     }
   };
@@ -171,12 +165,12 @@ const ProfileSupplier = ({ onLogout }) => {
   const handleSubCategoryEditChange = (index, value) => {
     const updatedItems = [...addedItems];
     updatedItems[index].subCategory = value;
-    updatedItems[index].product = ""; // Reset product selection if subcategory changes
+    updatedItems[index].product = ""; 
     setAddedItems(updatedItems);
   };
 
   const handleSaveEdit = (index) => {
-    setEditIndex(null); // Exit edit mode
+    setEditIndex(null);
   };
 
 
