@@ -39,7 +39,7 @@ const Signup = ({ onSwitch, onBackToLanding }) => {
     national_code: "",
     phone_number: "",
     password: "",
-    // role: "customer",
+    role: "customer",
   });
 
   const [errors, setErrors] = useState({});
