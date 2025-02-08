@@ -8,43 +8,10 @@ import settingsIcon from "../../assets/settings-icon.svg";
 import bellIcon from "../../assets/bell-icon.svg";
 import searchIcon from "../../assets/search-icon.svg";
 import logo from "../../assets/logo_mono.png";
+import data from '../../data/products.json';
 
 // The data structure for categories, subcategories, and products
-const data = {
-  Vegetables: {
-    LeafyGreens: ['Romaine Lettuce', 'Spinach', 'Arugula', 'Kale', 'Swiss Chard', 'Butterhead Lettuce'],
-    Cruciferous: ['Broccoli', 'Cauliflower', 'Brussels Sprouts', 'Cabbage'],
-    Root: ['Carrot', 'Beetroot', 'Turnip', 'Radish', 'Sweet Potato'],
-    Allium: ['Garlic', 'Onion', 'Shallots', 'Leeks'],
-    Nightshades: ['Tomato', 'Bell Pepper', 'Eggplant']
-  },
-  Fruits: {
-    Citrus: ['Lemon', 'Lime', 'Orange', 'Grapefruit', 'Mandarin'],
-    Tropical: ['Avocado', 'Mango', 'Pineapple', 'Papaya', 'Banana'],
-    Berries: ['Strawberry', 'Blueberry', 'Raspberry', 'Blackberry', 'Goji Berry'],
-    StoneFruits: ['Peach', 'Plum', 'Cherry', 'Apricot']
-  },
-  Herbs: {
-    LeafyHerbs: ['Basil', 'Mint', 'Parsley', 'Coriander', 'Thyme', 'Oregano'],
-    RootHerbs: ['Ginger', 'Turmeric', 'Horseradish']
-  },
-  Dairy: {
-    Milk: ['Cow Milk', 'Goat Milk', 'Almond Milk', 'Oat Milk', 'Soy Milk'],
-    Cheese: ['Cheddar', 'Mozzarella', 'Feta', 'Parmesan', 'Brie', 'Cottage Cheese'],
-    Yogurt: ['Greek Yogurt', 'Natural Yogurt', 'Flavored Yogurt']
-  },
-  Grains: {
-    Rice: ['White Rice', 'Brown Rice', 'Basmati Rice', 'Jasmine Rice', 'Wild Rice'],
-    Pasta: ['Spaghetti', 'Penne', 'Fusilli', 'Macaroni', 'Lasagna Sheets'],
-    Quinoa: ['Red Quinoa', 'White Quinoa', 'Black Quinoa'],
-    Couscous: ['Moroccan Couscous', 'Israeli Couscous']
-  },
-  Proteins: {
-    Meat: ['Chicken', 'Beef', 'Pork', 'Lamb'],
-    Fish: ['Salmon', 'Tuna', 'Cod', 'Mackerel', 'Trout'],
-    PlantBased: ['Tofu', 'Tempeh', 'Lentils', 'Chickpeas', 'Black Beans', 'Quorn']
-  }
-};
+// const data = JSON.parse();
 
 const ProfileSupplier = ({ onLogout }) => {
   const [activePage, setActivePage] = useState("profile");

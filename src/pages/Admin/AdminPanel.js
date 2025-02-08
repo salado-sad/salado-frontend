@@ -1,10 +1,9 @@
 // src/pages/Admin/AdminPanel.js
 import React, { useState } from "react";
 import './AdminPanel.css';
-import PackageList from "../../components/PackageList"; // Adjust the path as necessary
-import AddPackage from "../../components/AddPackage"; // This should be your component for adding packages
+import PackageList from "../../components/PackageList";
+import AddPackage from "../../components/AddPackage";
 
-// Import your assets here
 import basketIcon from "../../assets/basket-icon.svg";
 import plusIcon from "../../assets/plus-icon.svg";
 import settingsIcon from "../../assets/settings-icon.svg";
@@ -15,13 +14,39 @@ import logo from "../../assets/logo_mono.png";
 const AdminPanel = () => {
   const [activePage, setActivePage] = useState("packages");
 
+  // Add initial state for packages
+  const [packages, setPackages] = useState([
+    {
+      name: 'Agha Farid',
+      price: '$800.85',
+      description: 'Bache khoobie. Aziatesh nakonin. Bayad khordesh',
+      image: 'https://media.licdn.com/dms/image/v2/D4D03AQHP1k_GASXLmQ/profile-displayphoto-shrink_400_400/0/1720623177822?e=1744243200&v=beta&t=ZMqV6ju4Zd6YfWp99lt40uwCUs9SA_vvCoxp1ldfMNA',
+      products: [
+        {
+          name: 'Strawberry',
+          quantity: 5,
+          image: 'https://cdn.nyallergy.com/wp-content/uploads/square-1432664914-strawberry-facts1-1200x900.jpeg'
+        },
+        {
+          name: 'Spinach',
+          quantity: 3,
+          image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEFIf1LwpQrKWxz9lSfn976uLBL9n5g18CUQ&s'
+        }
+      ]
+    }
+    // Additional packages can be added here if needed
+  ]);
+
+  const handleAddPackage = (newPackage) => {
+    setPackages((prevPackages) => [...prevPackages, newPackage]);
+  };
+
   const renderContent = () => {
     switch (activePage) {
       case "packages":
-        return <PackageList />;
+        return <PackageList packages={packages} />;
       case "add":
-        return <AddPackage />;
-      // You can add more cases for different sections
+        return <AddPackage onAddPackage={handleAddPackage} />;
       default:
         return <div>Welcome, Admin. Select an option from the menu.</div>;
     }

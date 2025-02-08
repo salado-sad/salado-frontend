@@ -4,6 +4,7 @@ import Login from "./pages/Login/Login";
 import SignupSupplier from "./pages/Signup/SignupSupplier";
 import LoginSupplier from "./pages/Login/LoginSupplier";
 import LandingPage from "./pages/Landing/Landing";
+import ExploreSalads from "./pages/ExploreSalads/ExploreSalads";
 import ForgetPassword from "./pages/ForgetPassword/ForgetPassword";
 import Profile from "./pages/Profile/Profile";
 import ProfileSupplier from "./pages/Profile/ProfileSupplier";
@@ -20,6 +21,12 @@ function App() {
           onSwitchToLogin={() => setPage("login")}
           onSwitchToSupplierLogin={() => setPage("supplier-login")}
           onSwitchToAdminLogin={() => setPage("admin-login")}
+          onExploreSalads={() => setPage("explore-salads")}
+        />
+      )}
+      {page === "explore-salads" && (
+        <ExploreSalads
+          onBackToLanding={() => setPage("landing")}
         />
       )}
       {page === "login" && (
