@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Landing.css";
 import logo from "../../assets/logo.png";
 
-const Landing = ({ onSwitchToLogin, onSwitchToSupplierLogin, onSwitchToAdminLogin }) => {
+const Landing = ({ onSwitchToLogin, onSwitchToSupplierLogin, onSwitchToAdminLogin, onExploreSalads }) => {
   const [salads, setSalads] = useState([]);
   const placeholderImages = [
     "https://images.immediate.co.uk/production/volatile/sites/30/2014/05/Epic-summer-salad-hub-2646e6e.jpg?quality=90&webp=true&resize=600,545",
@@ -46,7 +46,7 @@ const Landing = ({ onSwitchToLogin, onSwitchToSupplierLogin, onSwitchToAdminLogi
           <p>
             Customizable salad options crafted to delight your taste buds delivered fresh daily.
           </p>
-          <button onClick={() => window.location.href = "#salads"} className="cta-btn">Explore Salads</button>
+          <button onClick={onExploreSalads} className="cta-btn">Explore Salads</button>
         </div>
         <img src={logo} alt="Salads" className="hero-image" />
       </section>
