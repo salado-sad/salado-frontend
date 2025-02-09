@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import './AdminPanel.css';
 import PackageList from "../../components/PackageList";
 import AddPackage from "../../components/AddPackage";
-
 import basketIcon from "../../assets/basket-icon.svg";
 import plusIcon from "../../assets/plus-icon.svg";
 import settingsIcon from "../../assets/settings-icon.svg";
@@ -12,7 +12,7 @@ import logo from "../../assets/logo_mono.png";
 
 const AdminPanel = ({ onLogout }) => {
   const [activePage, setActivePage] = useState("packages");
-
+  const navigate = useNavigate();
   const [packages, setPackages] = useState([
     {
       name: 'Agha Farid',
@@ -52,7 +52,10 @@ const AdminPanel = ({ onLogout }) => {
   return (
     <div className="admin-panel-container">
       <div className="sidebar">
-        <button className="sidebar-icon" onClick={onLogout} title="Logout">
+        <button className="sidebar-icon" onClick={() => {
+          onLogout()
+          navigate("/")
+          }} title="Logout">
           <img src={logo} alt="Logo" />
         </button>
         <button className={`sidebar-icon ${activePage === "search" ? "active" : ""}`} onClick={() => setActivePage("search")}>

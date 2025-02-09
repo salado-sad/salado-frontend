@@ -66,7 +66,7 @@ const Login = ({ onLoginSuccess }) => {
         Cookies.set('refresh_token', refreshToken, { expires: 7 });
 
         // Add additional logic like redirecting the user here.
-        // onLoginSuccess(result.user);
+        onLoginSuccess("customer");
         navigate("/profile");
       } else if (response.status === 401) {
         setErrorMessage(result.error); // "Invalid credentials"

@@ -97,21 +97,11 @@ const Landing = () => {
       {/* Footer */}
       <footer className="footer">
         <ul>
-          <li>
-            <a href="#careers">Careers</a>
-          </li>
-          <li>
-            <a href="#privacy">Privacy</a>
-          </li>
-          <li>
-            <a href="#faq">FAQ</a>
-          </li>
-          <li>
-            <a href="#contact">Contact Us</a>
-          </li>
-          <li>
-            <a href="#admin" onClick={() => navigate("/admin-login")}>Admin Login</a>
-          </li>
+          <li><button onClick={() => navigate("/careers")} className="footer-button">Careers</button></li>
+          <li><button onClick={() => navigate("/privacy")} className="footer-button">Privacy</button></li>
+          <li><button onClick={() => navigate("/faq")} className="footer-button">FAQ</button></li>
+          <li><button onClick={() => navigate("/contact")} className="footer-button">Contact Us</button></li>
+          <li><button onClick={() => navigate("/admin-login")} className="footer-button">Admin Login</button></li>
         </ul>
       </footer>
     </div>

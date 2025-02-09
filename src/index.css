@@ -229,7 +229,6 @@ code {
   display: flex;
   align-items: center;
   padding-bottom: 20px; /* Add padding below the button */
-  border-bottom: 1px solid #ccc; /* Draw a thin line below the button */
   width: max-content; /* Ensure the border only spans the button's content */
 }
 

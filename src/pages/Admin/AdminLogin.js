@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./AdminLogin.css";
 
-function AdminLogin({ onLoginSuccess, onBackToLanding }) {
+function AdminLogin({ onLoginSuccess }) {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -10,7 +12,8 @@ function AdminLogin({ onLoginSuccess, onBackToLanding }) {
     event.preventDefault();
 
     if (email === "admin" && password === "admin") {
-      onLoginSuccess();
+      onLoginSuccess("admin");
+      navigate("/admin-panel")
     } else {
       setError("Invalid username or password");
     }
@@ -35,7 +38,7 @@ function AdminLogin({ onLoginSuccess, onBackToLanding }) {
         />
         <button type="submit">Login</button>
       </form>
-      <button onClick={onBackToLanding} className="back-button">Back to Landing</button>
+      <button onClick={() => navigate("/")} className="back-button">Back to Landing</button>
     </div>
   );
 }

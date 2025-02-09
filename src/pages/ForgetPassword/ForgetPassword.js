@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import "../../index.css";
-import logo from "../../assets/logo.png"; // Add your logo here.
-import salad from "../../assets/salad.png"; // Reuse the same background image as Login Page.
+import { useNavigate } from "react-router-dom";
+import "./ForgetPassword.css";
+import logo from "../../assets/logo.png";
+import salad from "../../assets/salad.png";
 
-const ForgetPassword = ({ onBackToLogin }) => {
+const ForgetPassword = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "" });
   const [errors, setErrors] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
@@ -45,7 +47,7 @@ const ForgetPassword = ({ onBackToLogin }) => {
       if (response.ok) {
         setSuccessMessage("Password reset email sent.");
         alert("An email with instructions to reset your password has been sent.");
-        onBackToLogin(); // Redirect back to Login Page
+        navigate("/");
       } else if (response.status === 404) {
         setErrorMessage("Email not found. Please try again.");
       } else {
@@ -58,9 +60,8 @@ const ForgetPassword = ({ onBackToLogin }) => {
 
   return (
     <div className="login-container">
-      {/* Back to Home Button with Logo */}
       <div className="back-to-landing">
-        <button onClick={onBackToLogin} className="back-to-landing-btn">
+        <button onClick={() => navigate("/")} className="back-to-landing-btn">
           <img src={logo} alt="Salado Logo" className="logo-button" />
           <span className="salado-name">Salado</span>
         </button>
@@ -88,11 +89,6 @@ const ForgetPassword = ({ onBackToLogin }) => {
             Send Reset Instructions
           </button>
         </form>
-
-        <div className="signup-link">
-          Remember your password?{" "}
-          <button onClick={onBackToLogin}>Login</button>
-        </div>
       </div>
 
       <div className="image-section">

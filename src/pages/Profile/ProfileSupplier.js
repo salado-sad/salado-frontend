@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./ProfileSupplier.css";
-
 // Import icons from assets
 import basketIcon from "../../assets/basket-icon.svg";
 import plusIcon from "../../assets/plus-icon.svg";
@@ -141,7 +140,6 @@ const ProfileSupplier = ({ onLogout }) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
     onLogout();
   };
 

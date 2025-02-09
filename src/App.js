@@ -36,7 +36,7 @@ function App() {
         <Route path="/profile" element={user ? <Profile onLogout={() => setUser(null)} /> : <Navigate to="/login" />} />
         <Route path="/supplier-profile" element={user ? <ProfileSupplier onLogout={() => setUser(null)} /> : <Navigate to="/supplier-login" />} />
         <Route path="/admin-login" element={<AdminLogin onLoginSuccess={(u) => setUser(u)} />} />
-        <Route path="/admin-panel" element={user === "admin" ? <AdminPanel /> : <Navigate to="/admin-login" />} />
+        <Route path="/admin-panel" element={user === "admin" ? <AdminPanel onLogout={() => setUser(null)} /> : <Navigate to="/admin-login" />} />
       </Routes>
     </Router>
   );

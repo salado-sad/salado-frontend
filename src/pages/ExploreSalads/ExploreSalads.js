@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./ExploreSalads.css";
 
-const ExploreSalads = ({ onBackToLanding }) => {
+const ExploreSalads = () => {
+  const navigate = useNavigate();
   const [packages, setPackages] = useState([]);
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem("cart");
@@ -146,7 +148,7 @@ const ExploreSalads = ({ onBackToLanding }) => {
         </>
       )}
 
-      <button onClick={onBackToLanding} className="back-button">
+      <button onClick={() => navigate("/")} className="back-button">
         Back to Home
       </button>
     </div>

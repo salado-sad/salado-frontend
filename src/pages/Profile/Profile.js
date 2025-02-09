@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-
-import "../../index.css";
+import "./Profile.css";
 import logo from "../../assets/logo.png";
 
 const Profile = ({ onLogout }) => {
@@ -53,8 +52,7 @@ const Profile = ({ onLogout }) => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken"); // Remove token
-    onLogout(); // Callback to redirect to the login or landing page
+    onLogout();
   };
 
   return (
