@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-
 import "../../index.css";
-import logo from "../../assets/logo.png"; // Add your logo here
+import logo from "../../assets/logo.png";
 import salad from "../../assets/salad.png";
 
+/**
+ * Login component for suppliers.
+ * @param {object} props - The component props.
+ * @param {function} props.onLoginSuccess - Callback function to handle successful login.
+ * @returns {JSX.Element} - The rendered component.
+ */
 const Login = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -17,11 +22,19 @@ const Login = ({ onLoginSuccess }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  /**
+   * Handles input change events.
+   * @param {object} e - The event object.
+   */
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
 
+  /**
+   * Validates the form data.
+   * @returns {boolean} - Returns true if the form data is valid, otherwise false.
+   */
   const validateForm = () => {
     const newErrors = {};
 
@@ -29,22 +42,23 @@ const Login = ({ onLoginSuccess }) => {
     if (!formData.password.trim()) newErrors.password = "Password is required.";
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Return true if no errors
+    return Object.keys(newErrors).length === 0;
   };
 
+  /**
+   * Handles form submission.
+   * @param {object} e - The event object.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
 
-    // Validate form
     if (!validateForm()) {
       return;
     }
 
     try {
-      // const response = await fetch("https://api.salado.mghgm.ir/auth/login", {
-      // TODO fix API endpoint
       const response = await fetch("http://localhost:8000/auth/token/", {
         method: "POST",
         headers: {
@@ -56,23 +70,19 @@ const Login = ({ onLoginSuccess }) => {
       const result = await response.json();
 
       if (response.status === 200) {
-        setSuccessMessage(result.message); // "Login successful"
+        setSuccessMessage(result.message);
         console.log("Login successful:", result.message);
 
-        // Set Cookies
         const accessToken = result.access;
         const refreshToken = result.refresh;
 
         Cookies.set('access_token', accessToken, { expires: 1 });
         Cookies.set('refresh_token', refreshToken, { expires: 7 });
 
-        // Add additional logic like redirecting the user here.
         onLoginSuccess("supplier");
         navigate("/supplier-profile");
-      } else if (response.status === 401) {
-        setErrorMessage(result.error); // "Invalid credentials"
-      } else if (response.status === 403) {
-        setErrorMessage(result.error); // "Invalid credentials"
+      } else if (response.status === 401 || response.status === 403) {
+        setErrorMessage(result.error);
       } else {
         setErrorMessage("Something went wrong. Please try again.");
       }

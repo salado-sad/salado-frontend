@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ExploreSalads.css";
 
+/**
+ * ExploreSalads component for displaying and managing salad packages.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 const ExploreSalads = () => {
   const navigate = useNavigate();
   const [packages, setPackages] = useState([]);
@@ -24,7 +29,6 @@ const ExploreSalads = () => {
         return response.json();
       })
       .then(data => {
-        // Ensure prices are numbers
         const formattedData = data.map(pkg => ({
           ...pkg,
           price: parseFloat(pkg.price) || 0,
@@ -43,6 +47,11 @@ const ExploreSalads = () => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
+  /**
+   * Adds a package to the cart.
+   * 
+   * @param {Object} pkg - The package to add.
+   */
   const addToCart = (pkg) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.name === pkg.name);
@@ -56,6 +65,9 @@ const ExploreSalads = () => {
     });
   };
 
+  /**
+   * Clears the cart.
+   */
   const clearCart = () => {
     setCart([]);
   };

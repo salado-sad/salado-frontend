@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../index.css";
-import logo from "../../assets/logo.png"; // Add your logo here
+import logo from "../../assets/logo.png";
 import salad from "../../assets/salad.png";
 
+/**
+ * Validates the Iranian national code.
+ * @param {string} code - The national code to validate.
+ * @returns {boolean} True if the national code is valid, false otherwise.
+ */
 function validateNationalCode(code) {
-  const digits = code.split('').map(Number); 
-  const controlDigit = digits[9]; 
-  
+  const digits = code.split('').map(Number);
+  const controlDigit = digits[9];
+
   let weightedSum = 0;
   for (let i = 0; i < 9; i++) {
     weightedSum += digits[i] * (10 - i);
@@ -22,14 +27,23 @@ function validateNationalCode(code) {
   }
 }
 
+/**
+ * Converts Persian and Arabic digits to English digits.
+ * @param {string} input - The input string containing Persian or Arabic digits.
+ * @returns {string} The input string with Persian and Arabic digits converted to English digits.
+ */
 const convertToEnglishDigits = (input) => {
-  const persianDigits = /[\u06F0-\u06F9]/g; // Persian digits ۰-۹
-  const arabicDigits = /[\u0660-\u0669]/g;  // Arabic digits ٠-٩
+  const persianDigits = /[\u06F0-\u06F9]/g;
+  const arabicDigits = /[\u0660-\u0669]/g;
   return input
-    .replace(persianDigits, (d) => d.charCodeAt(0) - 0x06f0) // Convert Persian to English
-    .replace(arabicDigits, (d) => d.charCodeAt(0) - 0x0660); // Convert Arabic to English
+    .replace(persianDigits, (d) => d.charCodeAt(0) - 0x06f0)
+    .replace(arabicDigits, (d) => d.charCodeAt(0) - 0x0660);
 };
 
+/**
+ * Signup component renders the signup page for the application.
+ * @returns {JSX.Element} The signup page component.
+ */
 const Signup = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -48,10 +62,18 @@ const Signup = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  /**
+   * Handles input change events.
+   * @param {Object} e - The event object.
+   */
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
+  /**
+   * Validates the signup form.
+   * @returns {boolean} True if the form is valid, false otherwise.
+   */
   const validateForm = () => {
     const newErrors = {};
 
@@ -69,7 +91,6 @@ const Signup = () => {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       newErrors.email = "Email is not valid. Please enter a valid email address.";
     }
-    
 
     if (!formData.date_of_birth.trim()) newErrors.date_of_birth = "Birth date is required.";
 
@@ -98,9 +119,13 @@ const Signup = () => {
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; 
+    return Object.keys(newErrors).length === 0;
   };
 
+  /**
+   * Handles form submission.
+   * @param {Object} e - The event object.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -111,7 +136,6 @@ const Signup = () => {
     }
 
     try {
-      // const response = await fetch("https://api.salado.mghgm.ir/auth/signup", {
       const response = await fetch("http://localhost:8000/auth/register/", {
         method: "POST",
         headers: {

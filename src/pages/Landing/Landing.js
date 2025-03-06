@@ -4,27 +4,26 @@ import "./Landing.css";
 import logo from "../../assets/logo.png";
 import profileIcon from "../../assets/profile-icon.png";
 
-
+/**
+ * Landing component renders the landing page of the application.
+ * @param {Object} props - The component props.
+ * @param {Object} props.user - The user object to check if the user is logged in.
+ */
 const Landing = ({ user }) => {
   const navigate = useNavigate();
-  // const [salads, setSalads] = useState([]);
-  // const placeholderImages = [
-  //   "https://images.immediate.co.uk/production/volatile/sites/30/2014/05/Epic-summer-salad-hub-2646e6e.jpg?quality=90&webp=true&resize=600,545",
-  //   "https://images.immediate.co.uk/production/volatile/sites/30/2023/09/Roasted-beetroot-and-feta-salad-ffc7efb.jpg?quality=90&webp=true&resize=600,545",
-  //   "https://images.immediate.co.uk/production/volatile/sites/30/2023/10/Kale-caesar-salad-c519289.jpg?quality=90&webp=true&resize=600,545",
-  //   "https://www.sharifml.ir/wp-content/uploads/2024/09/shayanshabani-Shayan-Shabani.jpeg"
-  // ];
 
-  // useEffect(() => {
-  //   fetch('http://127.0.0.1:8000/management/packages/')
-  //     .then(response => response.json())
-  //     .then(data => setSalads(data))
-  //     .catch(error => console.error('Error fetching salads:', error));
-  // }, []);
-
-  // const getRandomPlaceholder = () => {
-  //   return placeholderImages[Math.floor(Math.random() * placeholderImages.length)];
-  // };
+  /**
+   * Handles profile button click based on user role.
+   */
+  const handleProfileClick = () => {
+    if (user === "supplier") {
+      navigate("/supplier-profile");
+    } else if (user === "admin") {
+      navigate("/admin-panel");
+    } else {
+      navigate("/profile");
+    }
+  };
 
   return (
     <div>
@@ -37,7 +36,7 @@ const Landing = ({ user }) => {
           <a href="#contact">Contact</a>
         </nav>
         {user ? (
-          <button className="profile-btn" onClick={() => navigate("/profile")}>
+          <button className="profile-btn" onClick={handleProfileClick}>
             <img src={profileIcon} alt="Profile" />
           </button>
         ) : (
@@ -72,26 +71,6 @@ const Landing = ({ user }) => {
         </p>
         <p className="highlighted-motto">"Freshness Redefined."</p>
       </section>
-
-      {/* Our Salads Section */}
-      {/* <section id="salads" className="salads-section">
-        <h2>Our Salads</h2>
-        <div className="salads-grid">
-          {salads.map(salad => (
-            <div key={salad.id} className="salad-card">
-              <img
-                src={salad.image || getRandomPlaceholder()}
-                alt={salad.name}
-                className="salad-image"
-                onError={(e) => { e.target.onerror = null; e.target.src = getRandomPlaceholder(); }}
-              />
-              <h3>{salad.name}</h3>
-              <p>{salad.description}</p>
-              <p>Price: {salad.price}</p>
-            </div>
-          ))}
-        </div>
-      </section> */}
 
       {/* Supplier Section */}
       <section className="supplier-section">

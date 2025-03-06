@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import './PackageList.css';
 
+/**
+ * PackageList component to display and manage packages.
+ * @returns {JSX.Element} - The rendered component.
+ */
 const PackageList = () => {
   const [packages, setPackages] = useState([]);
 
+  /**
+   * Fetches packages from the server and sets the state.
+   */
   useEffect(() => {
     fetch('http://127.0.0.1:8000/management/packages/')
       .then(response => response.json())
@@ -15,6 +22,10 @@ const PackageList = () => {
       .catch(error => console.error('Error fetching packages:', error));
   }, []);
 
+  /**
+   * Handles the deletion of a package.
+   * @param {number} id - The ID of the package to delete.
+   */
   const handleDelete = (id) => {
     fetch(`http://127.0.0.1:8000/management/packages/${id}/`, {
       method: 'DELETE',
@@ -25,6 +36,10 @@ const PackageList = () => {
       .catch(error => console.error('Error deleting package:', error));
   };
 
+  /**
+   * Toggles the active status of a package.
+   * @param {number} id - The ID of the package to toggle.
+   */
   const toggleActive = (id) => {
     setPackages(packages.map(pkg =>
       pkg.id === id ? { ...pkg, isActive: !pkg.isActive } : pkg

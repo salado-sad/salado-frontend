@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./ProfileSupplier.css";
-// Import icons from assets
 import basketIcon from "../../assets/basket-icon.svg";
 import plusIcon from "../../assets/plus-icon.svg";
 import settingsIcon from "../../assets/settings-icon.svg";
@@ -8,7 +8,15 @@ import bellIcon from "../../assets/bell-icon.svg";
 import searchIcon from "../../assets/search-icon.svg";
 import logo from "../../assets/logo_mono.png";
 import data from '../../data/products.json';
+import Cookies from "js-cookie";
 
+/**
+ * ProfileSupplier component for managing supplier functionalities.
+ * 
+ * @param {Object} props - Component properties.
+ * @param {Function} props.onLogout - Function to handle logout.
+ * @returns {JSX.Element} The rendered component.
+ */
 const ProfileSupplier = ({ onLogout }) => {
   const [activePage, setActivePage] = useState("profile");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -24,16 +32,54 @@ const ProfileSupplier = ({ onLogout }) => {
   const [editIndex, setEditIndex] = useState(null); 
   const [deleteIndex, setDeleteIndex] = useState(null); 
   const [isModalVisible, setModalVisible] = useState(false);
-  const [originalItem, setOriginalItem] = useState(null); 
+  const [originalItem, setOriginalItem] = useState(null);
+  const [supplierData, setSupplierData] = useState(null);
+  const navigate = useNavigate();
 
   // Fetch products when the component mounts
   useEffect(() => {
-    fetch('http://[Host]/vendors/products/')
+    fetch('http://127.0.0.1:8000/vendors/products/')
       .then(response => response.json())
       .then(data => setProducts(data))
       .catch(error => console.error('Error fetching products:', error));
   }, []);
 
+  useEffect(() => {
+    if (activePage === "setting") {
+      fetchSupplierProfile();
+    }
+  }, [activePage]);
+
+  /**
+   * Fetches the supplier profile data.
+   */
+  const fetchSupplierProfile = async () => {
+    try {
+      const accessToken = Cookies.get("access_token");
+      const response = await fetch("http://localhost:8000/auth/profile/", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const result = await response.json();
+      if (response.status === 200) {
+        setSupplierData(result);
+        console.log("Profile fetched successfully:", result);
+      } else {
+        console.error("Failed to fetch profile:", result);
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  };
+
+  /**
+   * Handles category change.
+   * 
+   * @param {Object} event - The event object.
+   */
   const handleCategoryChange = (event) => {
     const category = event.target.value;
     setSelectedCategory(category);
@@ -48,6 +94,11 @@ const ProfileSupplier = ({ onLogout }) => {
     }
   };
 
+  /**
+   * Handles subcategory change.
+   * 
+   * @param {Object} event - The event object.
+   */
   const handleSubCategoryChange = (event) => {
     const subCategory = event.target.value;
     setSelectedSubCategory(subCategory);
@@ -60,26 +111,54 @@ const ProfileSupplier = ({ onLogout }) => {
     }
   };
 
+  /**
+   * Handles product change.
+   * 
+   * @param {Object} event - The event object.
+   */
   const handleProductChange = (event) => {
     setSelectedProduct(event.target.value);
   };
 
+  /**
+   * Handles catalogue name change.
+   * 
+   * @param {Object} event - The event object.
+   */
   const handleCatalogueNameChange = (event) => {
     setCatalogueName(event.target.value);
   };
 
+  /**
+   * Handles product measurement change.
+   * 
+   * @param {Object} e - The event object.
+   */
   const handleProductMeasurementChange = (e) => {
     setProductMeasurement(e.target.value);
   };
 
+  /**
+   * Handles measurement unit change.
+   * 
+   * @param {Object} e - The event object.
+   */
   const handleMeasurementUnitChange = (e) => {
     setMeasurementUnit(e.target.value);
   };
 
+  /**
+   * Handles product quantity change.
+   * 
+   * @param {Object} event - The event object.
+   */
   const handleProductQuantityChange = (event) => {
     setProductQuantity(event.target.value);
   };
 
+  /**
+   * Handles cancel action.
+   */
   const handleCancel = () => {
     setSelectedCategory("");
     setSelectedSubCategory("");
@@ -89,6 +168,11 @@ const ProfileSupplier = ({ onLogout }) => {
     setProductQuantity(0);
   };
 
+  /**
+   * Validates the upload form.
+   * 
+   * @returns {boolean} True if the form is valid, false otherwise.
+   */
   const validateUploadForm = () => {
     if (!selectedCategory || !selectedSubCategory || !selectedProduct || !catalogueName || !productMeasurement || !productQuantity) {
       alert("Please fill out all required fields.");
@@ -97,6 +181,9 @@ const ProfileSupplier = ({ onLogout }) => {
     return true;
   };
 
+  /**
+   * Handles upload action.
+   */
   const handleUpload = () => {
     if (validateUploadForm()) {
       const newItem = {
@@ -110,7 +197,7 @@ const ProfileSupplier = ({ onLogout }) => {
         measurement_unit: measurementUnit,
       };
   
-      fetch('http://[Host]/vendors/products/', {
+      fetch('http://127.0.0.1:8000/vendors/products/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -121,7 +208,7 @@ const ProfileSupplier = ({ onLogout }) => {
       .then(data => {
         console.log('Product added:', data);
         // Refresh products list
-        fetch('http://[Host]/vendors/products/')
+        fetch('http://127.0.0.1:8000/vendors/products/')
           .then(response => response.json())
           .then(data => setAddedItems(data))
           .catch(error => console.error('Error fetching products:', error));
@@ -133,16 +220,56 @@ const ProfileSupplier = ({ onLogout }) => {
     }
   };
 
+  /**
+   * Handles delete item action.
+   * 
+   * @param {number} index - The index of the item to delete.
+   */
   const handleDeleteItem = (index) => {
     const updatedItems = [...addedItems];
     updatedItems.splice(index, 1); 
     setAddedItems(updatedItems);
   };
 
-  const handleLogout = () => {
-    onLogout();
+  /**
+   * Handles logout action.
+   */
+  const handleLogout = async () => {
+    try {
+      const accessToken = Cookies.get("access_token");
+      const refreshToken = Cookies.get("refresh_token");
+      if (!accessToken || !refreshToken) {
+        console.error("No tokens found. Logging out.");
+        onLogout();
+        return;
+      }
+      const response = await fetch("http://localhost:8000/auth/logout/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ refresh_token: refreshToken }),
+      });
+      if (response.status === 200) {
+        console.log("Logout successful");
+      } else {
+        console.error("Logout failed:", await response.text());
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+    } finally {
+      Cookies.remove("access_token");
+      Cookies.remove("refresh_token");
+      onLogout();
+    }
   };
 
+  /**
+   * Handles image upload.
+   * 
+   * @param {Object} event - The event object.
+   */
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -152,14 +279,30 @@ const ProfileSupplier = ({ onLogout }) => {
     }
   };
 
+  /**
+   * Clears the image preview.
+   */
   const clearImagePreview = () => setUploadedImage(null);
 
+  /**
+   * Handles edit change.
+   * 
+   * @param {number} index - The index of the item to edit.
+   * @param {string} field - The field to edit.
+   * @param {string} value - The new value.
+   */
   const handleEditChange = (index, field, value) => {
     const updatedItems = [...addedItems];
     updatedItems[index][field] = value;
     setAddedItems(updatedItems);
   };
 
+  /**
+   * Handles subcategory edit change.
+   * 
+   * @param {number} index - The index of the item to edit.
+   * @param {string} value - The new value.
+   */
   const handleSubCategoryEditChange = (index, value) => {
     const updatedItems = [...addedItems];
     updatedItems[index].subCategory = value;
@@ -167,11 +310,20 @@ const ProfileSupplier = ({ onLogout }) => {
     setAddedItems(updatedItems);
   };
 
+  /**
+   * Handles save edit action.
+   * 
+   * @param {number} index - The index of the item to save.
+   */
   const handleSaveEdit = (index) => {
     setEditIndex(null);
   };
 
-
+  /**
+   * Renders the confirm delete modal.
+   * 
+   * @returns {JSX.Element} The confirm delete modal component.
+   */
   const ConfirmDeleteModal = () => (
     isModalVisible && (
       <div className="modal-overlay">
@@ -205,6 +357,11 @@ const ProfileSupplier = ({ onLogout }) => {
     )
   );
 
+  /**
+   * Renders the profile page.
+   * 
+   * @returns {JSX.Element} The profile page component.
+   */
   const renderProfilePage = () => (
     <div className="profile-page-container">
       <h2>Your Added Supplies</h2>
@@ -368,6 +525,11 @@ const ProfileSupplier = ({ onLogout }) => {
     </div>
   );
 
+  /**
+   * Renders the Add Supply page.
+   * 
+   * @returns {JSX.Element} The Add Supply page component.
+   */
   const renderAddSupplyPage = () => (
     <div className="add-item-container">
       <h2>Add a New Supply</h2>
@@ -500,16 +662,39 @@ const ProfileSupplier = ({ onLogout }) => {
     </div>
   );
 
+  /**
+   * Renders the Setting page with supplier information.
+   * 
+   * @returns {JSX.Element} The Setting page component.
+   */
   const renderSettingPage = () => (
-    <h1>Your information will be shown here</h1>
+    <div className="setting-page-container">
+      <h2>Supplier Information</h2>
+      {supplierData ? (
+        <div className="supplier-info">
+          <p><strong>Name:</strong> {supplierData.first_name + ' ' + supplierData.lastname}</p>
+          <p><strong>Email:</strong> {supplierData.email}</p>
+          <p><strong>Company:</strong> {supplierData.company}</p>
+          <p><strong>Phone:</strong> {supplierData.phone}</p>
+          <p><strong>Address:</strong> {supplierData.address}</p>
+        </div>
+      ) : (
+        <p>Loading supplier information...</p>
+      )}
+      <button className="logout-button" onClick={handleLogout}>Logout</button>
+    </div>
   );
 
   const [searchQuery, setSearchQuery] = useState("");
   const [minQuantity, setMinQuantity] = useState(0);
   const [maxQuantity, setMaxQuantity] = useState(1000);
 
+  /**
+   * Renders the Search page.
+   * 
+   * @returns {JSX.Element} The Search page component.
+   */
   const renderSearchPage = () => {
-  
     // Filter products based on search query, category, and quantity range
     const filteredProducts = addedItems.filter((item) => {
       const matchesSearch = item.product.toLowerCase().includes(searchQuery.toLowerCase());
@@ -586,6 +771,11 @@ const ProfileSupplier = ({ onLogout }) => {
     );
   };
 
+  /**
+   * Renders the content based on the active page.
+   * 
+   * @returns {JSX.Element} The content component.
+   */
   const renderContent = () => {
     switch (activePage) {
       case "profile":
@@ -607,9 +797,9 @@ const ProfileSupplier = ({ onLogout }) => {
       <div className="profile-supplier-sidebar">
         {/* Larger Sidebar Logo */}
         <button
-          onClick={handleLogout}
+          onClick={() => navigate("/")}
           className="sidebar-icon logo-button"
-          title="Logout"
+          title="Home"
         >
           <img
             src={logo}
@@ -656,8 +846,8 @@ const ProfileSupplier = ({ onLogout }) => {
         {/* Header */}
         <div className="profile-supplier-header">
           <div>
-            <h2>Welcome, John</h2>
-            <p>Mon, 30 Dec 2024</p>
+            <h2>Welcome {supplierData?.first_name || ""}</h2>
+            <p>{new Date().toLocaleDateString("en-US", { weekday: "short", day: "2-digit", month: "short", year: "numeric" })}</p>
           </div>
           <div className="profile-notification">
             <img src={bellIcon} alt="Notifications" />

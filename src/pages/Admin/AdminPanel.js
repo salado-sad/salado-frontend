@@ -10,6 +10,13 @@ import bellIcon from "../../assets/bell-icon.svg";
 import searchIcon from "../../assets/search-icon.svg";
 import logo from "../../assets/logo_mono.png";
 
+/**
+ * AdminPanel component for managing admin functionalities.
+ * 
+ * @param {Object} props - Component properties.
+ * @param {Function} props.onLogout - Function to handle logout.
+ * @returns {JSX.Element} The rendered component.
+ */
 const AdminPanel = ({ onLogout }) => {
   const [activePage, setActivePage] = useState("packages");
   const navigate = useNavigate();
@@ -34,10 +41,20 @@ const AdminPanel = ({ onLogout }) => {
     }
   ]);
 
+  /**
+   * Handles adding a new package to the list.
+   * 
+   * @param {Object} newPackage - The new package to add.
+   */
   const handleAddPackage = (newPackage) => {
     setPackages((prevPackages) => [...prevPackages, newPackage]);
   };
 
+  /**
+   * Renders the content based on the active page.
+   * 
+   * @returns {JSX.Element} The content to render.
+   */
   const renderContent = () => {
     switch (activePage) {
       case "packages":
@@ -53,9 +70,9 @@ const AdminPanel = ({ onLogout }) => {
     <div className="admin-panel-container">
       <div className="sidebar">
         <button className="sidebar-icon" onClick={() => {
-          onLogout()
-          navigate("/")
-          }} title="Logout">
+          onLogout();
+          navigate("/");
+        }} title="Logout">
           <img src={logo} alt="Logo" />
         </button>
         <button className={`sidebar-icon ${activePage === "search" ? "active" : ""}`} onClick={() => setActivePage("search")}>
@@ -76,7 +93,7 @@ const AdminPanel = ({ onLogout }) => {
         <div className="header">
           <div>
             <h2>Welcome, Admin</h2>
-            <p>Mon, 30 Dec 2024</p>
+            <p>{new Date().toLocaleDateString("en-US", { weekday: "short", day: "2-digit", month: "short", year: "numeric" })}</p>
           </div>
           <div className="notifications">
             <img src={bellIcon} alt="Notifications" />

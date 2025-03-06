@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import './AddPackage.css';
 import data from '../data/products.json'; // Adjust the path as necessary
 
+/**
+ * AddPackage component to add a new package.
+ * @param {object} props - The component props.
+ * @param {function} props.onAddPackage - Callback function to handle adding a package.
+ * @returns {JSX.Element} - The rendered component.
+ */
 const AddPackage = ({ onAddPackage }) => {
   const [newPackage, setNewPackage] = useState({
     name: '',
@@ -13,6 +19,10 @@ const AddPackage = ({ onAddPackage }) => {
 
   const [product, setProduct] = useState({ category: '', subcategory: '', name: '', quantity: '' });
 
+  /**
+   * Handles input change events for the package form.
+   * @param {object} e - The event object.
+   */
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewPackage((prevState) => ({
@@ -21,6 +31,10 @@ const AddPackage = ({ onAddPackage }) => {
     }));
   };
 
+  /**
+   * Handles image upload and converts it to Base64.
+   * @param {object} e - The event object.
+   */
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -35,6 +49,9 @@ const AddPackage = ({ onAddPackage }) => {
     }
   };
 
+  /**
+   * Adds a product to the package.
+   */
   const addProduct = () => {
     if (product.name && product.quantity) {
       setNewPackage((prevState) => ({
@@ -45,6 +62,10 @@ const AddPackage = ({ onAddPackage }) => {
     }
   };
 
+  /**
+   * Handles form submission to add a new package.
+   * @param {object} e - The event object.
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     if (newPackage.name && newPackage.price && newPackage.description) {
@@ -65,11 +86,16 @@ const AddPackage = ({ onAddPackage }) => {
       .then(data => {
         console.log('Package added:', data);
         setNewPackage({ name: '', price: '', description: '', image: '', products: [] });
+        onAddPackage(data);
       })
       .catch(error => console.error('Error adding package:', error));
     }
   };
 
+  /**
+   * Handles input change events for the product form.
+   * @param {object} e - The event object.
+   */
   const handleProductChange = (e) => {
     const { name, value } = e.target;
     setProduct((prevState) => ({

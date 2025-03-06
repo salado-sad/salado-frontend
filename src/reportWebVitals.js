@@ -1,4 +1,8 @@
-const reportWebVitals = onPerfEntry => {
+/**
+ * Reports web vitals for performance measurement.
+ * @param {function} onPerfEntry - Function to handle performance entries.
+ */
+const reportWebVitals = (onPerfEntry) => {
   if (onPerfEntry && onPerfEntry instanceof Function) {
     import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
       getCLS(onPerfEntry);

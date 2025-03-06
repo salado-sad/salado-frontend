@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-
 import "../../index.css";
-import logo from "../../assets/logo.png"; // Add your logo here
+import logo from "../../assets/logo.png";
 import salad from "../../assets/salad.png";
 
+/**
+ * Login component renders the login page of the application.
+ * @param {Object} props - The component props.
+ * @param {Function} props.onLoginSuccess - Callback function to handle successful login.
+ */
 const Login = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -17,11 +21,19 @@ const Login = ({ onLoginSuccess }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  /**
+   * Handle input changes and update form data state.
+   * @param {Object} e - The event object.
+   */
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
 
+  /**
+   * Validate form inputs and set errors if any.
+   * @returns {boolean} - Returns true if no errors, otherwise false.
+   */
   const validateForm = () => {
     const newErrors = {};
 
@@ -32,6 +44,11 @@ const Login = ({ onLoginSuccess }) => {
     return Object.keys(newErrors).length === 0; // Return true if no errors
   };
 
+  /**
+   * Handle form submission, validate the form, make an API request to log in,
+   * set cookies, and navigate to the profile page if successful.
+   * @param {Object} e - The event object.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -43,7 +60,6 @@ const Login = ({ onLoginSuccess }) => {
     }
 
     try {
-      // const response = await fetch("https://api.salado.mghgm.ir/auth/login", {
       const response = await fetch("http://localhost:8000/auth/token/", {
         method: "POST",
         headers: {
@@ -65,7 +81,7 @@ const Login = ({ onLoginSuccess }) => {
         Cookies.set('access_token', accessToken, { expires: 1 });
         Cookies.set('refresh_token', refreshToken, { expires: 7 });
 
-        // Add additional logic like redirecting the user here.
+        // Redirect to profile page
         onLoginSuccess("customer");
         navigate("/profile");
       } else if (response.status === 401) {
