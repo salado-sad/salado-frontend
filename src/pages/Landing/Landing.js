@@ -2,8 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Landing.css";
 import logo from "../../assets/logo.png";
+import profileIcon from "../../assets/profile-icon.png";
 
-const Landing = () => {
+
+const Landing = ({ user }) => {
   const navigate = useNavigate();
   // const [salads, setSalads] = useState([]);
   // const placeholderImages = [
@@ -34,9 +36,15 @@ const Landing = () => {
           <a href="#salads">Our Salads</a>
           <a href="#contact">Contact</a>
         </nav>
-        <button className="signin-btn" onClick={() => navigate("/login")}>
-          Sign In
-        </button>
+        {user ? (
+          <button className="profile-btn" onClick={() => navigate("/profile")}>
+            <img src={profileIcon} alt="Profile" />
+          </button>
+        ) : (
+          <button className="signin-btn" onClick={() => navigate("/login")}>
+            Sign In
+          </button>
+        )}
       </header>
 
       {/* Hero Section */}

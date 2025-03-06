@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 import profileIcon from "../../assets/settings-icon.svg";
 import purchaseIcon from "../../assets/basket-icon.svg";
 import historyIcon from "../../assets/history-icon.svg";
 import bellIcon from "../../assets/bell-icon.svg";
 import logo from "../../assets/logo_mono.png";
+import Cookies from "js-cookie";
+
 const ProfileCustomer = ({ onLogout }) => {
-  const [activePage, setActivePage] = useState("purchase");
+  const [profileData, setProfileData] = useState(null);
+  const navigate = useNavigate();
+  const [activePage, setActivePage] = useState("profile");
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
   const [purchaseHistory, setPurchaseHistory] = useState([]); // Added missing state
@@ -175,47 +180,119 @@ const ProfileCustomer = ({ onLogout }) => {
     </div>
   );
 
-const renderProfileInfo = () => (
-<div className="profile-info-container">
-<h2>Your Profile Information</h2>
-<div className="profile-info-card">
-<div className="info-group">
-<div className="info-label">Full Name</div>
-<div className="info-value">John Customer</div>
-</div>
-<div className="info-group">
-<div className="info-label">Email</div>
-<div className="info-value">john.customer@example.com</div>
-</div>
-<div className="info-group">
-<div className="info-label">Shipping Address</div>
-<div className="info-value">123 Green Street, Eco City</div>
-</div>
-<div className="info-group">
-<div className="info-label">Payment Method</div>
-<div className="info-value">VISA •••• 1234</div>
-</div>
-</div>
-</div>
-);
 
-const renderPurchaseHistory = () => (
-  <div className="purchase-history-container">
-  <h2>Purchase History</h2>
-  {purchaseHistory.map((order) => (
-  <div className="order-card" key={order.id}>
-  <div className="order-date">Order Date: {order.date}</div>
-  <div className="order-items">
-  <strong>Items:</strong> {order.items.join(", ")}
-  </div>
-  <div className="order-total">
-  <strong>Total:</strong>
-  {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-  </div>
-  </div>
-  ))}
-  </div>
-  );
+  // Fetch profile data when the user navigates to the "profile" page
+  useEffect(() => {
+    if (activePage === "profile") {
+      fetchUserProfile();
+    }
+  }, [activePage]); // Runs when activePage changes
+
+  const fetchUserProfile = async () => {
+    try {
+      const accessToken = Cookies.get("access_token");
+  
+      const response = await fetch("http://localhost:8000/auth/profile/", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+  
+      const result = await response.json();
+  
+      if (response.status === 200) {
+        setProfileData(result);
+      } else {
+        console.error("Failed to fetch profile:", result);
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  };
+
+
+  const renderProfileInfo = () => {
+    return (
+      <div className="profile-info-container">
+        <h2>Your Profile Information</h2>
+        <div className="profile-info-card">
+          <div className="info-group">
+            <div className="info-label">Full Name</div>
+            <div className="info-value">{profileData?.first_name + ' ' + profileData?.last_name || "N/A"}</div>
+          </div>
+          <div className="info-group">
+            <div className="info-label">Email</div>
+            <div className="info-value">{profileData?.email || "N/A"}</div>
+          </div>
+          <div className="info-group">
+            <div className="info-label">Shipping Address</div>
+            <div className="info-value">{profileData?.address || "N/A"}</div>
+          </div>
+          <div className="info-group">
+            <div className="info-label">Payment Method</div>
+            <div className="info-value">{profileData?.payment_method || "N/A"}</div>
+          </div>
+        </div>
+
+        <button className="logout-button" onClick={handleLogout}>Logout</button>
+      </div>
+    );
+  };
+
+  const handleLogout = async () => {
+    try {
+      const accessToken = Cookies.get("access_token");
+      const refreshToken = Cookies.get("refresh_token");
+  
+      if (!accessToken || !refreshToken) {
+        console.error("No tokens found. Logging out.");
+        onLogout();
+        return;
+      }
+  
+      const response = await fetch("http://localhost:8000/auth/logout/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ refresh_token: refreshToken }),
+      });
+  
+      if (response.status === 200) {
+        console.log("Logout successful");
+      } else {
+        console.error("Logout failed:", await response.text());
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+    } finally {
+      // Ensure logout happens even if API call fails
+      Cookies.remove("access_token");
+      Cookies.remove("refresh_token");
+      onLogout();
+    }
+  };
+
+  const renderPurchaseHistory = () => (
+    <div className="purchase-history-container">
+    <h2>Purchase History</h2>
+    {purchaseHistory.map((order) => (
+    <div className="order-card" key={order.id}>
+    <div className="order-date">Order Date: {order.date}</div>
+    <div className="order-items">
+    <strong>Items:</strong> {order.items.join(", ")}
+    </div>
+    <div className="order-total">
+    <strong>Total:</strong>
+    {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+    </div>
+    </div>
+    ))}
+    </div>
+    );
   
   const renderContent = () => {
     switch (activePage) {
@@ -234,10 +311,9 @@ return (
 <div className="profile-customer-container">
 {/* Sidebar */}
 <div className="profile-customer-sidebar">
-<button onClick={onLogout} className="sidebar-icon logo-button" title="Logout" >
+<button onClick={() => navigate("/")} className="sidebar-icon logo-button" title="Home" >
 <img src={logo} alt="Company Logo" />
 </button>
-Copy
 
     <button
       className={`sidebar-icon ${activePage === "purchase" ? "active" : ""}`}
@@ -267,8 +343,8 @@ Copy
     {/* Header */}
     <div className="profile-customer-header">
       <div>
-        <h2>Welcome, John</h2>
-        <p>Mon, 30 Dec 2024</p>
+        <h2>Welcome, {profileData?.first_name || ""}</h2>
+        <p>{new Date().toLocaleDateString("en-US", { weekday: "short", day: "2-digit", month: "short", year: "numeric" })}</p>
       </div>
       <div className="profile-notification">
         <img src={bellIcon} alt="Notifications" />

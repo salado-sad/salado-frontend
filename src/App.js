@@ -26,7 +26,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<LandingPage user={user} />} />
         <Route path="/login" element={<Login onLoginSuccess={(u) => setUser(u)} />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/supplier-login" element={<LoginSupplier onLoginSuccess={(u) => setUser(u)} />} />
