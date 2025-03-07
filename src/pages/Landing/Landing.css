@@ -227,21 +227,22 @@
   left: 0;
 }
 
+/* Add to Navbar Styles section */
 .profile-btn {
-  background-color: transparent;
+  background: none;
   border: none;
-  cursor: pointer;
   padding: 0;
-  margin-left: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
 }
 
 .profile-btn img {
-  width: 40px;
+  width: 40px; /* Adjust this value to change icon size */
   height: 40px;
+  object-fit: cover;
   border-radius: 50%;
-  transition: transform 0.3s ease;
 }
 
-.profile-btn:hover img {
-  transform: scale(1.1);
+.profile-btn:hover {
+  transform: scale(1.05);
 }
