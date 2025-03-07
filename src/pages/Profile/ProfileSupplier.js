@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 import "./ProfileSupplier.css";
 import basketIcon from "../../assets/basket-icon.svg";
 import plusIcon from "../../assets/plus-icon.svg";
@@ -33,7 +33,9 @@ const ProfileSupplier = ({ onLogout }) => {
   const [editIndex, setEditIndex] = useState(null); 
   const [deleteIndex, setDeleteIndex] = useState(null); 
   const [isModalVisible, setModalVisible] = useState(false);
-  const [originalItem, setOriginalItem] = useState(null); 
+  const [originalItem, setOriginalItem] = useState(null);
+  const [supplierData, setSupplierData] = useState(null);
+  const navigate = useNavigate();
   const getAuthHeader = () => ({
     Authorization: `Bearer ${Cookies.get('access_token')}`
   });
@@ -732,10 +734,10 @@ const ProfileSupplier = ({ onLogout }) => {
       <h2>Supplier Information</h2>
       {supplierData ? (
         <div className="supplier-info">
-          <p><strong>Name:</strong> {supplierData.first_name + ' ' + supplierData.lastname}</p>
+          <p><strong>Name:</strong> {supplierData.first_name + ' ' + supplierData.last_name}</p>
           <p><strong>Email:</strong> {supplierData.email}</p>
           <p><strong>Company:</strong> {supplierData.company}</p>
-          <p><strong>Phone:</strong> {supplierData.phone}</p>
+          <p><strong>Phone:</strong> {supplierData.phone_number}</p>
           <p><strong>Address:</strong> {supplierData.address}</p>
         </div>
       ) : (
