@@ -1,51 +1,99 @@
 {
     "Vegetables": {
-        "LeafyGreens": ["Romaine Lettuce", "Spinach", "Arugula", "Kale", "Swiss Chard", "Butterhead Lettuce", "Collard Greens", "Watercress", "Mustard Greens"],
-        "Cruciferous": ["Broccoli", "Cauliflower", "Brussels Sprouts", "Cabbage", "Bok Choy", "Kohlrabi", "Collard Greens", "Radishes"],
-        "Root": ["Carrot", "Beetroot", "Turnip", "Radish", "Sweet Potato", "Parsnip", "Rutabaga", "Ginger", "Yam"],
-        "Allium": ["Garlic", "Onion", "Shallots", "Leeks", "Chives", "Scallions", "Green Onion", "Ramps"],
-        "Nightshades": ["Tomato", "Bell Pepper", "Eggplant", "Chili Pepper", "Potato", "Pimentos"],
-        "Legumes": ["Green Beans", "Peas", "Lentils", "Chickpeas", "Black Beans", "Kidney Beans", "Soybeans", "Lima Beans"],
-        "Mushrooms": ["Button Mushroom", "Portobello", "Shiitake", "Cremini", "Oyster", "Enoki"],
-        "Squashes": ["Zucchini", "Butternut Squash", "Acorn Squash", "Pumpkin", "Spaghetti Squash"]
+        "LeafyGreens": [
+            { "name": "Romaine Lettuce", "price": 2.99, "measurement": 200, "unit": "grams" },
+            { "name": "Spinach", "price": 3.49, "measurement": 150, "unit": "grams" },
+            { "name": "Arugula", "price": 4.99, "measurement": 100, "unit": "grams" },
+            { "name": "Kale", "price": 3.99, "measurement": 200, "unit": "grams" },
+            { "name": "Swiss Chard", "price": 2.79, "measurement": 250, "unit": "grams" }
+        ],
+        "Cruciferous": [
+            { "name": "Broccoli", "price": 1.99, "measurement": 1, "unit": "piece" },
+            { "name": "Cauliflower", "price": 2.49, "measurement": 1, "unit": "piece" },
+            { "name": "Brussels Sprouts", "price": 4.99, "measurement": 500, "unit": "grams" },
+            { "name": "Cabbage", "price": 1.49, "measurement": 1, "unit": "piece" }
+        ],
+        "Root": [
+            { "name": "Carrot", "price": 1.49, "measurement": 1, "unit": "kg" },
+            { "name": "Beetroot", "price": 2.99, "measurement": 1, "unit": "kg" },
+            { "name": "Sweet Potato", "price": 3.49, "measurement": 1, "unit": "kg" }
+        ],
+        "Allium": [
+            { "name": "Garlic", "price": 1.99, "measurement": 100, "unit": "grams" },
+            { "name": "Onion", "price": 1.29, "measurement": 1, "unit": "kg" },
+            { "name": "Shallots", "price": 4.99, "measurement": 500, "unit": "grams" }
+        ]
     },
     "Fruits": {
-        "Citrus": ["Lemon", "Lime", "Orange", "Grapefruit", "Mandarin", "Tangerine", "Pomelo", "Clementine"],
-        "Tropical": ["Avocado", "Mango", "Pineapple", "Papaya", "Banana", "Coconut", "Passion Fruit", "Lychee", "Dragon Fruit"],
-        "Berries": ["Strawberry", "Blueberry", "Raspberry", "Blackberry", "Goji Berry", "Cranberry", "Mulberry", "Acai Berry"],
-        "StoneFruits": ["Peach", "Plum", "Cherry", "Apricot", "Nectarine", "Mango"],
-        "Pomes": ["Apple", "Pear", "Quince", "Asian Pear"],
-        "Melons": ["Watermelon", "Cantaloupe", "Honeydew", "Galia Melon"]
+        "Citrus": [
+            { "name": "Lemon", "price": 0.50, "measurement": 1, "unit": "piece" },
+            { "name": "Orange", "price": 0.75, "measurement": 1, "unit": "piece" },
+            { "name": "Grapefruit", "price": 1.25, "measurement": 1, "unit": "piece" }
+        ],
+        "Tropical": [
+            { "name": "Avocado", "price": 1.99, "measurement": 1, "unit": "piece" },
+            { "name": "Mango", "price": 2.49, "measurement": 1, "unit": "piece" },
+            { "name": "Pineapple", "price": 3.99, "measurement": 1, "unit": "piece" }
+        ],
+        "Berries": [
+            { "name": "Strawberry", "price": 4.99, "measurement": 250, "unit": "grams" },
+            { "name": "Blueberry", "price": 5.99, "measurement": 250, "unit": "grams" },
+            { "name": "Raspberry", "price": 6.49, "measurement": 250, "unit": "grams" }
+        ]
     },
     "Grains": {
-        "WholeGrains": ["Brown Rice", "Quinoa", "Oats", "Barley", "Bulgur", "Millet", "Farro", "Amaranth"],
-        "Pasta": ["Spaghetti", "Fusilli", "Penne", "Macaroni", "Linguine", "Fettuccine", "Lasagna"],
-        "Breads": ["Whole Wheat Bread", "Sourdough", "Rye Bread", "Baguette", "Pita", "Ciabatta", "Naan"]
+        "WholeGrains": [
+            { "name": "Brown Rice", "price": 3.99, "measurement": 500, "unit": "grams" },
+            { "name": "Quinoa", "price": 5.99, "measurement": 500, "unit": "grams" },
+            { "name": "Oats", "price": 2.99, "measurement": 500, "unit": "grams" }
+        ],
+        "Pasta": [
+            { "name": "Spaghetti", "price": 2.49, "measurement": 400, "unit": "grams" },
+            { "name": "Penne", "price": 2.29, "measurement": 400, "unit": "grams" }
+        ]
     },
     "Proteins": {
-        "Meat": ["Chicken", "Beef", "Pork", "Lamb", "Turkey", "Duck", "Veal", "Rabbit"],
-        "Seafood": ["Salmon", "Shrimp", "Tuna", "Cod", "Crab", "Lobster", "Mussels", "Oysters", "Halibut"],
-        "PlantBased": ["Tofu", "Tempeh", "Seitan", "Edamame", "Lentils", "Chickpeas"]
+        "Meat": [
+            { "name": "Chicken Breast", "price": 6.99, "measurement": 500, "unit": "grams" },
+            { "name": "Ground Beef", "price": 8.99, "measurement": 500, "unit": "grams" }
+        ],
+        "Seafood": [
+            { "name": "Salmon", "price": 9.99, "measurement": 300, "unit": "grams" },
+            { "name": "Shrimp", "price": 12.99, "measurement": 500, "unit": "grams" }
+        ],
+        "PlantBased": [
+            { "name": "Tofu", "price": 4.99, "measurement": 400, "unit": "grams" },
+            { "name": "Tempeh", "price": 5.49, "measurement": 400, "unit": "grams" }
+        ]
     },
     "Dairy": {
-        "Milk": ["Cow Milk", "Almond Milk", "Soy Milk", "Oat Milk", "Coconut Milk", "Rice Milk"],
-        "Cheese": ["Cheddar", "Mozzarella", "Feta", "Parmesan", "Brie", "Gouda", "Goat Cheese", "Blue Cheese"],
-        "Yogurt": ["Greek Yogurt", "Regular Yogurt", "Icelandic Yogurt", "Soy Yogurt"]
+        "Milk": [
+            { "name": "Almond Milk", "price": 3.49, "measurement": 1, "unit": "liter" },
+            { "name": "Oat Milk", "price": 3.99, "measurement": 1, "unit": "liter" }
+        ],
+        "Cheese": [
+            { "name": "Cheddar", "price": 5.99, "measurement": 250, "unit": "grams" },
+            { "name": "Mozzarella", "price": 6.49, "measurement": 250, "unit": "grams" }
+        ]
     },
     "HerbsAndSpices": {
-        "Herbs": ["Basil", "Cilantro", "Parsley", "Mint", "Rosemary", "Thyme", "Dill", "Oregano", "Sage", "Tarragon"],
-        "Spices": ["Black Pepper", "Cinnamon", "Cumin", "Turmeric", "Paprika", "Ginger", "Nutmeg", "Clove", "Coriander", "Cardamom", "Allspice", "Saffron"]
+        "Herbs": [
+            { "name": "Basil", "price": 1.99, "measurement": 1, "unit": "bunch" },
+            { "name": "Cilantro", "price": 1.49, "measurement": 1, "unit": "bunch" }
+        ],
+        "Spices": [
+            { "name": "Black Pepper", "price": 2.99, "measurement": 50, "unit": "grams" },
+            { "name": "Cumin", "price": 3.49, "measurement": 50, "unit": "grams" }
+        ]
     },
     "OilsAndVinegars": {
-        "Oils": ["Olive Oil", "Canola Oil", "Sesame Oil", "Coconut Oil", "Sunflower Oil", "Peanut Oil"],
-        "Vinegars": ["Balsamic Vinegar", "Red Wine Vinegar", "Apple Cider Vinegar", "White Vinegar", "Rice Vinegar"]
-    },
-    "NutsAndSeeds": {
-        "Nuts": ["Almonds", "Walnuts", "Cashews", "Pistachios", "Pecans", "Hazelnuts"],
-        "Seeds": ["Chia Seeds", "Flaxseeds", "Pumpkin Seeds", "Sunflower Seeds", "Sesame Seeds"]
-    },
-    "Condiments": {
-        "Sauces": ["Soy Sauce", "Worcestershire Sauce", "Hot Sauce", "Barbecue Sauce", "Ketchup", "Mustard"],
-        "Pastes": ["Tomato Paste", "Curry Paste", "Miso Paste", "Harissa"]
+        "Oils": [
+            { "name": "Olive Oil", "price": 8.99, "measurement": 1, "unit": "liter" },
+            { "name": "Coconut Oil", "price": 6.99, "measurement": 500, "unit": "ml" }
+        ],
+        "Vinegars": [
+            { "name": "Balsamic Vinegar", "price": 6.50, "measurement": 250, "unit": "ml" },
+            { "name": "Apple Cider Vinegar", "price": 4.99, "measurement": 500, "unit": "ml" }
+        ]
     }
 }

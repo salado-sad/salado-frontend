@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Cookies from 'js-cookie';
 import "./ProfileSupplier.css";
 // Import icons from assets
 import basketIcon from "../../assets/basket-icon.svg";
@@ -19,19 +20,45 @@ const ProfileSupplier = ({ onLogout }) => {
   const [productQuantity, setProductQuantity] = useState(0);
   const [productMeasurement, setProductMeasurement] = useState('');
   const [measurementUnit, setMeasurementUnit] = useState('grams');
+  const [productPrice, setProductPrice] = useState(0);
   const [addedItems, setAddedItems] = useState([]);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [editIndex, setEditIndex] = useState(null); 
   const [deleteIndex, setDeleteIndex] = useState(null); 
   const [isModalVisible, setModalVisible] = useState(false);
   const [originalItem, setOriginalItem] = useState(null); 
+  const getAuthHeader = () => ({
+    Authorization: `Bearer ${Cookies.get('access_token')}`
+  });
 
   // Fetch products when the component mounts
   useEffect(() => {
-    fetch('http://[Host]/vendors/products/')
-      .then(response => response.json())
-      .then(data => setProducts(data))
-      .catch(error => console.error('Error fetching products:', error));
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/vendors/products/', {
+          headers: getAuthHeader()
+        });
+        
+        if (!response.ok) throw new Error('Failed to fetch');
+        
+        const apiData = await response.json();
+        
+        // Ensure all items have a price field with default value
+        const formattedData = apiData.map(item => ({
+          ...item,
+          price: Number(item.price) || 0, // Force numeric conversion
+          stock_quantity: Number(item.stock_quantity) || 0,
+          product_measurement: Number(item.product_measurement) || 0
+        }));
+        
+        setAddedItems(formattedData);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        setAddedItems([]); // Reset to empty array on error
+      }
+    };
+    
+    fetchProducts();
   }, []);
 
   const handleCategoryChange = (event) => {
@@ -61,7 +88,18 @@ const ProfileSupplier = ({ onLogout }) => {
   };
 
   const handleProductChange = (event) => {
-    setSelectedProduct(event.target.value);
+    const productName = event.target.value;
+    if (selectedCategory && selectedSubCategory) {
+      const product = data[selectedCategory][selectedSubCategory]
+        .find(p => p.name === productName);
+      
+      if (product) {
+        setProductMeasurement(product.measurement);
+        setMeasurementUnit(product.unit);
+        setProductPrice(product.price);
+      }
+      setSelectedProduct(productName);
+    }
   };
 
   const handleCatalogueNameChange = (event) => {
@@ -90,65 +128,95 @@ const ProfileSupplier = ({ onLogout }) => {
   };
 
   const validateUploadForm = () => {
-    if (!selectedCategory || !selectedSubCategory || !selectedProduct || !catalogueName || !productMeasurement || !productQuantity) {
+    if (!selectedCategory || !selectedSubCategory || 
+        !selectedProduct || !catalogueName || !productQuantity) {
       alert("Please fill out all required fields.");
       return false;
     }
     return true;
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (validateUploadForm()) {
       const newItem = {
         name: selectedProduct,
         category: selectedCategory,
         subcategory: selectedSubCategory,
         catalogue_name: catalogueName,
-        price: "0",
-        stock_quantity: productQuantity,
-        product_measurement: productMeasurement,
-        measurement_unit: measurementUnit,
+        price: Number(productPrice),
+        stock_quantity: Number(productQuantity),
+        product_measurement: Number(productMeasurement),
+        measurement_unit: measurementUnit
       };
+      
+      try {
+        const response = await fetch('http://localhost:8000/vendors/products/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...getAuthHeader()
+          },
+          body: JSON.stringify(newItem)
+        });
   
-      fetch('http://[Host]/vendors/products/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newItem)
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Product added:', data);
-        // Refresh products list
-        fetch('http://[Host]/vendors/products/')
-          .then(response => response.json())
-          .then(data => setAddedItems(data))
-          .catch(error => console.error('Error fetching products:', error));
-      })
-      .catch(error => console.error('Error adding product:', error));
-  
-      handleCancel();
-      setUploadedImage(null);
+        if (!response.ok) throw new Error('Create failed');
+        
+        const createdItem = await response.json();
+        setAddedItems(prev => [...prev, {
+          ...createdItem,
+          price: createdItem.price || 0.00 // Ensure price exists
+        }]);
+      } catch (error) {
+        console.error('Error adding product:', error);
+      }
     }
   };
 
-  const handleDeleteItem = (index) => {
-    const updatedItems = [...addedItems];
-    updatedItems.splice(index, 1); 
-    setAddedItems(updatedItems);
+  const handleDeleteItem = async (index) => {
+    const itemId = addedItems[index].id;
+    try {
+      const response = await fetch(`http://localhost:8000/vendors/products/${itemId}/`, {
+        method: 'DELETE',
+        headers: getAuthHeader()
+      });
+
+      if (!response.ok) throw new Error('Delete failed');
+      
+      const updatedItems = addedItems.filter((_, i) => i !== index);
+      setAddedItems(updatedItems);
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      alert('Failed to delete product');
+    }
   };
 
   const handleLogout = () => {
     onLogout();
   };
 
-  const handleImageUpload = (event) => {
+  const handleImageUpload = async (event, itemId) => {
     const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => setUploadedImage(reader.result);
-      reader.readAsDataURL(file);
+    if (!file) return;
+  
+    const formData = new FormData();
+    formData.append('image', file);
+  
+    try {
+      const response = await fetch(`http://localhost:8000/vendors/products/${itemId}/`, {
+        method: 'PATCH',
+        headers: getAuthHeader(),
+        body: formData
+      });
+  
+      if (!response.ok) throw new Error('Image upload failed');
+      
+      const updatedItem = await response.json();
+      setAddedItems(prev => prev.map(item => 
+        item.id === itemId ? {...item, image: updatedItem.image} : item
+      ));
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Failed to upload image');
     }
   };
 
@@ -167,10 +235,30 @@ const ProfileSupplier = ({ onLogout }) => {
     setAddedItems(updatedItems);
   };
 
-  const handleSaveEdit = (index) => {
-    setEditIndex(null);
+  const handleSaveEdit = async (index) => {
+    const item = addedItems[index];
+    try {
+      const response = await fetch(`http://localhost:8000/vendors/products/${item.id}/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeader()
+        },
+        body: JSON.stringify(item)
+      });
+  
+      if (!response.ok) throw new Error('Update failed');
+      
+      const updatedItem = await response.json();
+      const updatedItems = [...addedItems];
+      updatedItems[index] = updatedItem;
+      setAddedItems(updatedItems);
+      setEditIndex(null);
+    } catch (error) {
+      console.error('Error updating product:', error);
+      alert('Failed to update product');
+    }
   };
-
 
   const ConfirmDeleteModal = () => (
     isModalVisible && (
@@ -242,7 +330,7 @@ const ProfileSupplier = ({ onLogout }) => {
                     </select>
   
                     <select
-                      value={item.subCategory}
+                      value={item.subcategory}
                       onChange={(e) => handleSubCategoryEditChange(index, e.target.value)}
                       className="editable-dropdown"
                       disabled={!item.category}
@@ -278,14 +366,14 @@ const ProfileSupplier = ({ onLogout }) => {
   
                   <input
                     type="text"
-                    value={item.catalogueName}
+                    value={item.catalogue_name}
                     onChange={(e) => handleEditChange(index, "catalogueName", e.target.value)}
                     className="editable-input"
                     placeholder="Enter catalogue name"
                   />
                   <input
                     type="text"
-                    value={item.productMeasurement}
+                    value={item.product_measurement}
                     onChange={(e) =>
                       handleEditChange(index, "productMeasurement", e.target.value)
                     }
@@ -294,7 +382,7 @@ const ProfileSupplier = ({ onLogout }) => {
                   />
                   <input
                     type="number"
-                    value={item.productQuantity}
+                    value={item.stock_quantity}
                     onChange={(e) =>
                       handleEditChange(index, "productQuantity", e.target.value)
                     }
@@ -339,13 +427,14 @@ const ProfileSupplier = ({ onLogout }) => {
                 // Static View Mode
                 <>
                   <div className="card-header">
-                    <h3>{item.product}</h3>
+                    <h3>{item.name}</h3>
                     <span className="category-badge">{item.category}</span>
                   </div>
-                  <p><strong>Subcategory:</strong> {item.subCategory}</p>
-                  <p><strong>Catalogue Name:</strong> {item.catalogueName}</p>
-                  <p><strong>Measurement:</strong> {item.productMeasurement}</p>
-                  <p><strong>Quantity:</strong> {item.productQuantity}</p>
+                  <p><strong>Subcategory:</strong> {item.subcategory}</p>
+                  <p><strong>Catalogue Name:</strong> {item.catalogue_name}</p>
+                  <p><strong>Price:</strong> ${Number(item.price || 0).toFixed(2)}</p>
+                  <p><strong>Measurement:</strong> {item.product_measurement || 'N/A'} {item.measurement_unit || ''}</p>
+                  <p><strong>Quantity:</strong> {item.stock_quantity}</p>
   
                   <div className="action-buttons">
                     <button
@@ -413,9 +502,9 @@ const ProfileSupplier = ({ onLogout }) => {
           >
             <option value="">Select Product</option>
             {selectedSubCategory &&
-              products.map((product) => (
-                <option key={product} value={product}>
-                  {product}
+              products.map((product, index) => (
+                <option key={index} value={product.name}>
+                  {product.name}
                 </option>
               ))}
           </select>
@@ -432,30 +521,25 @@ const ProfileSupplier = ({ onLogout }) => {
             onChange={handleCatalogueNameChange}
           />
         </div>
+
+        {/* Price */}
+        <div className="input-group">
+          <label>Price</label>
+          <input 
+            type="text" 
+            value={`$${productPrice.toFixed(2)}`} 
+            readOnly 
+          />
+        </div>
   
         {/* Measurement */}
         <div className="input-group">
-          <label htmlFor="measurement">Product Measurement*</label>
-          <div className="measurement-wrapper">
-            <input
-              type="number"
-              id="measurement"
-              placeholder="Enter measurement"
-              value={productMeasurement}
-              onChange={handleProductMeasurementChange}
-            />
-            <select
-              id="measurement-unit"
-              value={measurementUnit}
-              onChange={handleMeasurementUnitChange}
-            >
-              <option value="grams">Grams (g)</option>
-              <option value="kilograms">Kilograms (kg)</option>
-              <option value="milliliters">Milliliters (ml)</option>
-              <option value="liters">Liters (l)</option>
-              <option value="pieces">Pieces</option>
-            </select>
-          </div>
+          <label>Measurement</label>
+          <input
+            type="text"
+            value={`${productMeasurement} ${measurementUnit}`}
+            readOnly
+          />
         </div>
   
         {/* Quantity */}
@@ -477,7 +561,13 @@ const ProfileSupplier = ({ onLogout }) => {
             type="file"
             id="image-upload"
             accept="image/*"
-            onChange={handleImageUpload}
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                // For new items, you'll need to handle this after creation
+                // For existing items: handleImageUpload(e, item.id)
+              }
+            }}
           />
           {uploadedImage && (
             <div className="image-preview">
