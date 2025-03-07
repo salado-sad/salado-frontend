@@ -6,6 +6,7 @@ import purchaseIcon from "../../assets/basket-icon.svg";
 import historyIcon from "../../assets/history-icon.svg";
 import bellIcon from "../../assets/bell-icon.svg";
 import logo from "../../assets/logo_mono.png";
+import defaultImage from "../../assets/salad.png";
 import Cookies from "js-cookie";
 
 /**
@@ -19,59 +20,110 @@ const ProfileCustomer = ({ onLogout }) => {
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
   const [purchaseHistory, setPurchaseHistory] = useState([]);
+  const [packages, setPackages] = useState([]);
+  const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
 
-  // Sample packages data
-  const [packages] = useState([
-    {
-      name: 'Agha Farid',
-      price: 800.85,
-      description: 'Bache khoobie. Aziatesh nakonin. Bayad khordesh',
-      image: 'https://media.licdn.com/dms/image/v2/D4D03AQHP1k_GASXLmQ/profile-displayphoto-shrink_400_400/0/1720623177822?e=1744243200&v=beta&t=ZMqV6ju4Zd6YfWp99lt40uwCUs9SA_vvCoxp1ldfMNA',
-      products: [
-        {
-          name: 'Strawberry',
-          quantity: 5,
-          image: 'https://cdn.nyallergy.com/wp-content/uploads/square-1432664914-strawberry-facts1-1200x900.jpeg'
-        },
-        {
-          name: 'Spinach',
-          quantity: 3,
-          image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEFIf1LwpQrKWxz9lSfn976uLBL9n5g18CUQ&s'
-        }
-      ]
+  useEffect(() => {
+    if (activePage === "profile") {
+      fetchUserProfile();
     }
-  ]);
+  }, [activePage]);
 
-  /**
-   * Adds a package to the cart.
-   * @param {Object} pkg - The package to add to the cart.
-   */
-  const addToCart = (pkg) => {
-    setCart(prev => {
-      const existingIndex = prev.findIndex(item => item.name === pkg.name);
-      if (existingIndex > -1) {
-        const newCart = [...prev];
-        newCart[existingIndex].quantity += 1;
-        return newCart;
+  useEffect(() => {
+    if (activePage === "purchase") {
+      fetchPackages();
+    }
+  }, [activePage]);
+
+  useEffect(() => {
+    if (activePage === "purchase") {
+      fetchCart();
+    }
+  }, [activePage]);
+
+  const fetchUserProfile = async () => {
+    try {
+      const accessToken = Cookies.get("access_token");
+      const response = await fetch("http://localhost:8000/auth/profile/", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const result = await response.json();
+      if (response.status === 200) {
+        setProfileData(result);
+      } else {
+        console.error("Failed to fetch profile:", result);
       }
-      return [...prev, { ...pkg, quantity: 1 }];
-    });
-    setShowCart(true);
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
   };
 
-  /**
-   * Removes a package from the cart.
-   * @param {string} packageName - The name of the package to remove from the cart.
-   */
+  const fetchPackages = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/management/packages/');
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      const formattedData = data
+        .filter(pkg => pkg.is_active) // Filter out inactive packages
+        .map(pkg => ({
+          ...pkg,
+          price: parseFloat(pkg.price) || 0,
+        }));
+      setPackages(formattedData);
+    } catch (error) {
+      console.error('Error fetching packages:', error);
+    }
+  };
+
+  const fetchCart = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/cart/', {
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+      const data = await response.json();
+      setCart(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+    }
+  };
+
+  const addToCart = (pkg) => {
+    if (quantity > pkg.stock_quantity) {
+      alert("Cannot add more than available stock.");
+      return;
+    }
+
+    fetch('http://127.0.0.1:8000/cart/items/', {
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        package_id: pkg.id,
+        quantity: quantity
+      })
+    })
+      .then(response => response.json())
+      .then(() => {
+        fetchCart();
+      })
+      .catch(error => console.error('Error adding to cart:', error));
+  };
+
   const removeFromCart = (packageName) => {
     setCart(prev => prev.filter(item => item.name !== packageName));
   };
 
-  /**
-   * Renders the cart sidebar.
-   * @returns {JSX.Element} The cart sidebar component.
-   */
   const renderCart = () => (
     <div className="cart-sidebar">
       <div className="cart-header">
@@ -105,10 +157,6 @@ const ProfileCustomer = ({ onLogout }) => {
     </div>
   );
 
-  /**
-   * Renders the cart button.
-   * @returns {JSX.Element} The cart button component.
-   */
   const renderCartButton = () => (
     <button className="cart-toggle-btn" onClick={() => setShowCart(!showCart)}>
       <span className="cart-icon">🛒</span>
@@ -116,10 +164,6 @@ const ProfileCustomer = ({ onLogout }) => {
     </button>
   );
 
-  /**
-   * Renders the purchase page.
-   * @returns {JSX.Element} The purchase page component.
-   */
   const renderPurchasePage = () => (
     <div className="purchase-page-container">
       <h2>Available Packages</h2>
@@ -127,22 +171,27 @@ const ProfileCustomer = ({ onLogout }) => {
       <div className="product-grid">
         {packages.map((pkg) => (
           <div className="package-card" key={pkg.name}>
-            <img src={pkg.image} className="package-image" alt={pkg.name} />
+            <img src={pkg.image || defaultImage} className="package-image" alt={pkg.name} />
             <div className="package-info">
               <h3>{pkg.name}</h3>
               <p className="package-description">{pkg.description}</p>
               <div className="package-products">
                 {pkg.products.map((product) => (
                   <div className="product-badge" key={product.name}>
-                    <img src={product.image} alt={product.name} />
                     <span>{product.quantity}x {product.name}</span>
                   </div>
                 ))}
               </div>
-              <div className="package-footer">
-                <span className="package-price">${pkg.price.toFixed(2)}</span>
-                <button className="purchase-btn" onClick={() => addToCart(pkg)}>Add to Cart</button>
-              </div>
+              <p className="package-price">Price: ${pkg.price.toFixed(2)}</p>
+              <input
+                type="number"
+                min="1"
+                max={pkg.stock_quantity}
+                value={quantity}
+                onChange={(e) => setQuantity(parseInt(e.target.value))}
+                className="quantity-input"
+              />
+              <button className="purchase-btn" onClick={() => addToCart(pkg)}>Add to Cart</button>
             </div>
           </div>
         ))}
@@ -151,41 +200,6 @@ const ProfileCustomer = ({ onLogout }) => {
     </div>
   );
 
-  // Fetch profile data when the user navigates to the "profile" page
-  useEffect(() => {
-    if (activePage === "profile") {
-      fetchUserProfile();
-    }
-  }, [activePage]);
-
-  /**
-   * Fetches the user profile data.
-   */
-  const fetchUserProfile = async () => {
-    try {
-      const accessToken = Cookies.get("access_token");
-      const response = await fetch("http://localhost:8000/auth/profile/", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const result = await response.json();
-      if (response.status === 200) {
-        setProfileData(result);
-      } else {
-        console.error("Failed to fetch profile:", result);
-      }
-    } catch (error) {
-      console.error("Error fetching profile:", error);
-    }
-  };
-
-  /**
-   * Renders the profile information.
-   * @returns {JSX.Element} The profile information component.
-   */
   const renderProfileInfo = () => (
     <div className="profile-info-container">
       <h2>Your Profile Information</h2>
@@ -211,9 +225,6 @@ const ProfileCustomer = ({ onLogout }) => {
     </div>
   );
 
-  /**
-   * Handles user logout.
-   */
   const handleLogout = async () => {
     try {
       const accessToken = Cookies.get("access_token");
@@ -245,10 +256,6 @@ const ProfileCustomer = ({ onLogout }) => {
     }
   };
 
-  /**
-   * Renders the purchase history.
-   * @returns {JSX.Element} The purchase history component.
-   */
   const renderPurchaseHistory = () => (
     <div className="purchase-history-container">
       <h2>Purchase History</h2>
@@ -262,10 +269,6 @@ const ProfileCustomer = ({ onLogout }) => {
     </div>
   );
 
-  /**
-   * Renders content based on the active page.
-   * @returns {JSX.Element|null} The content component.
-   */
   const renderContent = () => {
     switch (activePage) {
       case "purchase":

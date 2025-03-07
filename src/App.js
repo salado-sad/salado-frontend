@@ -50,7 +50,7 @@ function App() {
         <Route path="/forget-password" element={<ForgetPassword />} />
         
         {/* Explore Salads Page */}
-        <Route path="/explore-salads" element={<ExploreSalads />} />
+        <Route path="/explore-salads" element={<ExploreSalads user={user} />} />
         
         {/* Profile Page */}
         <Route path="/profile" element={user ? <Profile onLogout={() => setUser(null)} /> : <Navigate to="/login" />} />

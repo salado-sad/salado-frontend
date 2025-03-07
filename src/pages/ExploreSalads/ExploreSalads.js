@@ -1,24 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ExploreSalads.css";
+import defaultImage from "../../assets/salad.png";
 
 /**
  * ExploreSalads component for displaying and managing salad packages.
  * 
  * @returns {JSX.Element} The rendered component.
  */
-const ExploreSalads = () => {
+const ExploreSalads = ({ user }) => {
   const navigate = useNavigate();
   const [packages, setPackages] = useState([]);
-  const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem("cart");
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
+  const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [priceFilter, setPriceFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     fetch('http://127.0.0.1:8000/management/packages/')
@@ -29,10 +28,12 @@ const ExploreSalads = () => {
         return response.json();
       })
       .then(data => {
-        const formattedData = data.map(pkg => ({
-          ...pkg,
-          price: parseFloat(pkg.price) || 0,
-        }));
+        const formattedData = data
+          .filter(pkg => pkg.is_active) // Filter out inactive packages
+          .map(pkg => ({
+            ...pkg,
+            price: parseFloat(pkg.price) || 0,
+          }));
         setPackages(formattedData);
         setLoading(false);
       })
@@ -44,33 +45,71 @@ const ExploreSalads = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
+    if (user === "customer") {
+      fetch('http://127.0.0.1:8000/cart/', {
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+      })
+        .then(response => response.json())
+        .then(data => setCart(data))
+        .catch(error => console.error('Error fetching cart:', error));
+        console.log("Cart", cart);
+    }
+  }, [user]);
 
-  /**
-   * Adds a package to the cart.
-   * 
-   * @param {Object} pkg - The package to add.
-   */
   const addToCart = (pkg) => {
-    setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.name === pkg.name);
-      if (existingItem) {
-        return prevCart.map((item) =>
-          item.name === pkg.name ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      } else {
-        return [...prevCart, { ...pkg, quantity: 1 }];
-      }
-    });
+    if (user !== "customer") {
+      alert("Please log in to your account first.");
+      return;
+    }
+
+    if (quantity > pkg.stock_quantity) {
+      alert("Cannot add more than available stock.");
+      return;
+    }
+
+    fetch('http://127.0.0.1:8000/cart/items/', {
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        package_id: pkg.id,
+        quantity: quantity
+      })
+    })
+      .then(response => response.json())
+      .then(() => {
+        fetch('http://127.0.0.1:8000/cart/', {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+          }
+        })
+          .then(response => response.json())
+          .then(data => setCart(data))
+          .catch(error => console.error('Error fetching cart:', error));
+      })
+      .catch(error => console.error('Error adding to cart:', error));
   };
 
-  /**
-   * Clears the cart.
-   */
   const clearCart = () => {
     setCart([]);
   };
+
+  const debounce = (func, delay) => {
+    let debounceTimer;
+    return function(...args) {
+      const context = this;
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    };
+  };
+
+  const handleSearchChange = useCallback(debounce((e) => {
+    setSearchQuery(e.target.value);
+  }, 300), []);
 
   const filteredPackages = packages
     .filter((pkg) =>
@@ -95,8 +134,8 @@ const ExploreSalads = () => {
             <input
               type="text"
               placeholder="Search by name"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              defaultValue={searchQuery}
+              onChange={handleSearchChange}
               className="search-input"
             />
             <input
@@ -113,10 +152,11 @@ const ExploreSalads = () => {
             {filteredPackages.length > 0 ? (
               filteredPackages.map((pkg, index) => (
                 <div key={index} className="package-card">
-                  <img src={pkg.image || "placeholder-image-url.jpg"} alt={pkg.name} className="package-image" />
+                  <img src={pkg.image || defaultImage} alt={pkg.name} className="package-image" />
                   <h2>{pkg.name}</h2>
                   <p>{pkg.description}</p>
                   <p className="package-price">Price: ${pkg.price.toFixed(2)}</p>
+                  <p className="ingredients-title">Ingredients:</p>
                   <ul className="product-list">
                     {pkg.products.map((product, idx) => (
                       <li key={idx} className="product-item">
@@ -124,8 +164,17 @@ const ExploreSalads = () => {
                       </li>
                     ))}
                   </ul>
+                  <p className="package-stock">Stock: {pkg.stock_quantity}</p>
+                  <input
+                    type="number"
+                    min="1"
+                    max={pkg.stock_quantity}
+                    value={quantity}
+                    onChange={(e) => setQuantity(parseInt(e.target.value))}
+                    className="quantity-input"
+                  />
                   <button className="add-to-cart-btn" onClick={() => addToCart(pkg)}>
-                    +
+                    Add to Cart
                   </button>
                 </div>
               ))
