@@ -1,99 +1,58 @@
 {
     "Vegetables": {
         "LeafyGreens": [
-            { "name": "Romaine Lettuce", "price": 2.99, "measurement": 200, "unit": "grams" },
-            { "name": "Spinach", "price": 3.49, "measurement": 150, "unit": "grams" },
-            { "name": "Arugula", "price": 4.99, "measurement": 100, "unit": "grams" },
-            { "name": "Kale", "price": 3.99, "measurement": 200, "unit": "grams" },
-            { "name": "Swiss Chard", "price": 2.79, "measurement": 250, "unit": "grams" }
+            { "name": "Romaine Lettuce", "price": 2.99, "measurement": 200, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/7/79/Romaine_lettuce.jpg" },
+            { "name": "Spinach", "price": 3.49, "measurement": 150, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/3/32/Spinach_leaves.jpg" },
+            { "name": "Arugula", "price": 4.99, "measurement": 100, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Arugula_2007.jpg" },
+            { "name": "Kale", "price": 3.99, "measurement": 200, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/0/00/Kale-Bundle.jpg" }
         ],
         "Cruciferous": [
-            { "name": "Broccoli", "price": 1.99, "measurement": 1, "unit": "piece" },
-            { "name": "Cauliflower", "price": 2.49, "measurement": 1, "unit": "piece" },
-            { "name": "Brussels Sprouts", "price": 4.99, "measurement": 500, "unit": "grams" },
-            { "name": "Cabbage", "price": 1.49, "measurement": 1, "unit": "piece" }
+            { "name": "Broccoli", "price": 1.99, "measurement": 1, "unit": "piece", "image": "https://upload.wikimedia.org/wikipedia/commons/0/03/Broccoli_and_cross_section_edit.jpg" },
+            { "name": "Cauliflower", "price": 2.49, "measurement": 1, "unit": "piece", "image": "https://upload.wikimedia.org/wikipedia/commons/3/31/Cauliflower.JPG" },
+            { "name": "Brussels Sprouts", "price": 4.99, "measurement": 500, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/4/48/Brussels_sprout.jpg" }
         ],
         "Root": [
-            { "name": "Carrot", "price": 1.49, "measurement": 1, "unit": "kg" },
-            { "name": "Beetroot", "price": 2.99, "measurement": 1, "unit": "kg" },
-            { "name": "Sweet Potato", "price": 3.49, "measurement": 1, "unit": "kg" }
-        ],
-        "Allium": [
-            { "name": "Garlic", "price": 1.99, "measurement": 100, "unit": "grams" },
-            { "name": "Onion", "price": 1.29, "measurement": 1, "unit": "kg" },
-            { "name": "Shallots", "price": 4.99, "measurement": 500, "unit": "grams" }
+            { "name": "Carrot", "price": 1.49, "measurement": 1, "unit": "kg", "image": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Vegetable-Carrots-Bundle.jpg" },
+            { "name": "Beetroot", "price": 2.99, "measurement": 1, "unit": "kg", "image": "https://upload.wikimedia.org/wikipedia/commons/1/15/Beetroot_jm26647.jpg" },
+            { "name": "Sweet Potato", "price": 3.49, "measurement": 1, "unit": "kg", "image": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Sweet_potatoes.jpg" }
         ]
     },
     "Fruits": {
         "Citrus": [
-            { "name": "Lemon", "price": 0.50, "measurement": 1, "unit": "piece" },
-            { "name": "Orange", "price": 0.75, "measurement": 1, "unit": "piece" },
-            { "name": "Grapefruit", "price": 1.25, "measurement": 1, "unit": "piece" }
+            { "name": "Lemon", "price": 0.50, "measurement": 1, "unit": "piece", "image": "https://upload.wikimedia.org/wikipedia/commons/5/53/Lemon.jpg" },
+            { "name": "Orange", "price": 0.75, "measurement": 1, "unit": "piece", "image": "https://upload.wikimedia.org/wikipedia/commons/4/43/Ambersweet_oranges.jpg" },
+            { "name": "Grapefruit", "price": 1.25, "measurement": 1, "unit": "piece", "image": "https://upload.wikimedia.org/wikipedia/commons/2/21/Grapefruit-Whole-â-Split.jpg" }
         ],
         "Tropical": [
-            { "name": "Avocado", "price": 1.99, "measurement": 1, "unit": "piece" },
-            { "name": "Mango", "price": 2.49, "measurement": 1, "unit": "piece" },
-            { "name": "Pineapple", "price": 3.99, "measurement": 1, "unit": "piece" }
-        ],
-        "Berries": [
-            { "name": "Strawberry", "price": 4.99, "measurement": 250, "unit": "grams" },
-            { "name": "Blueberry", "price": 5.99, "measurement": 250, "unit": "grams" },
-            { "name": "Raspberry", "price": 6.49, "measurement": 250, "unit": "grams" }
+            { "name": "Avocado", "price": 1.99, "measurement": 1, "unit": "piece", "image": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Avocado_Hass_DS.jpg" },
+            { "name": "Mango", "price": 2.49, "measurement": 1, "unit": "piece", "image": "https://en.wikipedia.org/wiki/Mango#/media/File:Mangos_-_single_and_halved.jpg" },
+            { "name": "Pineapple", "price": 3.99, "measurement": 1, "unit": "piece", "image": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Pineapple_and_cross_section.jpg" }
         ]
     },
     "Grains": {
         "WholeGrains": [
-            { "name": "Brown Rice", "price": 3.99, "measurement": 500, "unit": "grams" },
-            { "name": "Quinoa", "price": 5.99, "measurement": 500, "unit": "grams" },
-            { "name": "Oats", "price": 2.99, "measurement": 500, "unit": "grams" }
+            { "name": "Brown Rice", "price": 3.99, "measurement": 500, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Rice_-_brown_grains.jpg" },
+            { "name": "Quinoa", "price": 5.99, "measurement": 500, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/a/a3/Quinoa_plants.jpg" }
         ],
         "Pasta": [
-            { "name": "Spaghetti", "price": 2.49, "measurement": 400, "unit": "grams" },
-            { "name": "Penne", "price": 2.29, "measurement": 400, "unit": "grams" }
+            { "name": "Spaghetti", "price": 2.49, "measurement": 400, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Spaghetti.jpg" },
+            { "name": "Penne", "price": 2.29, "measurement": 400, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Pasta_Penne.jpg" }
         ]
     },
     "Proteins": {
         "Meat": [
-            { "name": "Chicken Breast", "price": 6.99, "measurement": 500, "unit": "grams" },
-            { "name": "Ground Beef", "price": 8.99, "measurement": 500, "unit": "grams" }
+            { "name": "Chicken Breast", "price": 6.99, "measurement": 500, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Chicken_breast_pieces.jpg" },
+            { "name": "Ground Beef", "price": 8.99, "measurement": 500, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/6/64/Beef_mince.jpg" }
         ],
         "Seafood": [
-            { "name": "Salmon", "price": 9.99, "measurement": 300, "unit": "grams" },
-            { "name": "Shrimp", "price": 12.99, "measurement": 500, "unit": "grams" }
-        ],
-        "PlantBased": [
-            { "name": "Tofu", "price": 4.99, "measurement": 400, "unit": "grams" },
-            { "name": "Tempeh", "price": 5.49, "measurement": 400, "unit": "grams" }
+            { "name": "Salmon", "price": 9.99, "measurement": 300, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Atlantic_salmon.jpg" },
+            { "name": "Shrimp", "price": 12.99, "measurement": 500, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/3/39/Palaemon_sewelli.jpg" }
         ]
     },
     "Dairy": {
-        "Milk": [
-            { "name": "Almond Milk", "price": 3.49, "measurement": 1, "unit": "liter" },
-            { "name": "Oat Milk", "price": 3.99, "measurement": 1, "unit": "liter" }
-        ],
         "Cheese": [
-            { "name": "Cheddar", "price": 5.99, "measurement": 250, "unit": "grams" },
-            { "name": "Mozzarella", "price": 6.49, "measurement": 250, "unit": "grams" }
-        ]
-    },
-    "HerbsAndSpices": {
-        "Herbs": [
-            { "name": "Basil", "price": 1.99, "measurement": 1, "unit": "bunch" },
-            { "name": "Cilantro", "price": 1.49, "measurement": 1, "unit": "bunch" }
-        ],
-        "Spices": [
-            { "name": "Black Pepper", "price": 2.99, "measurement": 50, "unit": "grams" },
-            { "name": "Cumin", "price": 3.49, "measurement": 50, "unit": "grams" }
-        ]
-    },
-    "OilsAndVinegars": {
-        "Oils": [
-            { "name": "Olive Oil", "price": 8.99, "measurement": 1, "unit": "liter" },
-            { "name": "Coconut Oil", "price": 6.99, "measurement": 500, "unit": "ml" }
-        ],
-        "Vinegars": [
-            { "name": "Balsamic Vinegar", "price": 6.50, "measurement": 250, "unit": "ml" },
-            { "name": "Apple Cider Vinegar", "price": 4.99, "measurement": 500, "unit": "ml" }
+            { "name": "Cheddar", "price": 5.99, "measurement": 250, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/3/33/Cheddar_cheese_%28pasteurised%29.jpg" },
+            { "name": "Mozzarella", "price": 6.49, "measurement": 250, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/c/c0/Mozzarella_di_bufala2.jpg" }
         ]
     }
 }

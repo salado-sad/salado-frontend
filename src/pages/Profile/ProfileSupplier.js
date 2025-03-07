@@ -29,7 +29,6 @@ const ProfileSupplier = ({ onLogout }) => {
   const [measurementUnit, setMeasurementUnit] = useState('grams');
   const [productPrice, setProductPrice] = useState(0);
   const [addedItems, setAddedItems] = useState([]);
-  const [uploadedImage, setUploadedImage] = useState(null);
   const [editIndex, setEditIndex] = useState(null); 
   const [deleteIndex, setDeleteIndex] = useState(null); 
   const [isModalVisible, setModalVisible] = useState(false);
@@ -215,6 +214,8 @@ const ProfileSupplier = ({ onLogout }) => {
   };
 
   const handleUpload = async () => {
+    const selectedProductData = data[selectedCategory][selectedSubCategory]
+      .find(p => p.name === selectedProduct);
     if (validateUploadForm()) {
       const newItem = {
         name: selectedProduct,
@@ -224,7 +225,8 @@ const ProfileSupplier = ({ onLogout }) => {
         price: Number(productPrice),
         stock_quantity: Number(productQuantity),
         product_measurement: Number(productMeasurement),
-        measurement_unit: measurementUnit
+        measurement_unit: measurementUnit,
+        image: selectedProductData?.image || '',
       };
       
       try {
@@ -437,7 +439,7 @@ const ProfileSupplier = ({ onLogout }) => {
               {/* Image */}
               {item.image && (
                 <div className="card-image">
-                  <img src={item.image} alt={`${item.product} preview`} />
+                  <img src={item.image} alt={item.name} />
                 </div>
               )}
   
@@ -688,28 +690,20 @@ const ProfileSupplier = ({ onLogout }) => {
           />
         </div>
         
-        {/* Image Upload */}
-        <div className="input-group">
-          <label htmlFor="image-upload">Upload Item Image</label>
-          <input
-            type="file"
-            id="image-upload"
-            accept="image/*"
-            onChange={(e) => {
-              const file = e.target.files[0];
-              if (file) {
-                // For new items, you'll need to handle this after creation
-                // For existing items: handleImageUpload(e, item.id)
-              }
-            }}
-          />
-          {uploadedImage && (
-            <div className="image-preview">
-              <img src={uploadedImage} alt="Preview" />
-              <button onClick={clearImagePreview}>&times;</button>
-            </div>
-          )}
-        </div>
+        {selectedProduct && (
+          <div className="image-preview">
+            <img 
+              src={data[selectedCategory]?.[selectedSubCategory]
+                  ?.find(p => p.name === selectedProduct)?.image 
+                  || 'fallback-image.jpg'} 
+              alt="Product Preview" 
+              onError={(e) => {
+                e.target.src = 'fallback-image.jpg'; // Local fallback
+                e.target.style.display = 'none'; // Hide if missing
+              }}
+            />
+          </div>
+        )}
   
         {/* Action Buttons */}
         <div className="action-buttons">

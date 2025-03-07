@@ -858,3 +858,16 @@
   color: #888;
   margin-top: 20px;
 }
+
+.add-item-card .image-preview {
+  margin: 15px 0;
+  text-align: center;
+}
+
+
+.add-item-card .image-preview img {
+  max-width: 200px;
+  max-height: 150px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
