@@ -18,6 +18,19 @@ import Cookies from "js-cookie";
  * @returns {JSX.Element} The rendered component.
  */
 const ProfileSupplier = ({ onLogout }) => {
+  const UNIT_MAPPING = {
+    'gram': 'grams',
+    'grams': 'grams',
+    'kilogram': 'kilograms', 
+    'kilograms': 'kilograms',
+    'milliliter': 'milliliters',
+    'milliliters': 'milliliters',
+    'liter': 'liters',
+    'liters': 'liters',
+    'piece': 'pieces',
+    'pieces': 'pieces'
+  };
+
   const [activePage, setActivePage] = useState("profile");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
@@ -149,7 +162,10 @@ const ProfileSupplier = ({ onLogout }) => {
       
       if (product) {
         setProductMeasurement(product.measurement);
-        setMeasurementUnit(product.unit);
+        // Normalize the unit value using mapping
+        const rawUnit = product.unit.toLowerCase();
+        const normalizedUnit = UNIT_MAPPING[rawUnit] || 'pieces';
+        setMeasurementUnit(normalizedUnit);
         setProductPrice(product.price);
       }
       setSelectedProduct(productName);
@@ -205,18 +221,33 @@ const ProfileSupplier = ({ onLogout }) => {
    * @returns {boolean} True if the form is valid, false otherwise.
    */
   const validateUploadForm = () => {
-    if (!selectedCategory || !selectedSubCategory || 
-        !selectedProduct || !catalogueName || !productQuantity) {
+    const requiredFields = [
+      selectedCategory,
+      selectedSubCategory,
+      selectedProduct,
+      catalogueName,
+      productQuantity,
+      productMeasurement,
+      productPrice
+    ];
+  
+    if (requiredFields.some(field => !field || field.toString().trim() === '')) {
       alert("Please fill out all required fields.");
       return false;
     }
+  
+    if (Number(productPrice) <= 0 || Number(productQuantity) <= 0) {
+      alert("Price and quantity must be positive numbers");
+      return false;
+    }
+  
     return true;
   };
 
   const handleUpload = async () => {
-    const selectedProductData = data[selectedCategory][selectedSubCategory]
-      .find(p => p.name === selectedProduct);
     if (validateUploadForm()) {
+      const finalUnit = UNIT_MAPPING[measurementUnit.toLowerCase()] || 'pieces';
+      
       const newItem = {
         name: selectedProduct,
         category: selectedCategory,
@@ -226,9 +257,8 @@ const ProfileSupplier = ({ onLogout }) => {
         stock_quantity: Number(productQuantity),
         product_measurement: Number(productMeasurement),
         measurement_unit: measurementUnit,
-        image: selectedProductData?.image || '',
       };
-      
+  
       try {
         const response = await fetch('http://localhost:8000/vendors/products/', {
           method: 'POST',
@@ -239,15 +269,18 @@ const ProfileSupplier = ({ onLogout }) => {
           body: JSON.stringify(newItem)
         });
   
-        if (!response.ok) throw new Error('Create failed');
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`Server error: ${JSON.stringify(errorData)}`);
+        }
         
         const createdItem = await response.json();
-        setAddedItems(prev => [...prev, {
-          ...createdItem,
-          price: createdItem.price || 0.00 // Ensure price exists
-        }]);
+        setAddedItems(prev => [...prev, createdItem]);
+        handleCancel(); // Reset form after success
+        
       } catch (error) {
         console.error('Error adding product:', error);
+        alert(`Add failed: ${error.message}`);
       }
     }
   };
@@ -329,11 +362,6 @@ const ProfileSupplier = ({ onLogout }) => {
       alert('Failed to upload image');
     }
   };
-
-  /**
-   * Clears the image preview.
-   */
-  const clearImagePreview = () => setUploadedImage(null);
 
   /**
    * Handles edit change.
@@ -437,9 +465,12 @@ const ProfileSupplier = ({ onLogout }) => {
           {addedItems.map((item, index) => (
             <div className="profile-item-card" key={index}>
               {/* Image */}
-              {item.image && (
+              {data[item.category]?.[item.subcategory]?.find(p => p.name === item.name)?.image && (
                 <div className="card-image">
-                  <img src={item.image} alt={item.name} />
+                  <img 
+                    src={data[item.category][item.subcategory].find(p => p.name === item.name).image} 
+                    alt={item.name} 
+                  />
                 </div>
               )}
   
@@ -693,14 +724,9 @@ const ProfileSupplier = ({ onLogout }) => {
         {selectedProduct && (
           <div className="image-preview">
             <img 
-              src={data[selectedCategory]?.[selectedSubCategory]
-                  ?.find(p => p.name === selectedProduct)?.image 
-                  || 'fallback-image.jpg'} 
+              src={data[selectedCategory]?.[selectedSubCategory]?.find(p => p.name === selectedProduct)?.image || ''} 
               alt="Product Preview" 
-              onError={(e) => {
-                e.target.src = 'fallback-image.jpg'; // Local fallback
-                e.target.style.display = 'none'; // Hide if missing
-              }}
+              onError={(e) => e.target.style.display = 'none'}
             />
           </div>
         )}
