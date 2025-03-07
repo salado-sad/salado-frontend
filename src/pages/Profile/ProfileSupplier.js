@@ -476,115 +476,70 @@ const ProfileSupplier = ({ onLogout }) => {
   
               {editIndex === index ? (
                 // Editable Mode
-                <>
-                  <div className="card-header">
-                    <select
-                      value={item.category}
-                      onChange={(e) => handleEditChange(index, "category", e.target.value)}
-                      className="editable-dropdown"
-                    >
-                      <option value="">Select Category</option>
-                      {Object.keys(data).map((category) => (
-                        <option key={category} value={category}>
-                          {category}
-                        </option>
-                      ))}
-                    </select>
-  
-                    <select
-                      value={item.subcategory}
-                      onChange={(e) => handleSubCategoryEditChange(index, e.target.value)}
-                      className="editable-dropdown"
-                      disabled={!item.category}
-                    >
-                      <option value="">Select Subcategory</option>
-                      {item.category &&
-                        Object.keys(data[item.category]).map((subCategory) => (
-                          <option key={subCategory} value={subCategory}>
-                            {subCategory}
-                          </option>
-                        ))}
-                    </select>
+                <div className="edit-form-container">
+                  {/* Non-editable Fields */}
+                  <div className="non-editable-fields">
+                    <div className="field-group">
+                      <label>Category:</label>
+                      <div className="static-value">{item.category}</div>
+                    </div>
+                    <div className="field-group">
+                      <label>Subcategory:</label>
+                      <div className="static-value">{item.subcategory}</div>
+                    </div>
+                    <div className="field-group">
+                      <label>Product:</label>
+                      <div className="static-value">{item.name}</div>
+                    </div>
                   </div>
-  
-                  <div>
-                    <select
-                      value={item.product}
-                      onChange={(e) =>
-                        handleEditChange(index, "product", e.target.value)
-                      }
-                      className="editable-dropdown"
-                      disabled={!item.subCategory}
-                    >
-                      <option value="">Select Product</option>
-                      {item.subCategory &&
-                        data[item.category][item.subCategory].map((product) => (
-                          <option key={product} value={product}>
-                            {product}
-                          </option>
-                        ))}
-                    </select>
+
+                  {/* Editable Fields */}
+                  <div className="editable-fields">
+                    <div className="input-group">
+                      <label>Catalogue Name:</label>
+                      <input
+                        type="text"
+                        value={item.catalogue_name}
+                        onChange={(e) => handleEditChange(index, "catalogue_name", e.target.value)}
+                        className="editable-input"
+                        placeholder="Catalogue name"
+                      />
+                    </div>
+
+                    <div className="input-group">
+                      <label>Stock Quantity:</label>
+                      <input
+                        type="number"
+                        value={item.stock_quantity}
+                        onChange={(e) => handleEditChange(index, "stock_quantity", e.target.value)}
+                        className="editable-input"
+                        placeholder="Quantity"
+                        min="0"
+                      />
+                    </div>
                   </div>
-  
-                  <input
-                    type="text"
-                    value={item.catalogue_name}
-                    onChange={(e) => handleEditChange(index, "catalogueName", e.target.value)}
-                    className="editable-input"
-                    placeholder="Enter catalogue name"
-                  />
-                  <input
-                    type="text"
-                    value={item.product_measurement}
-                    onChange={(e) =>
-                      handleEditChange(index, "productMeasurement", e.target.value)
-                    }
-                    className="editable-input"
-                    placeholder="Enter measurement"
-                  />
-                  <input
-                    type="number"
-                    value={item.stock_quantity}
-                    onChange={(e) =>
-                      handleEditChange(index, "productQuantity", e.target.value)
-                    }
-                    className="editable-input"
-                    placeholder="Enter quantity"
-                  />
-  
+
                   {/* Action Buttons */}
-                  <div className="action-buttons">
-                    <button
-                      className="save-btn"
-                      onClick={() => handleSaveEdit(index)}
-                    >
-                      Save
+                  <div className="edit-action-buttons">
+                    <button className="save-btn" onClick={() => handleSaveEdit(index)}>
+                      Save Changes
                     </button>
                     <button
                       className="cancel-btn"
                       onClick={() => {
                         if (originalItem !== null) {
                           const updatedItems = [...addedItems];
-                          updatedItems[editIndex] = originalItem; // Revert to original values
+                          updatedItems[editIndex] = originalItem;
                           setAddedItems(updatedItems);
                         }
-                        setEditIndex(null); // Exit edit mode
-                        setOriginalItem(null); // Clear cached originalItem
+                        setEditIndex(null);
+                        setOriginalItem(null);
                       }}
                     >
-                      Cancel
-                    </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => {
-                        setDeleteIndex(index);
-                        setModalVisible(true);
-                      }}
-                    >
-                      Delete
+                      Discard Changes
                     </button>
                   </div>
-                </>
+                </div>
               ) : (
                 // Static View Mode
                 <>
