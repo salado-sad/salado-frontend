@@ -6,7 +6,6 @@ import AddPackage from "../../components/AddPackage";
 import basketIcon from "../../assets/basket-icon.svg";
 import plusIcon from "../../assets/plus-icon.svg";
 import settingsIcon from "../../assets/settings-icon.svg";
-import bellIcon from "../../assets/bell-icon.svg";
 import searchIcon from "../../assets/search-icon.svg";
 import logo from "../../assets/logo_mono.png";
 
@@ -94,9 +93,6 @@ const AdminPanel = ({ onLogout }) => {
           <div>
             <h2>Welcome, Admin</h2>
             <p>{new Date().toLocaleDateString("en-US", { weekday: "short", day: "2-digit", month: "short", year: "numeric" })}</p>
-          </div>
-          <div className="notifications">
-            <img src={bellIcon} alt="Notifications" />
           </div>
         </div>
         <div className="content">

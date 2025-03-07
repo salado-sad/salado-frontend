@@ -11,9 +11,8 @@ import data from '../data/products.json'; // Adjust the path as necessary
 const AddPackage = ({ onAddPackage }) => {
   const [newPackage, setNewPackage] = useState({
     name: '',
-    price: '',
+    stock_quantity: '',
     description: '',
-    image: '', // Use for Base64 image data
     products: []
   });
 
@@ -32,33 +31,18 @@ const AddPackage = ({ onAddPackage }) => {
   };
 
   /**
-   * Handles image upload and converts it to Base64.
-   * @param {object} e - The event object.
-   */
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setNewPackage((prevState) => ({
-          ...prevState,
-          image: reader.result // Convert image file to Base64
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  /**
    * Adds a product to the package.
    */
   const addProduct = () => {
     if (product.name && product.quantity) {
-      setNewPackage((prevState) => ({
-        ...prevState,
-        products: [...prevState.products, product]
-      }));
-      setProduct({ category: '', subcategory: '', name: '', quantity: '' });
+      const selectedProduct = data[product.category][product.subcategory].find(p => p.name === product.name);
+      if (selectedProduct) {
+        setNewPackage((prevState) => ({
+          ...prevState,
+          products: [...prevState.products, { name: selectedProduct.name, quantity: parseInt(product.quantity, 10) },]
+        }));
+        setProduct({ category: '', subcategory: '', name: '', quantity: '' });
+      }
     }
   };
 
@@ -68,24 +52,23 @@ const AddPackage = ({ onAddPackage }) => {
    */
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (newPackage.name && newPackage.price && newPackage.description) {
+    if (newPackage.name && newPackage.stock_quantity && newPackage.description) {
       fetch('http://127.0.0.1:8000/management/packages/', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           name: newPackage.name,
-          price: newPackage.price,
+          stock_quantity: parseInt(newPackage.stock_quantity, 10),
           description: newPackage.description,
-          image: newPackage.image, // Send the encoded image
-          products: newPackage.products.map(p => ({ name: p.name, quantity: parseInt(p.quantity, 10) }))
+          products: newPackage.products
         })
       })
       .then(response => response.json())
       .then(data => {
         console.log('Package added:', data);
-        setNewPackage({ name: '', price: '', description: '', image: '', products: [] });
+        setNewPackage({ name: '', stock_quantity: '', description: '', products: [] });
         onAddPackage(data);
       })
       .catch(error => console.error('Error adding package:', error));
@@ -122,10 +105,10 @@ const AddPackage = ({ onAddPackage }) => {
           required
         />
         <input
-          type="text"
-          name="price"
-          placeholder="Price"
-          value={newPackage.price}
+          type="number"
+          name="stock_quantity"
+          placeholder="Stock Quantity"
+          value={newPackage.stock_quantity}
           onChange={handleInputChange}
           required
         />
@@ -135,11 +118,6 @@ const AddPackage = ({ onAddPackage }) => {
           value={newPackage.description}
           onChange={handleInputChange}
           required
-        />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
         />
 
         <div className="product-details">
@@ -159,7 +137,7 @@ const AddPackage = ({ onAddPackage }) => {
           <select name="name" value={product.name} onChange={handleProductChange} disabled={!product.subcategory}>
             <option value="">Select Product</option>
             {products.map((prod) => (
-              <option key={prod} value={prod}>{prod}</option>
+              <option key={prod.name} value={prod.name}>{prod.name}</option>
             ))}
           </select>
           <input
@@ -176,7 +154,7 @@ const AddPackage = ({ onAddPackage }) => {
           <h4>Added Products</h4>
           <ul>
             {newPackage.products.map((prod, index) => (
-              <li key={index}>{prod.name}: {prod.quantity}</li>
+              <li key={index}>{prod.name} : {prod.quantity}</li>
             ))}
           </ul>
         </div>
