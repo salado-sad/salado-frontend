@@ -33,11 +33,6 @@ const ProfileCustomer = ({ onLogout }) => {
   useEffect(() => {
     if (activePage === "purchase") {
       fetchPackages();
-    }
-  }, [activePage]);
-
-  useEffect(() => {
-    if (activePage === "purchase") {
       fetchCart();
     }
   }, [activePage]);
@@ -84,19 +79,27 @@ const ProfileCustomer = ({ onLogout }) => {
 
   const fetchCart = async () => {
     try {
+      const accessToken = Cookies.get("access_token");
       const response = await fetch('http://127.0.0.1:8000/cart/', {
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+          "Authorization": `Bearer ${accessToken}`
         }
       });
       const data = await response.json();
-      setCart(Array.isArray(data) ? data : []);
+      setCart(data.items || []);
     } catch (error) {
       console.error('Error fetching cart:', error);
     }
   };
 
   const addToCart = (pkg) => {
+    const accessToken = Cookies.get("access_token");
+    if (!accessToken) {
+      console.error("No tokens found.");
+      alert("Please log in to your account first.");
+      return;
+    }
+
     if (quantity > pkg.stock_quantity) {
       alert("Cannot add more than available stock.");
       return;
@@ -105,7 +108,7 @@ const ProfileCustomer = ({ onLogout }) => {
     fetch('http://127.0.0.1:8000/cart/items/', {
       method: 'POST',
       headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        "Authorization": `Bearer ${accessToken}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -113,15 +116,39 @@ const ProfileCustomer = ({ onLogout }) => {
         quantity: quantity
       })
     })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then(() => {
         fetchCart();
       })
       .catch(error => console.error('Error adding to cart:', error));
   };
 
-  const removeFromCart = (packageName) => {
-    setCart(prev => prev.filter(item => item.name !== packageName));
+  const removeFromCart = (itemId) => {
+    const accessToken = Cookies.get("access_token");
+    if (!accessToken) {
+      console.error("No tokens found.");
+      alert("Please log in to your account first.");
+      return;
+    }
+
+    fetch(`http://127.0.0.1:8000/cart/items/${itemId}/`, {
+      method: 'DELETE',
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        fetchCart();
+      })
+      .catch(error => console.error('Error removing item from cart:', error));
   };
 
   const renderCart = () => (
@@ -132,18 +159,18 @@ const ProfileCustomer = ({ onLogout }) => {
       </div>
       <div className="cart-items">
         {cart.map((item) => (
-          <div className="cart-item" key={item.name}>
-            <img src={item.image} className="cart-item-image" alt={item.name} />
+          <div className="cart-item" key={item.id}>
+            <img src={item.image || defaultImage} className="cart-item-image" alt={item.package} />
             <div className="cart-item-details">
-              <h4>{item.name}</h4>
+              <h4>{item.package}</h4>
               <div className="quantity-controls">
-                <button onClick={() => setCart(prev => prev.map(p => p.name === item.name ? {...p, quantity: Math.max(1, p.quantity - 1)} : p))}>−</button>
+                <button onClick={() => setCart(prev => prev.map(p => p.id === item.id ? {...p, quantity: Math.max(1, p.quantity - 1)} : p))}>−</button>
                 <span>{item.quantity}</span>
-                <button onClick={() => setCart(prev => prev.map(p => p.name === item.name ? {...p, quantity: p.quantity + 1} : p))}>+</button>
+                <button onClick={() => setCart(prev => prev.map(p => p.id === item.id ? {...p, quantity: p.quantity + 1} : p))}>+</button>
               </div>
               <p className="item-total">${(item.price * item.quantity).toFixed(2)}</p>
             </div>
-            <button className="remove-item" onClick={() => removeFromCart(item.name)}>&times;</button>
+            <button className="remove-item" onClick={() => removeFromCart(item.id)}>&times;</button>
           </div>
         ))}
       </div>
@@ -167,10 +194,10 @@ const ProfileCustomer = ({ onLogout }) => {
   const renderPurchasePage = () => (
     <div className="purchase-page-container">
       <h2>Available Packages</h2>
-      <button className="cart-toggle-btn" onClick={() => setShowCart(!showCart)}>🛒 View Cart</button>
+      {renderCartButton()}
       <div className="product-grid">
         {packages.map((pkg) => (
-          <div className="package-card" key={pkg.name}>
+          <div className="package-card" key={pkg.id}>
             <img src={pkg.image || defaultImage} className="package-image" alt={pkg.name} />
             <div className="package-info">
               <h3>{pkg.name}</h3>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ExploreSalads.css";
 import defaultImage from "../../assets/salad.png";
+import Cookies from "js-cookie";
 
 /**
  * ExploreSalads component for displaying and managing salad packages.
@@ -17,7 +18,7 @@ const ExploreSalads = ({ user }) => {
   const [priceFilter, setPriceFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
     fetch('http://127.0.0.1:8000/management/packages/')
@@ -45,34 +46,54 @@ const ExploreSalads = ({ user }) => {
   }, []);
 
   useEffect(() => {
-    if (user === "customer") {
-      fetch('http://127.0.0.1:8000/cart/', {
-        headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        }
-      })
-        .then(response => response.json())
-        .then(data => setCart(data))
-        .catch(error => console.error('Error fetching cart:', error));
-        console.log("Cart", cart);
+    const accessToken = Cookies.get("access_token");
+    if (accessToken && user === "customer") {
+      fetchCart(accessToken);
     }
   }, [user]);
 
+  const fetchCart = (accessToken) => {
+    fetch('http://127.0.0.1:8000/cart/', {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log("Fetched cart data:", data);
+        setCart(data.items || []);
+      })
+      .catch(error => console.error('Error fetching cart:', error));
+  };
+
   const addToCart = (pkg) => {
-    if (user !== "customer") {
+    const accessToken = Cookies.get("access_token");
+    if (!accessToken || user !== "customer") {
+      console.error("No tokens found.");
       alert("Please log in to your account first.");
       return;
     }
 
-    if (quantity > pkg.stock_quantity) {
+    if (quantity === 0) {
+      alert("Quantity cannot be zero.");
+      return;
+    }
+
+    const existingItem = cart.find(item => item.package === pkg.name);
+    const newQuantity = existingItem ? existingItem.quantity + quantity : quantity;
+
+    if (newQuantity > pkg.stock_quantity) {
       alert("Cannot add more than available stock.");
       return;
     }
 
+    console.log("Adding to cart:", pkg);
+    console.log("Quantity:", quantity);
+
     fetch('http://127.0.0.1:8000/cart/items/', {
       method: 'POST',
       headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        "Authorization": `Bearer ${accessToken}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -80,36 +101,47 @@ const ExploreSalads = ({ user }) => {
         quantity: quantity
       })
     })
-      .then(response => response.json())
-      .then(() => {
-        fetch('http://127.0.0.1:8000/cart/', {
-          headers: {
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
-          }
-        })
-          .then(response => response.json())
-          .then(data => setCart(data))
-          .catch(error => console.error('Error fetching cart:', error));
+      .then(response => {
+        console.log("Response status:", response.status);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Response data:", data);
+        fetchCart(accessToken); // Fetch the cart from the API after updating
       })
       .catch(error => console.error('Error adding to cart:', error));
   };
 
-  const clearCart = () => {
-    setCart([]);
+  const removeFromCart = (itemId) => {
+    const accessToken = Cookies.get("access_token");
+    if (!accessToken || user !== "customer") {
+      console.error("No tokens found.");
+      alert("Please log in to your account first.");
+      return;
+    }
+
+    fetch(`http://127.0.0.1:8000/cart/items/${itemId}/`, {
+      method: 'DELETE',
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        console.log("Item removed from cart");
+        fetchCart(accessToken); // Fetch the cart from the API after updating
+      })
+      .catch(error => console.error('Error removing item from cart:', error));
   };
 
-  const debounce = (func, delay) => {
-    let debounceTimer;
-    return function(...args) {
-      const context = this;
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => func.apply(context, args), delay);
-    };
-  };
-
-  const handleSearchChange = useCallback(debounce((e) => {
+  const handleSearchChange = useCallback((e) => {
     setSearchQuery(e.target.value);
-  }, 300), []);
+  }, []);
 
   const filteredPackages = packages
     .filter((pkg) =>
@@ -167,7 +199,7 @@ const ExploreSalads = ({ user }) => {
                   <p className="package-stock">Stock: {pkg.stock_quantity}</p>
                   <input
                     type="number"
-                    min="1"
+                    min="0"
                     max={pkg.stock_quantity}
                     value={quantity}
                     onChange={(e) => setQuantity(parseInt(e.target.value))}
@@ -197,12 +229,12 @@ const ExploreSalads = ({ user }) => {
                   <ul className="cart-list">
                     {cart.map((item, index) => (
                       <li key={index} className="cart-item">
-                        <span>{item.name}</span> - <strong>{item.quantity}</strong> pcs
+                        <span>{item.package}</span> - <strong>{item.quantity}</strong> pcs - <strong>${item.cost.toFixed(2)}</strong>
+                        <button className="remove-from-cart-btn" onClick={() => removeFromCart(item.id)}>Remove</button>
                       </li>
                     ))}
                   </ul>
                 )}
-                {cart.length > 0 && <button className="clear-cart-btn" onClick={clearCart}>Clear Cart</button>}
               </div>
             )}
           </div>
