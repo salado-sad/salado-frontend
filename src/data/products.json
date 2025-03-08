@@ -1,58 +1,58 @@
 {
     "Vegetables": {
         "LeafyGreens": [
-            { "name": "Romaine Lettuce", "price": 2.99, "measurement": 200, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/7/79/Romaine_lettuce.jpg" },
-            { "name": "Spinach", "price": 3.49, "measurement": 150, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/3/32/Spinach_leaves.jpg" },
-            { "name": "Arugula", "price": 4.99, "measurement": 100, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Arugula_2007.jpg" },
-            { "name": "Kale", "price": 3.99, "measurement": 200, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/0/00/Kale-Bundle.jpg" }
+            { "name": "Romaine Lettuce", "price": 2.99, "measurement": 200, "unit": "grams", "image": "https://theorangegrovesaltaire.com/cdn/shop/products/RomaineLettuce_580x.jpg?v=1590929013" },
+            { "name": "Spinach", "price": 3.49, "measurement": 150, "unit": "grams", "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEFIf1LwpQrKWxz9lSfn976uLBL9n5g18CUQ&s" },
+            { "name": "Arugula", "price": 4.99, "measurement": 100, "unit": "grams", "image": "https://www.livinginwellbeing.org/wp-content/uploads/2020/04/Arugula-1200x800.jpg" },
+            { "name": "Kale", "price": 3.99, "measurement": 200, "unit": "grams", "image": "https://cdn.britannica.com/74/181374-050-83F7B492/kale-leaves.jpg" }
         ],
         "Cruciferous": [
-            { "name": "Broccoli", "price": 1.99, "measurement": 1, "unit": "piece", "image": "https://upload.wikimedia.org/wikipedia/commons/0/03/Broccoli_and_cross_section_edit.jpg" },
-            { "name": "Cauliflower", "price": 2.49, "measurement": 1, "unit": "piece", "image": "https://upload.wikimedia.org/wikipedia/commons/3/31/Cauliflower.JPG" },
-            { "name": "Brussels Sprouts", "price": 4.99, "measurement": 500, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/4/48/Brussels_sprout.jpg" }
+            { "name": "Broccoli", "price": 1.99, "measurement": 1, "unit": "piece", "image": "https://images.squarespace-cdn.com/content/v1/5b5aa0922487fd1ce32c117a/1547765015801-FSR1DVSKCZU3PAYWIRQG/broccoli.jpg" },
+            { "name": "Cauliflower", "price": 2.49, "measurement": 1, "unit": "piece", "image": "https://media-cdn2.greatbritishchefs.com/media/xuaop4pn/cauliflower.whqc_468x312q80.jpg" },
+            { "name": "Brussels Sprouts", "price": 4.99, "measurement": 500, "unit": "grams", "image": "https://tinandthyme.uk/wp-content/uploads/2023/01/Cooked-Brussels-Sprouts.jpg" }
         ],
         "Root": [
-            { "name": "Carrot", "price": 1.49, "measurement": 1, "unit": "kg", "image": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Vegetable-Carrots-Bundle.jpg" },
-            { "name": "Beetroot", "price": 2.99, "measurement": 1, "unit": "kg", "image": "https://upload.wikimedia.org/wikipedia/commons/1/15/Beetroot_jm26647.jpg" },
-            { "name": "Sweet Potato", "price": 3.49, "measurement": 1, "unit": "kg", "image": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Sweet_potatoes.jpg" }
+            { "name": "Carrot", "price": 1.49, "measurement": 1, "unit": "kg", "image": "https://tapcom-live.ams3.cdn.digitaloceanspaces.com/media/messila-mashatel/products/776212-carrot8576.jpg" },
+            { "name": "Beetroot", "price": 2.99, "measurement": 1, "unit": "kg", "image": "https://www.seedparade.co.uk/news/wp-content/uploads/2023/08/beetroot-boltardy.jpg" },
+            { "name": "Sweet Potato", "price": 3.49, "measurement": 1, "unit": "kg", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Ipomoea_batatas_006.JPG/1200px-Ipomoea_batatas_006.JPG" }
         ]
     },
     "Fruits": {
         "Citrus": [
-            { "name": "Lemon", "price": 0.50, "measurement": 1, "unit": "piece", "image": "https://upload.wikimedia.org/wikipedia/commons/5/53/Lemon.jpg" },
-            { "name": "Orange", "price": 0.75, "measurement": 1, "unit": "piece", "image": "https://upload.wikimedia.org/wikipedia/commons/4/43/Ambersweet_oranges.jpg" },
-            { "name": "Grapefruit", "price": 1.25, "measurement": 1, "unit": "piece", "image": "https://upload.wikimedia.org/wikipedia/commons/2/21/Grapefruit-Whole-â-Split.jpg" }
+            { "name": "Lemon", "price": 0.50, "measurement": 1, "unit": "piece", "image": "https://foodprint.org/wp-content/uploads/2018/10/AdobeStock_222132175.jpeg" },
+            { "name": "Orange", "price": 0.75, "measurement": 1, "unit": "piece", "image": "https://desime.co.uk/cdn/shop/files/orange_grande.jpg?v=1690113703" },
+            { "name": "Grapefruit", "price": 1.25, "measurement": 1, "unit": "piece", "image": "https://www.hopkinsmedicine.org/-/media/images/health/3_-wellness/food-and-nutrition/grapefruit-teaser.png" }
         ],
         "Tropical": [
-            { "name": "Avocado", "price": 1.99, "measurement": 1, "unit": "piece", "image": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Avocado_Hass_DS.jpg" },
-            { "name": "Mango", "price": 2.49, "measurement": 1, "unit": "piece", "image": "https://en.wikipedia.org/wiki/Mango#/media/File:Mangos_-_single_and_halved.jpg" },
-            { "name": "Pineapple", "price": 3.99, "measurement": 1, "unit": "piece", "image": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Pineapple_and_cross_section.jpg" }
+            { "name": "Avocado", "price": 1.99, "measurement": 1, "unit": "piece", "image": "https://images.healthshots.com/healthshots/en/uploads/2024/04/04153309/avocado-1.jpg" },
+            { "name": "Mango", "price": 2.49, "measurement": 1, "unit": "piece", "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmgfExstNMpVm0dVH-xKurYdLlQpZpgJxHaw&s" },
+            { "name": "Pineapple", "price": 3.99, "measurement": 1, "unit": "piece", "image": "https://www.healthxchange.sg/sites/hexassets/Assets/food-nutrition/pineapple-health-benefits-and-ways-to-enjoy.jpg" }
         ]
     },
     "Grains": {
         "WholeGrains": [
-            { "name": "Brown Rice", "price": 3.99, "measurement": 500, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Rice_-_brown_grains.jpg" },
-            { "name": "Quinoa", "price": 5.99, "measurement": 500, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/a/a3/Quinoa_plants.jpg" }
+            { "name": "Brown Rice", "price": 3.99, "measurement": 500, "unit": "grams", "image": "https://roughandreadywholefoods.co.uk/cdn/shop/products/OrganicBrownRice.jpg?v=1739225677" },
+            { "name": "Quinoa", "price": 5.99, "measurement": 500, "unit": "grams", "image": "https://media-cdn2.greatbritishchefs.com/media/in1o4glq/img23323.whqc_1426x713q80.jpg" }
         ],
         "Pasta": [
-            { "name": "Spaghetti", "price": 2.49, "measurement": 400, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Spaghetti.jpg" },
+            { "name": "Spaghetti", "price": 2.49, "measurement": 400, "unit": "grams", "image": "https://www.allrecipes.com/thmb/2HO2LhFlz8_iwu7XJLcVTJuQoZA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/DJ20-pantry-spaghetti-650x465-d04a95018b3743dcb4f35d054a75d678.jpg" },
             { "name": "Penne", "price": 2.29, "measurement": 400, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Pennelisce_closeup.png" }
         ]
     },
     "Proteins": {
         "Meat": [
-            { "name": "Chicken Breast", "price": 6.99, "measurement": 500, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Chicken_breast_pieces.jpg" },
-            { "name": "Ground Beef", "price": 8.99, "measurement": 500, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/6/64/Beef_mince.jpg" }
+            { "name": "Chicken Breast", "price": 6.99, "measurement": 500, "unit": "grams", "image": "https://www.allrecipes.com/thmb/Z5s08uvHYI2dg5LAd0vwoA47Ngo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/240208_simplebakedchickenbreasts_mfs_step1_0181-1-4x3-250b3f145a194aa3bab88e94e3cbae73.jpg" },
+            { "name": "Ground Beef", "price": 8.99, "measurement": 500, "unit": "grams", "image": "https://embed.widencdn.net/img/beef/4hh1pywcnj/800x600px/Grind_Fine_85.psd?keep=c&u=7fueml" }
         ],
         "Seafood": [
-            { "name": "Salmon", "price": 9.99, "measurement": 300, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Atlantic_salmon.jpg" },
-            { "name": "Shrimp", "price": 12.99, "measurement": 500, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/3/39/Palaemon_sewelli.jpg" }
+            { "name": "Salmon", "price": 9.99, "measurement": 300, "unit": "grams", "image": "https://www.tobermoryfish.co.uk/wp-content/uploads/2018/08/smoked-salmon-sliced.jpeg" },
+            { "name": "Shrimp", "price": 12.99, "measurement": 500, "unit": "grams", "image": "https://spanishsabores.com/wp-content/uploads/2023/09/Boiled-Shrimp-Featured.jpg" }
         ]
     },
     "Dairy": {
         "Cheese": [
-            { "name": "Cheddar", "price": 5.99, "measurement": 250, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/3/33/Cheddar_cheese_%28pasteurised%29.jpg" },
-            { "name": "Mozzarella", "price": 6.49, "measurement": 250, "unit": "grams", "image": "https://upload.wikimedia.org/wikipedia/commons/c/c0/Mozzarella_di_bufala2.jpg" }
+            { "name": "Cheddar", "price": 5.99, "measurement": 250, "unit": "grams", "image": "https://cdn.britannica.com/60/217660-050-DBCC409A/cheddar-cheese-wedge.jpg" },
+            { "name": "Mozzarella", "price": 6.49, "measurement": 250, "unit": "grams", "image": "https://www.thespruceeats.com/thmb/foj5j6DX53tnifpXL6K8oslbpho=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/fresh-mozzarella-slices-154947518-582dd1b55f9b58d5b172bbc3.jpg" }
         ]
     }
 }
