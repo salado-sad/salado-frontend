@@ -18,7 +18,7 @@ const ExploreSalads = ({ user }) => {
   const [priceFilter, setPriceFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [quantity, setQuantity] = useState(0);
+  const [quantities, setQuantities] = useState({});
 
   useEffect(() => {
     fetch('http://127.0.0.1:8000/management/packages/')
@@ -66,6 +66,13 @@ const ExploreSalads = ({ user }) => {
       .catch(error => console.error('Error fetching cart:', error));
   };
 
+  const handleQuantityChange = (pkgId, value) => {
+    setQuantities(prevQuantities => ({
+      ...prevQuantities,
+      [pkgId]: value
+    }));
+  };
+
   const addToCart = (pkg) => {
     const accessToken = Cookies.get("access_token");
     if (!accessToken || user !== "customer") {
@@ -73,23 +80,25 @@ const ExploreSalads = ({ user }) => {
       alert("Please log in to your account first.");
       return;
     }
-
+  
+    const quantity = quantities[pkg.id] || 0;
+  
     if (quantity === 0) {
       alert("Quantity cannot be zero.");
       return;
     }
-
+  
     const existingItem = cart.find(item => item.package === pkg.name);
     const newQuantity = existingItem ? existingItem.quantity + quantity : quantity;
-
+  
     if (newQuantity > pkg.stock_quantity) {
       alert("Cannot add more than available stock.");
       return;
     }
-
+  
     console.log("Adding to cart:", pkg);
     console.log("Quantity:", quantity);
-
+  
     fetch('http://127.0.0.1:8000/cart/items/', {
       method: 'POST',
       headers: {
@@ -201,8 +210,8 @@ const ExploreSalads = ({ user }) => {
                     type="number"
                     min="0"
                     max={pkg.stock_quantity}
-                    value={quantity}
-                    onChange={(e) => setQuantity(parseInt(e.target.value))}
+                    value={quantities[pkg.id] || 0}
+                    onChange={(e) => handleQuantityChange(pkg.id, parseInt(e.target.value))}
                     className="quantity-input"
                   />
                   <button className="add-to-cart-btn" onClick={() => addToCart(pkg)}>
