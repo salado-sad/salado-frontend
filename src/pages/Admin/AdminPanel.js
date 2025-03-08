@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import './AdminPanel.css';
 import PackageList from "../../components/PackageList";
 import AddPackage from "../../components/AddPackage";
@@ -18,6 +19,7 @@ import logo from "../../assets/logo_mono.png";
  */
 const AdminPanel = ({ onLogout }) => {
   const [activePage, setActivePage] = useState("packages");
+  const [adminData, setAdminData] = useState(null);
   const navigate = useNavigate();
   const [packages, setPackages] = useState([
     {
@@ -49,6 +51,45 @@ const AdminPanel = ({ onLogout }) => {
     setPackages((prevPackages) => [...prevPackages, newPackage]);
   };
 
+  useEffect(() => {
+    const fetchAdminProfile = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/auth/profile/", {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('access_token')}`
+          }
+        });
+        const result = await response.json();
+        if (response.ok) setAdminData(result);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+    if (activePage === "settings") fetchAdminProfile();
+  }, [activePage]);
+
+  const renderSettingsPage = () => (
+    <div className="setting-page-container">
+      <h2>Admin Information</h2>
+      {adminData ? (
+        <div className="admin-info">
+          <p><strong>Name:</strong> {adminData.first_name} {adminData.last_name}</p>
+          <p><strong>Email:</strong> {adminData.email}</p>
+          <p><strong>Role:</strong> {adminData.role}</p>
+        </div>
+      ) : (
+        <p>Loading admin information...</p>
+      )}
+      <button className="logout-button" onClick={() => {
+        Cookies.remove("access_token");
+        Cookies.remove("refresh_token");
+        onLogout();
+      }}>
+        Logout
+      </button>
+    </div>
+  );
+
   /**
    * Renders the content based on the active page.
    * 
@@ -60,6 +101,8 @@ const AdminPanel = ({ onLogout }) => {
         return <PackageList packages={packages} />;
       case "add":
         return <AddPackage onAddPackage={handleAddPackage} />;
+      case "settings":
+        return renderSettingsPage();
       default:
         return <div>Welcome, Admin. Select an option from the menu.</div>;
     }

@@ -92,3 +92,16 @@
         font-size: 14px;
     }
 }
+
+/* Add stock display styling */
+.product-stock-warning {
+  color: #dc3545;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+/* Product selection dropdown */
+select option:disabled {
+  color: #dc3545;
+  background-color: #ffe6e6;
+}

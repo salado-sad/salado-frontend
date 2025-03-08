@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AddPackage.css';
 import data from '../data/products.json'; // Adjust the path as necessary
+import Cookies from "js-cookie";
 
 /**
  * AddPackage component to add a new package.
@@ -16,7 +17,55 @@ const AddPackage = ({ onAddPackage }) => {
     products: []
   });
 
-  const [product, setProduct] = useState({ category: '', subcategory: '', name: '', quantity: '' });
+  const [product, setProduct] = useState({ 
+    category: '', 
+    subcategory: '', 
+    name: '', 
+    quantity: 1 
+  });
+
+  const [productStocks, setProductStocks] = useState({});
+  const [fetchError, setFetchError] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/vendors/all-products/', {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('access_token')}`
+          }
+        });
+        
+        if (!response.ok) throw new Error('Failed to fetch product stock');
+        
+        const products = await response.json();
+        const stocks = products.reduce((acc, curr) => {
+          acc[curr.name] = curr.stock_quantity;
+          return acc;
+        }, {});
+        setProductStocks(stocks);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        setFetchError('Failed to load product stock data. Please refresh the page.');
+      }
+    };
+    
+    fetchProducts();
+  }, []);
+
+  const removeProduct = (index) => {
+    setNewPackage(prev => ({
+      ...prev,
+      products: prev.products.filter((_, i) => i !== index)
+    }));
+  };
+
+  const updateQuantity = (index, newQuantity) => {
+    const updatedProducts = [...newPackage.products];
+    updatedProducts[index].quantity = Math.max(1, parseInt(newQuantity, 10) || 1);
+    setNewPackage(prev => ({ ...prev, products: updatedProducts }));
+  };
+
 
   /**
    * Handles input change events for the package form.
@@ -34,15 +83,15 @@ const AddPackage = ({ onAddPackage }) => {
    * Adds a product to the package.
    */
   const addProduct = () => {
-    if (product.name && product.quantity) {
-      const selectedProduct = data[product.category][product.subcategory].find(p => p.name === product.name);
-      if (selectedProduct) {
-        setNewPackage((prevState) => ({
-          ...prevState,
-          products: [...prevState.products, { name: selectedProduct.name, quantity: parseInt(product.quantity, 10) },]
-        }));
-        setProduct({ category: '', subcategory: '', name: '', quantity: '' });
-      }
+    if (product.name && product.quantity > 0) {
+      setNewPackage(prev => ({
+        ...prev,
+        products: [...prev.products, {
+          name: product.name,
+          quantity: product.quantity
+        }]
+      }));
+      setProduct(prev => ({ ...prev, name: '', quantity: 1 }));
     }
   };
 
@@ -50,13 +99,21 @@ const AddPackage = ({ onAddPackage }) => {
    * Handles form submission to add a new package.
    * @param {object} e - The event object.
    */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (newPackage.name && newPackage.stock_quantity && newPackage.description) {
-      fetch('http://127.0.0.1:8000/management/packages/', {
+    
+    // Basic validation
+    if (!newPackage.name || !newPackage.stock_quantity || !newPackage.description) {
+      alert('Please fill all required fields');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:8000/management/packages/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('access_token')}`
         },
         body: JSON.stringify({
           name: newPackage.name,
@@ -64,14 +121,21 @@ const AddPackage = ({ onAddPackage }) => {
           description: newPackage.description,
           products: newPackage.products
         })
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Package added:', data);
-        setNewPackage({ name: '', stock_quantity: '', description: '', products: [] });
-        onAddPackage(data);
-      })
-      .catch(error => console.error('Error adding package:', error));
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to create package');
+      }
+
+      const createdPackage = await response.json();
+      onAddPackage(createdPackage);
+      setNewPackage({ name: '', stock_quantity: '', description: '', products: [] });
+      alert('Package created successfully!');
+
+    } catch (error) {
+      console.error('Error creating package:', error);
+      alert(error.message || 'Failed to create package');
     }
   };
 
@@ -95,6 +159,13 @@ const AddPackage = ({ onAddPackage }) => {
   return (
     <div className="add-package">
       <h1>Add a New Package</h1>
+
+      {fetchError && (
+        <div className="error-message">
+          ⚠️ {fetchError}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -134,11 +205,20 @@ const AddPackage = ({ onAddPackage }) => {
               <option key={subcat} value={subcat}>{subcat}</option>
             ))}
           </select>
-          <select name="name" value={product.name} onChange={handleProductChange} disabled={!product.subcategory}>
+          <select name="name" value={product.name} onChange={handleProductChange}>
             <option value="">Select Product</option>
-            {products.map((prod) => (
-              <option key={prod.name} value={prod.name}>{prod.name}</option>
-            ))}
+            {products.map((prod) => {
+              const stock = productStocks[prod.name] ?? 'N/A';
+              return (
+                <option 
+                  key={prod.name} 
+                  value={prod.name}
+                  disabled={stock === 'N/A' || stock < 1}
+                >
+                  {prod.name} (Stock: {stock})
+                </option>
+              );
+            })}
           </select>
           <input
             type="number"
@@ -151,14 +231,40 @@ const AddPackage = ({ onAddPackage }) => {
         </div>
 
         <div className="added-products">
-          <h4>Added Products</h4>
+        <h4>Added Products</h4>
           <ul>
             {newPackage.products.map((prod, index) => (
-              <li key={index}>{prod.name} : {prod.quantity}</li>
+              <li key={index}>
+                <div className="product-controls">
+                  <span>{prod.name}</span>
+                  
+                  <input
+                    type="number"
+                    min="1"
+                    value={prod.quantity}
+                    onChange={(e) => updateQuantity(index, e.target.value)}
+                    className="quantity-input"
+                  />
+                  
+                  <button 
+                    type="button" 
+                    onClick={() => removeProduct(index)}
+                    className="delete-product"
+                  >
+                    ×
+                  </button>
+                </div>
+                
+                {productStocks[prod.name] !== undefined && (
+                  <span className="stock-status">
+                    Available: {productStocks[prod.name]} | 
+                    Remaining: {productStocks[prod.name] - prod.quantity}
+                  </span>
+                )}
+              </li>
             ))}
           </ul>
         </div>
-
         <button type="submit">Save Package</button>
       </form>
     </div>
