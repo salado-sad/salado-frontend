@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './PackageList.css';
+import defaultImage from '../assets/salad.png';
 
 /**
  * PackageList component to display and manage packages.
@@ -16,7 +17,7 @@ const PackageList = () => {
       .then(response => response.json())
       .then(data => {
         // Add isActive property to each package
-        const packagesWithStatus = data.map(pkg => ({ ...pkg, isActive: true }));
+        const packagesWithStatus = data.map(pkg => ({ ...pkg, isActive: pkg.is_active }));
         setPackages(packagesWithStatus);
       })
       .catch(error => console.error('Error fetching packages:', error));
@@ -40,10 +41,45 @@ const PackageList = () => {
    * Toggles the active status of a package.
    * @param {number} id - The ID of the package to toggle.
    */
-  const toggleActive = (id) => {
-    setPackages(packages.map(pkg =>
-      pkg.id === id ? { ...pkg, isActive: !pkg.isActive } : pkg
-    ));
+  const toggleActive = (id, isActive) => {
+    fetch(`http://127.0.0.1:8000/management/packages/${id}/`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ is_active: !isActive }),
+    })
+      .then(response => response.json())
+      .then(() => {
+        setPackages(packages.map(pkg =>
+          pkg.id === id ? { ...pkg, isActive: !pkg.isActive } : pkg
+        ));
+      })
+      .catch(error => console.error('Error toggling active status:', error));
+  };
+
+  /**
+   * Handles the quantity increase of a package.
+   * @param {number} id - The ID of the package to update.
+   * @param {number} stock - The current stock of the package.
+   */
+  const handleQuantityIncrease = (id, stock) => {
+    console.log(`Increasing quantity for package ID: ${id}, current stock: ${stock}`);
+    fetch(`http://127.0.0.1:8000/management/packages/${id}/`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ stock: stock + 1 }),
+    })
+      .then(response => response.json())
+      .then(updatedPackage => {
+        console.log('Updated package:', updatedPackage);
+        setPackages(packages.map(pkg =>
+          pkg.id === id ? { ...pkg, stock_quantity: updatedPackage.stock_quantity + 1 } : pkg
+        ));
+      })
+      .catch(error => console.error('Error updating quantity:', error));
   };
 
   return (
@@ -60,24 +96,25 @@ const PackageList = () => {
                 &times;
               </button>
               <div className="package-image">
-                <img src={pkg.image || 'default-image-path.jpg'} alt={pkg.name} />
+                <img src={pkg.image || defaultImage} alt={pkg.name} />
               </div>
               <h2>{pkg.name}</h2>
               <p>{pkg.description}</p>
               <p>Price: {pkg.price}</p>
+              <p>Stock: {pkg.stock_quantity}</p>
               <ul className="product-list">
                 {pkg.products.map((product, idx) => (
                   <li key={idx} className="product-item">
-                    <img src={product.image || 'default-product-image.jpg'} alt={product.name} className="product-small-image" />
                     <span>{product.name}: {product.quantity}</span>
+                    <button onClick={() => handleQuantityIncrease(pkg.id, product.quantity)}>Increase Quantity</button>
                   </li>
                 ))}
               </ul>
               <button
                 className={`toggle-button ${pkg.isActive ? 'active' : 'inactive'}`}
-                onClick={() => toggleActive(pkg.id)}
+                onClick={() => toggleActive(pkg.id, pkg.isActive)}
               >
-                {pkg.isActive ? 'Deactivate' : 'Activate'}
+                {pkg.isActive ? 'Active' : 'Deactive'}
               </button>
             </div>
           ))

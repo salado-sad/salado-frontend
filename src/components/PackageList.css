@@ -3,77 +3,68 @@
 }
 
 .package-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
 }
 
 .package-card {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
   padding: 20px;
+  border-radius: 8px;
+  width: 300px;
   position: relative;
-  text-align: center;
 }
 
 .delete-button {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #ff4d4f;
-  border: none;
+  background: red;
   color: white;
+  border: none;
   border-radius: 50%;
   width: 30px;
   height: 30px;
-  font-size: 16px;
   cursor: pointer;
 }
 
-.delete-button:hover {
-  background: #ff7875;
+.package-image img {
+  width: 100%;
+  height: auto;
 }
 
 .product-list {
   list-style: none;
   padding: 0;
-  margin: 10px 0;
-  text-align: left;
 }
 
 .product-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px;
-  background-color: #f8f9fa;
-  margin-bottom: 5px;
-  border-radius: 5px;
+  margin-bottom: 10px;
 }
 
 .product-small-image {
-  width: 20px;
-  height: 20px;
-  border-radius: 3px;
+  width: 50px;
+  height: 50px;
   margin-right: 10px;
-  object-fit: cover;
 }
 
 .toggle-button {
-  padding: 10px 20px;
+  background: #007bff;
+  color: white;
   border: none;
+  padding: 10px;
   border-radius: 5px;
-  color: #fff;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 10px;
 }
 
 .toggle-button.active {
-  background-color: #4caf50; /* Green for active */
+  background: green;
 }
 
 .toggle-button.inactive {
-  background-color: #f44336; /* Red for inactive */
+  background: gray;
 }
