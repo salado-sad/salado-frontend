@@ -168,7 +168,7 @@ const ProfileCustomer = ({ onLogout }) => {
                 <span>{item.quantity}</span>
                 <button onClick={() => setCart(prev => prev.map(p => p.id === item.id ? {...p, quantity: p.quantity + 1} : p))}>+</button>
               </div>
-              <p className="item-total">${(item.price * item.quantity).toFixed(2)}</p>
+              <p className="item-total">${(item.cost).toFixed(2)}</p>
             </div>
             <button className="remove-item" onClick={() => removeFromCart(item.id)}>&times;</button>
           </div>
@@ -177,7 +177,7 @@ const ProfileCustomer = ({ onLogout }) => {
       <div className="cart-summary">
         <div className="summary-row">
           <span>Subtotal:</span>
-          <span>${cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}</span>
+          <span>${cart.reduce((sum, item) => sum + (item.cost), 0).toFixed(2)}</span>
         </div>
         <button className="checkout-btn">Proceed to Checkout</button>
       </div>

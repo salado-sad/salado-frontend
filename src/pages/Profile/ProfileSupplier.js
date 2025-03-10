@@ -734,9 +734,9 @@ const ProfileSupplier = ({ onLogout }) => {
   const renderSearchPage = () => {
     // Filter products based on search query, category, and quantity range
     const filteredProducts = addedItems.filter((item) => {
-      const matchesSearch = item.product.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = selectedCategory ? item.category === selectedCategory : true;
-      const matchesQuantity = item.productQuantity >= minQuantity && item.productQuantity <= maxQuantity;
+      const matchesQuantity = item.stock_quantity >= minQuantity && item.stock_quantity <= maxQuantity;
       return matchesSearch && matchesCategory && matchesQuantity;
     });
   
@@ -789,15 +789,21 @@ const ProfileSupplier = ({ onLogout }) => {
           {filteredProducts.length > 0 ? (
             filteredProducts.map((item, index) => (
               <div key={index} className="product-card">
-                <div className="card-image">
-                  <img src={item.image} alt={item.product} />
-                </div>
-                <h3>{item.product}</h3>
+                {/* Image */}
+                {data[item.category]?.[item.subcategory]?.find(p => p.name === item.name)?.image && (
+                  <div className="card-image">
+                    <img 
+                      src={data[item.category][item.subcategory].find(p => p.name === item.name).image} 
+                      alt={item.name} 
+                    />
+                  </div>
+                )}
+                <h3>{item.name}</h3>
                 <p>Category: {item.category}</p>
-                <p>Subcategory: {item.subCategory}</p>
-                <p>Quantity: {item.productQuantity}</p>
-                <p>Measurement: {item.productMeasurement}</p>
-                <p>Catalogue: {item.catalogueName}</p>
+                <p>Subcategory: {item.subcategory}</p>
+                <p>Quantity: {item.stock_quantity}</p>
+                <p>Measurement: {item.product_measurement}</p>
+                <p>Catalogue: {item.catalogue_name}</p>
               </div>
             ))
           ) : (

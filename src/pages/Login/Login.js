@@ -84,16 +84,13 @@ const Login = ({ onLoginSuccess }) => {
         // Redirect to profile page
         onLoginSuccess("customer");
         navigate("/profile");
-      } else if (response.status === 401) {
-        setErrorMessage(result.error); // "Invalid credentials"
-      } else if (response.status === 403) {
-        setErrorMessage(result.error); // "Invalid credentials"
+      } else if (response.status === 400) {
+        setErrorMessage(result.non_field_errors);
       } else {
         setErrorMessage("Something went wrong. Please try again.");
       }
     } catch (error) {
       setErrorMessage("Failed to connect to the server. Please try again.");
-      console.error("Login error:", error);
     }
   };
 

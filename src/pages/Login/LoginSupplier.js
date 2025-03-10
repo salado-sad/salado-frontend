@@ -81,8 +81,8 @@ const Login = ({ onLoginSuccess }) => {
 
         onLoginSuccess("supplier");
         navigate("/supplier-profile");
-      } else if (response.status === 401 || response.status === 403) {
-        setErrorMessage(result.error);
+      } else if (response.status==400 || response.status === 401 || response.status === 403) {
+        setErrorMessage(result.non_field_errors);
       } else {
         setErrorMessage("Something went wrong. Please try again.");
       }

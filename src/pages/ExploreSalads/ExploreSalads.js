@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./ExploreSalads.css";
 import defaultImage from "../../assets/salad.png";
 import Cookies from "js-cookie";
@@ -77,14 +79,14 @@ const ExploreSalads = ({ user }) => {
     const accessToken = Cookies.get("access_token");
     if (!accessToken || user !== "customer") {
       console.error("No tokens found.");
-      alert("Please log in to your account first.");
+      toast.error("Please log in to your account first.");
       return;
     }
   
     const quantity = quantities[pkg.id] || 0;
   
     if (quantity === 0) {
-      alert("Quantity cannot be zero.");
+      toast.error("Quantity cannot be zero.");
       return;
     }
   
@@ -92,7 +94,7 @@ const ExploreSalads = ({ user }) => {
     const newQuantity = existingItem ? existingItem.quantity + quantity : quantity;
   
     if (newQuantity > pkg.stock_quantity) {
-      alert("Cannot add more than available stock.");
+      toast.error("Cannot add more than available stock.");
       return;
     }
   
@@ -128,7 +130,7 @@ const ExploreSalads = ({ user }) => {
     const accessToken = Cookies.get("access_token");
     if (!accessToken || user !== "customer") {
       console.error("No tokens found.");
-      alert("Please log in to your account first.");
+      toast.error("Please log in to your account first.");
       return;
     }
 
@@ -148,6 +150,92 @@ const ExploreSalads = ({ user }) => {
       .catch(error => console.error('Error removing item from cart:', error));
   };
 
+  const updateCartItemQuantity = (itemId, newQuantity) => {
+    const accessToken = Cookies.get("access_token");
+    if (!accessToken || user !== "customer") {
+      console.error("No tokens found.");
+      toast.error("Please log in to your account first.");
+      return;
+    }
+  
+    const item = cart.find(p => p.id === itemId);
+    if (!item) {
+      console.error("Item not found in cart.");
+      return;
+    }
+  
+    const packageItem = packages.find(pkg => pkg.name === item.package);
+    if (!packageItem) {
+      console.error("Package not found.");
+      return;
+    }
+  
+    if (newQuantity > packageItem.stock_quantity) {
+      return;
+    }
+  
+    fetch(`http://127.0.0.1:8000/cart/items/${itemId}/`, {
+      method: 'PATCH',
+      headers: {
+        "Authorization": `Bearer ${accessToken}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        quantity: newQuantity
+      })
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Updated cart item quantity:", data);
+        fetchCart(accessToken); // Fetch the cart from the API after updating
+      })
+      .catch(error => console.error('Error updating cart item quantity:', error));
+  };
+  
+  const incrementQuantity = (itemId) => {
+    const packageItem = packages.find(pkg => pkg.name === cart.find(p => p.id === itemId).package);
+    if (!packageItem) {
+      console.error("Package not found.");
+      return;
+    }
+
+    setCart(prev => {
+      const updatedCart = prev.map(p => {
+        if (p.id === itemId) {
+          const newQuantity = p.quantity + 1;
+          if (newQuantity > packageItem.stock_quantity) {
+            toast.error("Cannot add more than available stock.");
+            return p;
+          }
+
+          updateCartItemQuantity(itemId, newQuantity);
+          return { ...p, quantity: newQuantity };
+        }
+        return p;
+      });
+      return updatedCart;
+    });
+  };
+  
+  const decrementQuantity = (itemId) => {
+    setCart(prev => {
+      const updatedCart = prev.map(p => {
+        if (p.id === itemId) {
+          const newQuantity = Math.max(1, p.quantity - 1);
+          updateCartItemQuantity(itemId, newQuantity);
+          return { ...p, quantity: newQuantity };
+        }
+        return p;
+      });
+      return updatedCart;
+    });
+  };
+
   const handleSearchChange = useCallback((e) => {
     setSearchQuery(e.target.value);
   }, []);
@@ -163,6 +251,7 @@ const ExploreSalads = ({ user }) => {
 
   return (
     <div className="package-list">
+      <ToastContainer />
       <h1>Explore Salads</h1>
 
       {loading && <p>Loading packages...</p>}
@@ -231,19 +320,37 @@ const ExploreSalads = ({ user }) => {
             </button>
             {showCart && (
               <div className="cart-container">
-                <h2>Your Cart</h2>
-                {cart.length === 0 ? (
-                  <p>Your cart is empty.</p>
-                ) : (
-                  <ul className="cart-list">
-                    {cart.map((item, index) => (
-                      <li key={index} className="cart-item">
-                        <span>{item.package}</span> - <strong>{item.quantity}</strong> pcs - <strong>${item.cost.toFixed(2)}</strong>
-                        <button className="remove-from-cart-btn" onClick={() => removeFromCart(item.id)}>Remove</button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                <div className="cart-header">
+                  <h3>Shopping Cart ({cart.reduce((sum, item) => sum + item.quantity, 0)})</h3>
+                </div>
+                <div className="cart-items">
+                  {cart.length === 0 ? (
+                    <p>Your cart is empty.</p>
+                  ) : (
+                    cart.map((item) => (
+                      <div className="cart-item" key={item.id}>
+                        <img src={item.image || defaultImage} className="cart-item-image" alt={item.package} />
+                        <div className="cart-item-details">
+                          <h4>{item.package}</h4>
+                          <div className="quantity-controls">
+                            <button onClick={() => decrementQuantity(item.id)}>−</button>
+                            <span>{item.quantity}</span>
+                            <button onClick={() => incrementQuantity(item.id)}>+</button>
+                          </div>
+                          <p className="item-total">${(item.cost).toFixed(2)}</p>
+                        </div>
+                        <button className="remove-item" onClick={() => removeFromCart(item.id)}>&times;</button>
+                      </div>
+                    ))
+                  )}
+                </div>
+                <div className="cart-summary">
+                  <div className="summary-row">
+                    <span>Subtotal:</span>
+                    <span>${cart.reduce((sum, item) => sum + (item.cost), 0).toFixed(2)}</span>
+                  </div>
+                  <button className="checkout-btn">Proceed to Checkout</button>
+                </div>
               </div>
             )}
           </div>
