@@ -96,7 +96,7 @@ const AddPackage = ({ onAddPackage }) => {
    * Handles form submission to add a new package.
    * @param {object} e - The event object.
    */
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Basic validation
@@ -104,14 +104,8 @@ const AddPackage = ({ onAddPackage }) => {
       alert('Please fill all required fields');
       return;
     }
-
+  
     try {
-      console.log(JSON.stringify({
-        name: newPackage.name,
-        stock_quantity: parseInt(newPackage.stock_quantity, 10),
-        description: newPackage.description,
-        products: newPackage.products
-      }))
       const response = await fetch('http://localhost:8000/management/packages/', {
         method: 'POST',
         headers: {
@@ -121,20 +115,23 @@ const AddPackage = ({ onAddPackage }) => {
           name: newPackage.name,
           stock_quantity: parseInt(newPackage.stock_quantity, 10),
           description: newPackage.description,
-          products: newPackage.products
+          products: newPackage.products.map(product => ({
+            ...product,
+            quantity: parseInt(product.quantity, 10)
+          }))
         })
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to create package');
       }
-
+  
       const createdPackage = await response.json();
       onAddPackage(createdPackage);
       setNewPackage({ name: '', stock_quantity: '', description: '', products: [] });
       alert('Package created successfully!');
-
+  
     } catch (error) {
       console.error('Error creating package:', error);
       alert(error.message || 'Failed to create package');
