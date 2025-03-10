@@ -39,13 +39,13 @@ function App() {
         <Route path="/" element={<LandingPage user={user} />} />
         
         {/* Login Page */}
-        <Route path="/login" element={<Login onLoginSuccess={(u) => setUser(u)} />} />
+        <Route path="/login" element={user ? <Navigate to="/profile" /> : <Login onLoginSuccess={(u) => setUser(u)} />} />
         
         {/* Signup Page */}
         <Route path="/signup" element={<Signup />} />
         
         {/* Supplier Login Page */}
-        <Route path="/supplier-login" element={<LoginSupplier onLoginSuccess={(u) => setUser(u)} />} />
+        <Route path="/supplier-login" element={user ? <Navigate to="/supplier-profile" /> : <LoginSupplier onLoginSuccess={(u) => setUser(u)} />} />
         
         {/* Supplier Signup Page */}
         <Route path="/supplier-signup" element={<SignupSupplier />} />
@@ -63,7 +63,7 @@ function App() {
         <Route path="/supplier-profile" element={user ? <ProfileSupplier onLogout={() => setUser(null)} /> : <Navigate to="/supplier-login" />} />
         
         {/* Admin Login Page */}
-        <Route path="/admin-login" element={<AdminLogin onLoginSuccess={(u) => setUser(u)} />} />
+        <Route path="/admin-login" element={user ? <Navigate to='/' /> : <AdminLogin onLoginSuccess={(u) => setUser(u)} />} />
         
         {/* Admin Panel Page */}
         <Route path="/admin-panel" element={user === "admin" ? <AdminPanel onLogout={() => setUser(null)} /> : <Navigate to="/admin-login" />} />
