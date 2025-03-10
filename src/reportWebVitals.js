@@ -2,15 +2,15 @@
  * Reports web vitals for performance measurement.
  * @param {function} onPerfEntry - Function to handle performance entries.
  */
+import { onCLS, onFCP, onLCP, onTTFB, onINP } from 'web-vitals';
+
 const reportWebVitals = (onPerfEntry) => {
   if (onPerfEntry && onPerfEntry instanceof Function) {
-    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-      getCLS(onPerfEntry);
-      getFID(onPerfEntry);
-      getFCP(onPerfEntry);
-      getLCP(onPerfEntry);
-      getTTFB(onPerfEntry);
-    });
+    onCLS(onPerfEntry);
+    onFCP(onPerfEntry);
+    onLCP(onPerfEntry);
+    onTTFB(onPerfEntry);
+    onINP(onPerfEntry); // New replacement
   }
 };
 
