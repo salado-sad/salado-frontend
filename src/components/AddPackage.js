@@ -31,9 +31,7 @@ const AddPackage = ({ onAddPackage }) => {
     const fetchProducts = async () => {
       try {
         const response = await fetch('http://localhost:8000/vendors/all-products/', {
-          headers: {
-            Authorization: `Bearer ${Cookies.get('access_token')}`
-          }
+          headers: {}
         });
         
         if (!response.ok) throw new Error('Failed to fetch product stock');

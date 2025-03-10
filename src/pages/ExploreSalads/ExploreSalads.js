@@ -236,6 +236,37 @@ const ExploreSalads = ({ user }) => {
     });
   };
 
+  const finalizePurchase = () => {
+    const accessToken = Cookies.get("access_token");
+    if (!accessToken || user !== "customer") {
+      console.error("No tokens found.");
+      toast.error("Please log in to your account first.");
+      return;
+    }
+  
+    fetch('http://localhost:8000/cart/purchases/', {
+      method: 'GET',
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Purchase finalized:", data);
+        toast.success("Purchase completed successfully!");
+        setCart([]); // Clear the cart after purchase
+      })
+      .catch(error => {
+        console.error('Error finalizing purchase:', error);
+        toast.error("Failed to complete purchase.");
+      });
+  };
+
   const handleSearchChange = useCallback((e) => {
     setSearchQuery(e.target.value);
   }, []);
@@ -349,7 +380,7 @@ const ExploreSalads = ({ user }) => {
                     <span>Subtotal:</span>
                     <span>${cart.reduce((sum, item) => sum + (item.cost), 0).toFixed(2)}</span>
                   </div>
-                  <button className="checkout-btn">Proceed to Checkout</button>
+                  <button className="checkout-btn" onClick={finalizePurchase}>Proceed to Checkout</button>
                 </div>
               </div>
             )}

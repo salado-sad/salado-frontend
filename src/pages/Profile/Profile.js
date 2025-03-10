@@ -21,7 +21,7 @@ const ProfileCustomer = ({ onLogout }) => {
   const [showCart, setShowCart] = useState(false);
   const [purchaseHistory, setPurchaseHistory] = useState([]);
   const [packages, setPackages] = useState([]);
-  const [quantity, setQuantity] = useState(1);
+  const [quantities, setQuantities] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,6 +34,12 @@ const ProfileCustomer = ({ onLogout }) => {
     if (activePage === "purchase") {
       fetchPackages();
       fetchCart();
+    }
+  }, [activePage]);
+
+  useEffect(() => {
+    if (activePage === "history") {
+      fetchPurchaseHistory();
     }
   }, [activePage]);
 
@@ -92,7 +98,7 @@ const ProfileCustomer = ({ onLogout }) => {
     }
   };
 
-  const addToCart = (pkg) => {
+  const addToCart = (pkg, quantity) => {
     const accessToken = Cookies.get("access_token");
     if (!accessToken) {
       console.error("No tokens found.");
@@ -100,7 +106,11 @@ const ProfileCustomer = ({ onLogout }) => {
       return;
     }
 
-    if (quantity > pkg.stock_quantity) {
+
+    const existingItem = cart.find(item => item.package === pkg.name);
+    const newQuantity = existingItem ? existingItem.quantity + quantity : quantity;
+
+    if (newQuantity > pkg.stock_quantity) {
       alert("Cannot add more than available stock.");
       return;
     }
@@ -151,6 +161,71 @@ const ProfileCustomer = ({ onLogout }) => {
       .catch(error => console.error('Error removing item from cart:', error));
   };
 
+  const updateCartItemQuantity = (itemId, newQuantity) => {
+    const accessToken = Cookies.get("access_token");
+    if (!accessToken) {
+      console.error("No tokens found.");
+      alert("Please log in to your account first.");
+      return;
+    }
+
+    fetch(`http://127.0.0.1:8000/cart/items/${itemId}/`, {
+      method: 'PATCH',
+      headers: {
+        "Authorization": `Bearer ${accessToken}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        quantity: newQuantity
+      })
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(() => {
+        fetchCart();
+      })
+      .catch(error => console.error('Error updating cart item quantity:', error));
+  };
+
+  const incrementQuantity = (itemId) => {
+    const item = cart.find(p => p.id === itemId);
+    if (!item) {
+      console.error("Item not found in cart.");
+      return;
+    }
+
+    const packageItem = packages.find(pkg => pkg.name === item.package);
+    if (!packageItem) {
+      console.error("Package not found.");
+      return;
+    }
+
+    if (item.quantity + 1 > packageItem.stock_quantity) {
+      alert("Cannot add more than available stock.");
+      return;
+    }
+
+    updateCartItemQuantity(itemId, item.quantity + 1);
+  };
+
+  const decrementQuantity = (itemId) => {
+    const item = cart.find(p => p.id === itemId);
+    if (!item) {
+      console.error("Item not found in cart.");
+      return;
+    }
+
+    if (item.quantity - 1 < 1) {
+      return;
+    }
+
+    updateCartItemQuantity(itemId, item.quantity - 1);
+  };
+
   const renderCart = () => (
     <div className="cart-sidebar">
       <div className="cart-header">
@@ -164,9 +239,9 @@ const ProfileCustomer = ({ onLogout }) => {
             <div className="cart-item-details">
               <h4>{item.package}</h4>
               <div className="quantity-controls">
-                <button onClick={() => setCart(prev => prev.map(p => p.id === item.id ? {...p, quantity: Math.max(1, p.quantity - 1)} : p))}>−</button>
+                <button onClick={() => decrementQuantity(item.id)}>−</button>
                 <span>{item.quantity}</span>
-                <button onClick={() => setCart(prev => prev.map(p => p.id === item.id ? {...p, quantity: p.quantity + 1} : p))}>+</button>
+                <button onClick={() => incrementQuantity(item.id)}>+</button>
               </div>
               <p className="item-total">${(item.cost).toFixed(2)}</p>
             </div>
@@ -191,41 +266,51 @@ const ProfileCustomer = ({ onLogout }) => {
     </button>
   );
 
-  const renderPurchasePage = () => (
-    <div className="purchase-page-container">
-      <h2>Available Packages</h2>
-      {renderCartButton()}
-      <div className="product-grid">
-        {packages.map((pkg) => (
-          <div className="package-card" key={pkg.id}>
-            <img src={pkg.image || defaultImage} className="package-image" alt={pkg.name} />
-            <div className="package-info">
-              <h3>{pkg.name}</h3>
-              <p className="package-description">{pkg.description}</p>
-              <div className="package-products">
-                {pkg.products.map((product) => (
-                  <div className="product-badge" key={product.name}>
-                    <span>{product.quantity}x {product.name}</span>
-                  </div>
-                ))}
+  const renderPurchasePage = () => {
+    const handleQuantityChange = (pkgId, value) => {
+      setQuantities(prevQuantities => ({
+        ...prevQuantities,
+        [pkgId]: value
+      }));
+    };
+
+    return (
+      <div className="purchase-page-container">
+        <h2>Available Packages</h2>
+        {renderCartButton()}
+        <div className="product-grid">
+          {packages.map((pkg) => (
+            <div className="package-card" key={pkg.id}>
+              <img src={pkg.image || defaultImage} className="package-image" alt={pkg.name} />
+              <div className="package-info">
+                <h3>{pkg.name}</h3>
+                <p className="package-description">{pkg.description}</p>
+                <div className="package-products">
+                  {pkg.products.map((product) => (
+                    <div className="product-badge" key={product.name}>
+                      <span>{product.quantity}x {product.name}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="package-price">Price: ${pkg.price.toFixed(2)}</p>
+                <p className="package-stock">Stock: {pkg.stock_quantity}</p>
+                <input
+                  type="number"
+                  min="0"
+                  max={pkg.stock_quantity}
+                  value={quantities[pkg.id] || 0}
+                  onChange={(e) => handleQuantityChange(pkg.id, parseInt(e.target.value))}
+                  className="quantity-input"
+                />
+                <button className="purchase-btn" onClick={() => addToCart(pkg, quantities[pkg.id] || 1)}>Add to Cart</button>
               </div>
-              <p className="package-price">Price: ${pkg.price.toFixed(2)}</p>
-              <input
-                type="number"
-                min="1"
-                max={pkg.stock_quantity}
-                value={quantity}
-                onChange={(e) => setQuantity(parseInt(e.target.value))}
-                className="quantity-input"
-              />
-              <button className="purchase-btn" onClick={() => addToCart(pkg)}>Add to Cart</button>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+        {showCart && renderCart()}
       </div>
-      {showCart && renderCart()}
-    </div>
-  );
+    );
+  };
 
   const renderProfileInfo = () => (
     <div className="profile-info-container">
@@ -283,16 +368,37 @@ const ProfileCustomer = ({ onLogout }) => {
     }
   };
 
+  const fetchPurchaseHistory = async () => {
+    try {
+      const accessToken = Cookies.get("access_token");
+      const response = await fetch("http://localhost:8000/cart/items/1/purchase/", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`
+        }
+      });
+      console.log(response);
+      const data = await response.json();
+      setPurchaseHistory(data);
+    } catch (error) {
+      console.error("Error fetching purchase history:", error);
+    }
+  };
+
   const renderPurchaseHistory = () => (
     <div className="purchase-history-container">
       <h2>Purchase History</h2>
-      {purchaseHistory.map((order) => (
-        <div className="order-card" key={order.id}>
-          <div className="order-date">Order Date: {order.date}</div>
-          <div className="order-items"><strong>Items:</strong> {order.items.join(", ")}</div>
-          <div className="order-total"><strong>Total:</strong> {order.status.charAt(0).toUpperCase() + order.status.slice(1)}</div>
-        </div>
-      ))}
+      {purchaseHistory.length > 0 ? (
+        purchaseHistory.map((order) => (
+          <div className="order-card" key={order.id}>
+            <div className="order-date">Order Date: {new Date(order.date).toLocaleDateString()}</div>
+            <div className="order-items"><strong>Items:</strong> {order.items.map(item => item.package).join(", ")}</div>
+            <div className="order-total"><strong>Total:</strong> ${order.total.toFixed(2)}</div>
+          </div>
+        ))
+      ) : (
+        <p>No purchase history found.</p>
+      )}
     </div>
   );
 
