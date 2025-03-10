@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import "./Profile.css";
 import profileIcon from "../../assets/settings-icon.svg";
 import purchaseIcon from "../../assets/basket-icon.svg";
@@ -37,11 +38,31 @@ const ProfileCustomer = ({ onLogout }) => {
     }
   }, [activePage]);
 
+  const fetchPurchaseHistory = useCallback(async () => {
+    try {
+      const accessToken = Cookies.get("access_token");
+      const response = await fetch("http://localhost:8000/cart/purchases/", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      const filteredData = data.filter(purchase => purchase.user === profileData.id);
+      setPurchaseHistory(filteredData);
+    } catch (error) {
+      console.error("Error fetching purchase history:", error);
+    }
+  }, [profileData]);
+
   useEffect(() => {
     if (activePage === "history") {
       fetchPurchaseHistory();
     }
-  }, [activePage]);
+  }, [activePage, fetchPurchaseHistory]);
 
   const fetchUserProfile = async () => {
     try {
@@ -105,7 +126,6 @@ const ProfileCustomer = ({ onLogout }) => {
       alert("Please log in to your account first.");
       return;
     }
-
 
     const existingItem = cart.find(item => item.package === pkg.name);
     const newQuantity = existingItem ? existingItem.quantity + quantity : quantity;
@@ -226,6 +246,52 @@ const ProfileCustomer = ({ onLogout }) => {
     updateCartItemQuantity(itemId, item.quantity - 1);
   };
 
+  const finalizePurchase = () => {
+    const accessToken = Cookies.get("access_token");
+    if (!accessToken) {
+      console.error("No tokens found.");
+      toast.error("Please log in to your account first.");
+      return;
+    }
+  
+    if (cart.length === 0) {
+      toast.error("Your cart is empty.");
+      return;
+    }
+  
+    const purchasePromises = cart.map(item => {
+      return fetch(`http://localhost:8000/cart/items/${item.id}/purchase/`, {
+        method: 'POST',
+        headers: {
+          "Authorization": `Bearer ${accessToken}`
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Purchase successful for item:", item.id);
+      })
+      .catch(error => {
+        console.error('Error finalizing purchase for item:', item.id, error);
+        toast.error(`Failed to purchase item: ${item.package}`);
+      });
+    });
+  
+    Promise.all(purchasePromises)
+      .then(() => {
+        toast.success("Purchase completed successfully!");
+        fetchCart(accessToken); // Refresh the cart after purchase
+      })
+      .catch(error => {
+        console.error('Error finalizing purchase:', error);
+        toast.error("Failed to complete purchase.");
+      });
+  };
+
   const renderCart = () => (
     <div className="cart-sidebar">
       <div className="cart-header">
@@ -254,7 +320,7 @@ const ProfileCustomer = ({ onLogout }) => {
           <span>Subtotal:</span>
           <span>${cart.reduce((sum, item) => sum + (item.cost), 0).toFixed(2)}</span>
         </div>
-        <button className="checkout-btn">Proceed to Checkout</button>
+        <button className="checkout-btn" onClick={finalizePurchase}>Proceed to Checkout</button>
       </div>
     </div>
   );
@@ -368,32 +434,18 @@ const ProfileCustomer = ({ onLogout }) => {
     }
   };
 
-  const fetchPurchaseHistory = async () => {
-    try {
-      const accessToken = Cookies.get("access_token");
-      const response = await fetch("http://localhost:8000/cart/items/1/purchase/", {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${accessToken}`
-        }
-      });
-      console.log(response);
-      const data = await response.json();
-      setPurchaseHistory(data);
-    } catch (error) {
-      console.error("Error fetching purchase history:", error);
-    }
-  };
-
   const renderPurchaseHistory = () => (
     <div className="purchase-history-container">
       <h2>Purchase History</h2>
       {purchaseHistory.length > 0 ? (
         purchaseHistory.map((order) => (
           <div className="order-card" key={order.id}>
-            <div className="order-date">Order Date: {new Date(order.date).toLocaleDateString()}</div>
-            <div className="order-items"><strong>Items:</strong> {order.items.map(item => item.package).join(", ")}</div>
-            <div className="order-total"><strong>Total:</strong> ${order.total.toFixed(2)}</div>
+            <div className="order-date">
+              Order Date: {new Date(order.purchased_at).toLocaleDateString()} {new Date(order.purchased_at).toLocaleTimeString()}
+            </div>
+            <div className="order-items"><strong>Package:</strong> {order.package}</div>
+            <div className="order-quantity"><strong>Quantity:</strong> {order.quantity}</div>
+            <div className="order-status"><strong>Status:</strong> {order.status}</div>
           </div>
         ))
       ) : (

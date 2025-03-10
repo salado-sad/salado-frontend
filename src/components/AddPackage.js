@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './AddPackage.css';
 import data from '../data/products.json'; // Adjust the path as necessary
-import Cookies from "js-cookie";
 
 /**
  * AddPackage component to add a new package.
@@ -109,10 +108,7 @@ const AddPackage = ({ onAddPackage }) => {
     try {
       const response = await fetch('http://localhost:8000/management/packages/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${Cookies.get('access_token')}`
-        },
+        headers: {},
         body: JSON.stringify({
           name: newPackage.name,
           stock_quantity: parseInt(newPackage.stock_quantity, 10),

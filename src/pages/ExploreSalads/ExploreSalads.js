@@ -244,12 +244,18 @@ const ExploreSalads = ({ user }) => {
       return;
     }
   
-    fetch('http://localhost:8000/cart/purchases/', {
-      method: 'GET',
-      headers: {
-        "Authorization": `Bearer ${accessToken}`
-      }
-    })
+    if (cart.length === 0) {
+      toast.error("Your cart is empty.");
+      return;
+    }
+  
+    const purchasePromises = cart.map(item => {
+      return fetch(`http://localhost:8000/cart/items/${item.id}/purchase/`, {
+        method: 'POST',
+        headers: {
+          "Authorization": `Bearer ${accessToken}`
+        }
+      })
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -257,9 +263,18 @@ const ExploreSalads = ({ user }) => {
         return response.json();
       })
       .then(data => {
-        console.log("Purchase finalized:", data);
+        console.log("Purchase successful for item:", item.id);
+      })
+      .catch(error => {
+        console.error('Error finalizing purchase for item:', item.id, error);
+        toast.error(`Failed to purchase item: ${item.package}`);
+      });
+    });
+  
+    Promise.all(purchasePromises)
+      .then(() => {
         toast.success("Purchase completed successfully!");
-        setCart([]); // Clear the cart after purchase
+        fetchCart(accessToken); // Refresh the cart after purchase
       })
       .catch(error => {
         console.error('Error finalizing purchase:', error);
