@@ -30,11 +30,6 @@ const Landing = ({ user }) => {
       {/* Navbar */}
       <header className="navbar">
         <div className="logo">Salado</div>
-        <nav className="menu">
-          <a href="#about">About</a>
-          <a href="#salads">Our Salads</a>
-          <a href="#contact">Contact</a>
-        </nav>
         {user ? (
           <button className="profile-btn" onClick={handleProfileClick}>
             <img src={profileIcon} alt="Profile" />

@@ -1,0 +1,39 @@
+.privacy-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.privacy-image {
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.privacy-container h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+.privacy-container p {
+  font-size: 1.2em;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.back-home-btn {
+  padding: 10px 20px;
+  font-size: 1em;
+  color: #fff;
+  background-color: #28a745;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  margin: 10px;
+}
+
+.back-home-btn:hover {
+  background-color: #218838;
+}

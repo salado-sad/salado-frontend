@@ -11,6 +11,10 @@ import Profile from "./pages/Profile/Profile";
 import ProfileSupplier from "./pages/Profile/ProfileSupplier";
 import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminPanel from "./pages/Admin/AdminPanel";
+import Careers from "./pages/Landing/Careers";
+import Privacy from "./pages/Landing/Privacy";
+import FAQ from "./pages/Landing/FAQ";
+import Contact from "./pages/Landing/Contact";
 
 /**
  * App component is the root component of the application.
@@ -63,6 +67,18 @@ function App() {
         
         {/* Admin Panel Page */}
         <Route path="/admin-panel" element={user === "admin" ? <AdminPanel onLogout={() => setUser(null)} /> : <Navigate to="/admin-login" />} />
+        
+        {/* Careers Page */}
+        <Route path="/careers" element={<Careers />} />
+
+        {/* Privacy Page */}
+        <Route path="/privacy" element={<Privacy />} />
+
+        {/* FAQ Page */}
+        <Route path="/faq" element={<FAQ />} />
+
+        {/* Contact Page */}
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>
   );
