@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AdminLogin.css";
 
@@ -13,6 +13,14 @@ function AdminLogin({ onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      alert("You are already logged into your account.")
+      navigate("/");
+    }
+  }, [navigate]);
 
   /**
    * Handles the login form submission.

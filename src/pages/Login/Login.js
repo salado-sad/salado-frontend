@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import "../../index.css";
@@ -20,6 +20,14 @@ const Login = ({ onLoginSuccess }) => {
   const [errors, setErrors] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      alert("You are already logged into your account.")
+      navigate("/");
+    }
+  }, [navigate]);
 
   /**
    * Handle input changes and update form data state.
