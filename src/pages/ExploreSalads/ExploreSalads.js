@@ -9,6 +9,8 @@ import Cookies from "js-cookie";
 /**
  * ExploreSalads component for displaying and managing salad packages.
  * 
+ * @param {Object} props - Component properties.
+ * @param {string} props.user - The current user type.
  * @returns {JSX.Element} The rendered component.
  */
 const ExploreSalads = ({ user }) => {
@@ -22,6 +24,7 @@ const ExploreSalads = ({ user }) => {
   const [error, setError] = useState(null);
   const [quantities, setQuantities] = useState({});
 
+  // Fetch packages from the API on component mount
   useEffect(() => {
     fetch('http://127.0.0.1:8000/management/packages/')
       .then(response => {
@@ -47,6 +50,7 @@ const ExploreSalads = ({ user }) => {
       });
   }, []);
 
+  // Fetch cart data if the user is a customer
   useEffect(() => {
     const accessToken = Cookies.get("access_token");
     if (accessToken && user === "customer") {
@@ -54,6 +58,11 @@ const ExploreSalads = ({ user }) => {
     }
   }, [user]);
 
+  /**
+   * Fetch the cart data from the API.
+   * 
+   * @param {string} accessToken - The access token for authentication.
+   */
   const fetchCart = (accessToken) => {
     fetch('http://127.0.0.1:8000/cart/', {
       headers: {
@@ -68,6 +77,12 @@ const ExploreSalads = ({ user }) => {
       .catch(error => console.error('Error fetching cart:', error));
   };
 
+  /**
+   * Handle quantity change for a specific package.
+   * 
+   * @param {number} pkgId - The package ID.
+   * @param {number} value - The new quantity value.
+   */
   const handleQuantityChange = (pkgId, value) => {
     setQuantities(prevQuantities => ({
       ...prevQuantities,
@@ -75,6 +90,11 @@ const ExploreSalads = ({ user }) => {
     }));
   };
 
+  /**
+   * Add a package to the cart.
+   * 
+   * @param {Object} pkg - The package object.
+   */
   const addToCart = (pkg) => {
     const accessToken = Cookies.get("access_token");
     if (!accessToken || user !== "customer") {
@@ -82,25 +102,25 @@ const ExploreSalads = ({ user }) => {
       toast.error("Please log in to your account first.");
       return;
     }
-  
+
     const quantity = quantities[pkg.id] || 0;
-  
+
     if (quantity === 0) {
       toast.error("Quantity cannot be zero.");
       return;
     }
-  
+
     const existingItem = cart.find(item => item.package === pkg.name);
     const newQuantity = existingItem ? existingItem.quantity + quantity : quantity;
-  
+
     if (newQuantity > pkg.stock_quantity) {
       toast.error("Cannot add more than available stock.");
       return;
     }
-  
+
     console.log("Adding to cart:", pkg);
     console.log("Quantity:", quantity);
-  
+
     fetch('http://127.0.0.1:8000/cart/items/', {
       method: 'POST',
       headers: {
@@ -126,6 +146,11 @@ const ExploreSalads = ({ user }) => {
       .catch(error => console.error('Error adding to cart:', error));
   };
 
+  /**
+   * Remove an item from the cart.
+   * 
+   * @param {number} itemId - The item ID.
+   */
   const removeFromCart = (itemId) => {
     const accessToken = Cookies.get("access_token");
     if (!accessToken || user !== "customer") {
@@ -150,6 +175,12 @@ const ExploreSalads = ({ user }) => {
       .catch(error => console.error('Error removing item from cart:', error));
   };
 
+  /**
+   * Update the quantity of an item in the cart.
+   * 
+   * @param {number} itemId - The item ID.
+   * @param {number} newQuantity - The new quantity.
+   */
   const updateCartItemQuantity = (itemId, newQuantity) => {
     const accessToken = Cookies.get("access_token");
     if (!accessToken || user !== "customer") {
@@ -157,23 +188,23 @@ const ExploreSalads = ({ user }) => {
       toast.error("Please log in to your account first.");
       return;
     }
-  
+
     const item = cart.find(p => p.id === itemId);
     if (!item) {
       console.error("Item not found in cart.");
       return;
     }
-  
+
     const packageItem = packages.find(pkg => pkg.name === item.package);
     if (!packageItem) {
       console.error("Package not found.");
       return;
     }
-  
+
     if (newQuantity > packageItem.stock_quantity) {
       return;
     }
-  
+
     fetch(`http://127.0.0.1:8000/cart/items/${itemId}/`, {
       method: 'PATCH',
       headers: {
@@ -196,7 +227,12 @@ const ExploreSalads = ({ user }) => {
       })
       .catch(error => console.error('Error updating cart item quantity:', error));
   };
-  
+
+  /**
+   * Increment the quantity of an item in the cart.
+   * 
+   * @param {number} itemId - The item ID.
+   */
   const incrementQuantity = (itemId) => {
     const packageItem = packages.find(pkg => pkg.name === cart.find(p => p.id === itemId).package);
     if (!packageItem) {
@@ -221,7 +257,12 @@ const ExploreSalads = ({ user }) => {
       return updatedCart;
     });
   };
-  
+
+  /**
+   * Decrement the quantity of an item in the cart.
+   * 
+   * @param {number} itemId - The item ID.
+   */
   const decrementQuantity = (itemId) => {
     setCart(prev => {
       const updatedCart = prev.map(p => {
@@ -236,6 +277,9 @@ const ExploreSalads = ({ user }) => {
     });
   };
 
+  /**
+   * Finalize the purchase of items in the cart.
+   */
   const finalizePurchase = () => {
     const accessToken = Cookies.get("access_token");
     if (!accessToken || user !== "customer") {
@@ -243,12 +287,12 @@ const ExploreSalads = ({ user }) => {
       toast.error("Please log in to your account first.");
       return;
     }
-  
+
     if (cart.length === 0) {
       toast.error("Your cart is empty.");
       return;
     }
-  
+
     const purchasePromises = cart.map(item => {
       return fetch(`http://localhost:8000/cart/items/${item.id}/purchase/`, {
         method: 'POST',
@@ -256,21 +300,21 @@ const ExploreSalads = ({ user }) => {
           "Authorization": `Bearer ${accessToken}`
         }
       })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log("Purchase successful for item:", item.id);
-      })
-      .catch(error => {
-        console.error('Error finalizing purchase for item:', item.id, error);
-        toast.error(`Failed to purchase item: ${item.package}`);
-      });
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log("Purchase successful for item:", item.id);
+        })
+        .catch(error => {
+          console.error('Error finalizing purchase for item:', item.id, error);
+          toast.error(`Failed to purchase item: ${item.package}`);
+        });
     });
-  
+
     Promise.all(purchasePromises)
       .then(() => {
         toast.success("Purchase completed successfully!");
@@ -282,10 +326,16 @@ const ExploreSalads = ({ user }) => {
       });
   };
 
+  /**
+   * Handle search query change.
+   * 
+   * @param {Object} e - The event object.
+   */
   const handleSearchChange = useCallback((e) => {
     setSearchQuery(e.target.value);
   }, []);
 
+  // Filter packages based on search query and price filter
   const filteredPackages = packages
     .filter((pkg) =>
       pkg.name.toLowerCase().includes(searchQuery.toLowerCase())

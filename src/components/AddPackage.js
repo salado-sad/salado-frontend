@@ -106,9 +106,17 @@ const AddPackage = ({ onAddPackage }) => {
     }
 
     try {
+      console.log(JSON.stringify({
+        name: newPackage.name,
+        stock_quantity: parseInt(newPackage.stock_quantity, 10),
+        description: newPackage.description,
+        products: newPackage.products
+      }))
       const response = await fetch('http://localhost:8000/management/packages/', {
         method: 'POST',
-        headers: {},
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           name: newPackage.name,
           stock_quantity: parseInt(newPackage.stock_quantity, 10),

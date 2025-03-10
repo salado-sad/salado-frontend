@@ -18,29 +18,10 @@ import logo from "../../assets/logo_mono.png";
  * @returns {JSX.Element} The rendered component.
  */
 const AdminPanel = ({ onLogout }) => {
-  const [activePage, setActivePage] = useState("packages");
-  const [adminData, setAdminData] = useState(null);
-  const navigate = useNavigate();
-  const [packages, setPackages] = useState([
-    {
-      name: 'Agha Farid',
-      price: '$800.85',
-      description: 'Bache khoobie. Aziatesh nakonin. Bayad khordesh',
-      image: 'https://media.licdn.com/dms/image/v2/D4D03AQHP1k_GASXLmQ/profile-displayphoto-shrink_400_400/0/1720623177822?e=1744243200&v=beta&t=ZMqV6ju4Zd6YfWp99lt40uwCUs9SA_vvCoxp1ldfMNA',
-      products: [
-        {
-          name: 'Strawberry',
-          quantity: 5,
-          image: 'https://cdn.nyallergy.com/wp-content/uploads/square-1432664914-strawberry-facts1-1200x900.jpeg'
-        },
-        {
-          name: 'Spinach',
-          quantity: 3,
-          image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEFIf1LwpQrKWxz9lSfn976uLBL9n5g18CUQ&s'
-        }
-      ]
-    }
-  ]);
+  const [activePage, setActivePage] = useState("packages"); // State to track the active page
+  const [adminData, setAdminData] = useState(null); // State to store admin profile data
+  const navigate = useNavigate(); // Hook to navigate between routes
+  const [packages, setPackages] = useState([]); // State to store the list of packages
 
   /**
    * Handles adding a new package to the list.
@@ -51,6 +32,9 @@ const AdminPanel = ({ onLogout }) => {
     setPackages((prevPackages) => [...prevPackages, newPackage]);
   };
 
+  /**
+   * Fetch admin profile data from the API when the active page is "settings".
+   */
   useEffect(() => {
     const fetchAdminProfile = async () => {
       try {
@@ -68,6 +52,11 @@ const AdminPanel = ({ onLogout }) => {
     if (activePage === "settings") fetchAdminProfile();
   }, [activePage]);
 
+  /**
+   * Renders the settings page with admin information.
+   * 
+   * @returns {JSX.Element} The rendered settings page.
+   */
   const renderSettingsPage = () => (
     <div className="setting-page-container">
       <h2>Admin Information</h2>
@@ -110,9 +99,9 @@ const AdminPanel = ({ onLogout }) => {
 
   return (
     <div className="admin-panel-container">
+      {/* Sidebar for navigation */}
       <div className="sidebar">
         <button className="sidebar-icon" onClick={() => {
-          onLogout();
           navigate("/");
         }} title="Logout">
           <img src={logo} alt="Logo" />
@@ -131,13 +120,16 @@ const AdminPanel = ({ onLogout }) => {
         </button>
       </div>
 
+      {/* Main content area */}
       <main className="main-content">
+        {/* Header section */}
         <div className="header">
           <div>
             <h2>Welcome, Admin</h2>
             <p>{new Date().toLocaleDateString("en-US", { weekday: "short", day: "2-digit", month: "short", year: "numeric" })}</p>
           </div>
         </div>
+        {/* Dynamic content based on active page */}
         <div className="content">
           {renderContent()}
         </div>

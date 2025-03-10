@@ -14,6 +14,7 @@ import Cookies from "js-cookie";
  * ProfileCustomer component renders the profile page for the customer.
  * @param {Object} props - The component props.
  * @param {Function} props.onLogout - The function to call when the user logs out.
+ * @returns {JSX.Element} The rendered component.
  */
 const ProfileCustomer = ({ onLogout }) => {
   const [profileData, setProfileData] = useState(null);
@@ -25,12 +26,18 @@ const ProfileCustomer = ({ onLogout }) => {
   const [quantities, setQuantities] = useState({});
   const navigate = useNavigate();
 
+  /**
+   * Fetch user profile data when the active page is "profile".
+   */
   useEffect(() => {
     if (activePage === "profile") {
       fetchUserProfile();
     }
   }, [activePage]);
 
+  /**
+   * Fetch packages and cart data when the active page is "purchase".
+   */
   useEffect(() => {
     if (activePage === "purchase") {
       fetchPackages();
@@ -38,6 +45,10 @@ const ProfileCustomer = ({ onLogout }) => {
     }
   }, [activePage]);
 
+  /**
+   * Fetch purchase history data from the API.
+   * @returns {Promise<void>}
+   */
   const fetchPurchaseHistory = useCallback(async () => {
     try {
       const accessToken = Cookies.get("access_token");
@@ -58,12 +69,19 @@ const ProfileCustomer = ({ onLogout }) => {
     }
   }, [profileData]);
 
+  /**
+   * Fetch purchase history data when the active page is "history".
+   */
   useEffect(() => {
     if (activePage === "history") {
       fetchPurchaseHistory();
     }
   }, [activePage, fetchPurchaseHistory]);
 
+  /**
+   * Fetch user profile data from the API.
+   * @returns {Promise<void>}
+   */
   const fetchUserProfile = async () => {
     try {
       const accessToken = Cookies.get("access_token");
@@ -85,6 +103,10 @@ const ProfileCustomer = ({ onLogout }) => {
     }
   };
 
+  /**
+   * Fetch packages data from the API.
+   * @returns {Promise<void>}
+   */
   const fetchPackages = async () => {
     try {
       const response = await fetch('http://127.0.0.1:8000/management/packages/');
@@ -104,6 +126,10 @@ const ProfileCustomer = ({ onLogout }) => {
     }
   };
 
+  /**
+   * Fetch cart data from the API.
+   * @returns {Promise<void>}
+   */
   const fetchCart = async () => {
     try {
       const accessToken = Cookies.get("access_token");
@@ -119,6 +145,11 @@ const ProfileCustomer = ({ onLogout }) => {
     }
   };
 
+  /**
+   * Add a package to the cart.
+   * @param {Object} pkg - The package object.
+   * @param {number} quantity - The quantity to add.
+   */
   const addToCart = (pkg, quantity) => {
     const accessToken = Cookies.get("access_token");
     if (!accessToken) {
@@ -158,6 +189,10 @@ const ProfileCustomer = ({ onLogout }) => {
       .catch(error => console.error('Error adding to cart:', error));
   };
 
+  /**
+   * Remove an item from the cart.
+   * @param {number} itemId - The item ID.
+   */
   const removeFromCart = (itemId) => {
     const accessToken = Cookies.get("access_token");
     if (!accessToken) {
@@ -181,6 +216,11 @@ const ProfileCustomer = ({ onLogout }) => {
       .catch(error => console.error('Error removing item from cart:', error));
   };
 
+  /**
+   * Update the quantity of an item in the cart.
+   * @param {number} itemId - The item ID.
+   * @param {number} newQuantity - The new quantity.
+   */
   const updateCartItemQuantity = (itemId, newQuantity) => {
     const accessToken = Cookies.get("access_token");
     if (!accessToken) {
@@ -211,6 +251,10 @@ const ProfileCustomer = ({ onLogout }) => {
       .catch(error => console.error('Error updating cart item quantity:', error));
   };
 
+  /**
+   * Increment the quantity of an item in the cart.
+   * @param {number} itemId - The item ID.
+   */
   const incrementQuantity = (itemId) => {
     const item = cart.find(p => p.id === itemId);
     if (!item) {
@@ -232,6 +276,10 @@ const ProfileCustomer = ({ onLogout }) => {
     updateCartItemQuantity(itemId, item.quantity + 1);
   };
 
+  /**
+   * Decrement the quantity of an item in the cart.
+   * @param {number} itemId - The item ID.
+   */
   const decrementQuantity = (itemId) => {
     const item = cart.find(p => p.id === itemId);
     if (!item) {
@@ -246,6 +294,9 @@ const ProfileCustomer = ({ onLogout }) => {
     updateCartItemQuantity(itemId, item.quantity - 1);
   };
 
+  /**
+   * Finalize the purchase of items in the cart.
+   */
   const finalizePurchase = () => {
     const accessToken = Cookies.get("access_token");
     if (!accessToken) {
@@ -292,6 +343,10 @@ const ProfileCustomer = ({ onLogout }) => {
       });
   };
 
+  /**
+   * Render the cart sidebar.
+   * @returns {JSX.Element} The rendered cart sidebar.
+   */
   const renderCart = () => (
     <div className="cart-sidebar">
       <div className="cart-header">
@@ -325,6 +380,10 @@ const ProfileCustomer = ({ onLogout }) => {
     </div>
   );
 
+  /**
+   * Render the cart toggle button.
+   * @returns {JSX.Element} The rendered cart toggle button.
+   */
   const renderCartButton = () => (
     <button className="cart-toggle-btn" onClick={() => setShowCart(!showCart)}>
       <span className="cart-icon">🛒</span>
@@ -332,7 +391,16 @@ const ProfileCustomer = ({ onLogout }) => {
     </button>
   );
 
+  /**
+   * Render the purchase page.
+   * @returns {JSX.Element} The rendered purchase page.
+   */
   const renderPurchasePage = () => {
+    /**
+     * Handle quantity change for a specific package.
+     * @param {number} pkgId - The package ID.
+     * @param {number} value - The new quantity value.
+     */
     const handleQuantityChange = (pkgId, value) => {
       setQuantities(prevQuantities => ({
         ...prevQuantities,
@@ -378,6 +446,10 @@ const ProfileCustomer = ({ onLogout }) => {
     );
   };
 
+  /**
+   * Render the profile information.
+   * @returns {JSX.Element} The rendered profile information.
+   */
   const renderProfileInfo = () => (
     <div className="profile-info-container">
       <h2>Your Profile Information</h2>
@@ -403,6 +475,10 @@ const ProfileCustomer = ({ onLogout }) => {
     </div>
   );
 
+  /**
+   * Handle user logout by removing tokens and notifying the server.
+   * @returns {Promise<void>}
+   */
   const handleLogout = async () => {
     try {
       const accessToken = Cookies.get("access_token");
@@ -434,6 +510,10 @@ const ProfileCustomer = ({ onLogout }) => {
     }
   };
 
+  /**
+   * Render the purchase history section.
+   * @returns {JSX.Element} The rendered purchase history section.
+   */
   const renderPurchaseHistory = () => (
     <div className="purchase-history-container">
       <h2>Purchase History</h2>
@@ -454,6 +534,10 @@ const ProfileCustomer = ({ onLogout }) => {
     </div>
   );
 
+  /**
+   * Render the main content based on the active page.
+   * @returns {JSX.Element|null} The rendered content or null if no active page.
+   */
   const renderContent = () => {
     switch (activePage) {
       case "purchase":
