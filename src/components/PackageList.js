@@ -58,28 +58,33 @@ const PackageList = () => {
       .catch(error => console.error('Error toggling active status:', error));
   };
 
-  /**
-   * Handles the quantity increase of a package.
+  
+  /*
+   * Handles the quantity increase of a package's stock.
    * @param {number} id - The ID of the package to update.
-   * @param {number} stock - The current stock of the package.
    */
-  const handleQuantityIncrease = (id, stock) => {
-    console.log(`Increasing quantity for package ID: ${id}, current stock: ${stock}`);
+  const handleQuantityIncrease = (id) => {
+    const packageToUpdate = packages.find(pkg => pkg.id === id);
+    if (!packageToUpdate) return;
+
+    // Calculate new stock
+    const newStock = packageToUpdate.stock_quantity + 1;
+
     fetch(`http://127.0.0.1:8000/management/packages/${id}/`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ stock: stock + 1 }),
+      body: JSON.stringify({ stock_quantity: newStock }), // Ensure field matches backend
     })
       .then(response => response.json())
       .then(updatedPackage => {
-        console.log('Updated package:', updatedPackage);
-        setPackages(packages.map(pkg =>
-          pkg.id === id ? { ...pkg, stock_quantity: updatedPackage.stock_quantity + 1 } : pkg
+        // Update state with new stock
+        setPackages(packages.map(pkg => 
+          pkg.id === id ? { ...pkg, stock_quantity: updatedPackage.stock_quantity } : pkg
         ));
       })
-      .catch(error => console.error('Error updating quantity:', error));
+      .catch(error => console.error('Error updating stock:', error));
   };
 
   return (
@@ -110,6 +115,12 @@ const PackageList = () => {
                   </li>
                 ))}
               </ul>
+              <button 
+                onClick={() => handleQuantityIncrease(pkg.id)}
+                className="increase-stock-button"
+              >
+                Increase Package Stock
+              </button>
               <button
                 className={`toggle-button ${pkg.isActive ? 'active' : 'inactive'}`}
                 onClick={() => toggleActive(pkg.id, pkg.isActive)}

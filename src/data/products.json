@@ -1,7 +1,7 @@
 {
     "Vegetables": {
         "LeafyGreens": [
-            { "name": "Romaine Lettuce", "price": 2.99, "measurement": 200, "unit": "grams", "image": "https://theorangegrovesaltaire.com/cdn/shop/products/RomaineLettuce_580x.jpg?v=1590929013" },
+            { "name": "Romaine Lettuce", "price": 2.99, "measurement": 200, "unit": "grams", "image": "https://www.mashed.com/img/gallery/why-you-might-want-to-choose-romaine-lettuce-over-iceberg-lettuce/intro-1641874408.jpg" },
             { "name": "Spinach", "price": 3.49, "measurement": 150, "unit": "grams", "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEFIf1LwpQrKWxz9lSfn976uLBL9n5g18CUQ&s" },
             { "name": "Arugula", "price": 4.99, "measurement": 100, "unit": "grams", "image": "https://www.livinginwellbeing.org/wp-content/uploads/2020/04/Arugula-1200x800.jpg" },
             { "name": "Kale", "price": 3.99, "measurement": 200, "unit": "grams", "image": "https://cdn.britannica.com/74/181374-050-83F7B492/kale-leaves.jpg" }
@@ -20,7 +20,7 @@
     "Fruits": {
         "Citrus": [
             { "name": "Lemon", "price": 0.50, "measurement": 1, "unit": "piece", "image": "https://foodprint.org/wp-content/uploads/2018/10/AdobeStock_222132175.jpeg" },
-            { "name": "Orange", "price": 0.75, "measurement": 1, "unit": "piece", "image": "https://desime.co.uk/cdn/shop/files/orange_grande.jpg?v=1690113703" },
+            { "name": "Orange", "price": 0.75, "measurement": 1, "unit": "piece", "image": "https://www.allrecipes.com/thmb/y_uvjwXWAuD6T0RxaS19jFvZyFU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1205638014-2000-d0fbf9170f2d43eeb046f56eec65319c.jpg" },
             { "name": "Grapefruit", "price": 1.25, "measurement": 1, "unit": "piece", "image": "https://www.hopkinsmedicine.org/-/media/images/health/3_-wellness/food-and-nutrition/grapefruit-teaser.png" }
         ],
         "Tropical": [
@@ -31,7 +31,7 @@
     },
     "Grains": {
         "WholeGrains": [
-            { "name": "Brown Rice", "price": 3.99, "measurement": 500, "unit": "grams", "image": "https://roughandreadywholefoods.co.uk/cdn/shop/products/OrganicBrownRice.jpg?v=1739225677" },
+            { "name": "Brown Rice", "price": 3.99, "measurement": 500, "unit": "grams", "image": "https://5.imimg.com/data5/CK/XQ/MY-31120275/organic-brown-rice-500x500.jpg" },
             { "name": "Quinoa", "price": 5.99, "measurement": 500, "unit": "grams", "image": "https://media-cdn2.greatbritishchefs.com/media/in1o4glq/img23323.whqc_1426x713q80.jpg" }
         ],
         "Pasta": [
@@ -46,7 +46,7 @@
         ],
         "Seafood": [
             { "name": "Salmon", "price": 9.99, "measurement": 300, "unit": "grams", "image": "https://www.tobermoryfish.co.uk/wp-content/uploads/2018/08/smoked-salmon-sliced.jpeg" },
-            { "name": "Shrimp", "price": 12.99, "measurement": 500, "unit": "grams", "image": "https://spanishsabores.com/wp-content/uploads/2023/09/Boiled-Shrimp-Featured.jpg" }
+            { "name": "Shrimp", "price": 12.99, "measurement": 500, "unit": "grams", "image": "https://www.allrecipes.com/thmb/q21bV8G0nonK3rD6_299KjWhrvk=/0x512/filters:no_upscale():max_bytes(150000):strip_icc()/220597-Simple-garlic-shrimp-beauty3x4_38539-63f687e1ec6a41e88dfb5a9c9021e194.jpg" }
         ]
     },
     "Dairy": {

@@ -68,3 +68,17 @@
 .toggle-button.inactive {
   background: gray;
 }
+
+.increase-stock-button {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 10px 0;
+}
+
+.increase-stock-button:hover {
+  background: #218838;
+}
