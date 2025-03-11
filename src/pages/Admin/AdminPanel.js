@@ -7,8 +7,9 @@ import AddPackage from "../../components/AddPackage";
 import basketIcon from "../../assets/basket-icon.svg";
 import plusIcon from "../../assets/plus-icon.svg";
 import settingsIcon from "../../assets/settings-icon.svg";
-import searchIcon from "../../assets/search-icon.svg";
+import historyIcon from "../../assets/history-icon.svg";
 import logo from "../../assets/logo_mono.png";
+import PurchaseList from "../../components/PurchaseList";
 
 /**
  * AdminPanel component for managing admin functionalities.
@@ -92,6 +93,8 @@ const AdminPanel = ({ onLogout }) => {
         return <AddPackage onAddPackage={handleAddPackage} />;
       case "settings":
         return renderSettingsPage();
+      case "purchases":  // Changed from "search"
+        return <PurchaseList />;
       default:
         return <div>Welcome, Admin. Select an option from the menu.</div>;
     }
@@ -106,8 +109,11 @@ const AdminPanel = ({ onLogout }) => {
         }} title="Logout">
           <img src={logo} alt="Logo" />
         </button>
-        <button className={`sidebar-icon ${activePage === "search" ? "active" : ""}`} onClick={() => setActivePage("search")}>
-          <img src={searchIcon} alt="Search" />
+        <button 
+          className={`sidebar-icon ${activePage === "purchases" ? "active" : ""}`} 
+          onClick={() => setActivePage("purchases")}
+        >
+          <img src={historyIcon} alt="Purchases" />
         </button>
         <button className={`sidebar-icon ${activePage === "packages" ? "active" : ""}`} onClick={() => setActivePage("packages")}>
           <img src={basketIcon} alt="Packages" />
