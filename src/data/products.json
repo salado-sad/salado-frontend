@@ -1,7 +1,7 @@
 {
     "Vegetables": {
         "LeafyGreens": [
-            { "name": "Romaine Lettuce", "price": 2.99, "measurement": 200, "unit": "grams", "image": "https://www.mashed.com/img/gallery/why-you-might-want-to-choose-romaine-lettuce-over-iceberg-lettuce/intro-1641874408.jpg" },
+            { "name": "Romaine Lettuce", "price": 2.99, "measurement": 200, "unit": "grams", "image": "https://www.taylorfarms.com/wp-content/uploads/2023/10/Romaine-Leaves.jpg" },
             { "name": "Spinach", "price": 3.49, "measurement": 150, "unit": "grams", "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEFIf1LwpQrKWxz9lSfn976uLBL9n5g18CUQ&s" },
             { "name": "Arugula", "price": 4.99, "measurement": 100, "unit": "grams", "image": "https://www.livinginwellbeing.org/wp-content/uploads/2020/04/Arugula-1200x800.jpg" },
             { "name": "Kale", "price": 3.99, "measurement": 200, "unit": "grams", "image": "https://cdn.britannica.com/74/181374-050-83F7B492/kale-leaves.jpg" }
@@ -14,7 +14,7 @@
         "Root": [
             { "name": "Carrot", "price": 1.49, "measurement": 1, "unit": "kg", "image": "https://tapcom-live.ams3.cdn.digitaloceanspaces.com/media/messila-mashatel/products/776212-carrot8576.jpg" },
             { "name": "Beetroot", "price": 2.99, "measurement": 1, "unit": "kg", "image": "https://www.seedparade.co.uk/news/wp-content/uploads/2023/08/beetroot-boltardy.jpg" },
-            { "name": "Sweet Potato", "price": 3.49, "measurement": 1, "unit": "kg", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Ipomoea_batatas_006.JPG/1200px-Ipomoea_batatas_006.JPG" }
+            { "name": "Sweet Potato", "price": 0.01, "measurement": 100, "unit": "piece", "image": "https://media.licdn.com/dms/image/v2/D4D03AQHP1k_GASXLmQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1720623177822?e=2147483647&v=beta&t=U1fERNZOrDwNXoAZJ0zX9rk_HbP_E7L7vSPXaEUD2hc" }
         ]
     },
     "Fruits": {
@@ -31,7 +31,8 @@
     },
     "Grains": {
         "WholeGrains": [
-            { "name": "Brown Rice", "price": 3.99, "measurement": 500, "unit": "grams", "image": "https://5.imimg.com/data5/CK/XQ/MY-31120275/organic-brown-rice-500x500.jpg" },
+            { "name": "Brown Rice", "price": 3.99, "measurement": 500, "unit": "grams", "image": "https://organicsbylee.com/wp-content/uploads/2017/10/brown-rice.jpg" },
+            { "name": "Esfahan", "price": 2000.00, "measurement": 5, "unit": "grams", "image": "https://www.sharifml.ir/wp-content/uploads/2024/09/Profile_rasta_square-Emad-EmamJomeh.jpeg" },
             { "name": "Quinoa", "price": 5.99, "measurement": 500, "unit": "grams", "image": "https://media-cdn2.greatbritishchefs.com/media/in1o4glq/img23323.whqc_1426x713q80.jpg" }
         ],
         "Pasta": [
@@ -42,11 +43,12 @@
     "Proteins": {
         "Meat": [
             { "name": "Chicken Breast", "price": 6.99, "measurement": 500, "unit": "grams", "image": "https://www.allrecipes.com/thmb/Z5s08uvHYI2dg5LAd0vwoA47Ngo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/240208_simplebakedchickenbreasts_mfs_step1_0181-1-4x3-250b3f145a194aa3bab88e94e3cbae73.jpg" },
-            { "name": "Ground Beef", "price": 8.99, "measurement": 500, "unit": "grams", "image": "https://embed.widencdn.net/img/beef/4hh1pywcnj/800x600px/Grind_Fine_85.psd?keep=c&u=7fueml" }
+            { "name": "Ground Beef", "price": 8.99, "measurement": 500, "unit": "grams", "image": "https://embed.widencdn.net/img/beef/4hh1pywcnj/800x600px/Grind_Fine_85.psd?keep=c&u=7fueml" },
+            { "name": "Shayan", "price": 99999999999.27, "measurement": 67, "unit": "kg", "image": "https://www.sharifml.ir/wp-content/uploads/2024/09/shayanshabani-Shayan-Shabani.jpeg" }
         ],
         "Seafood": [
-            { "name": "Salmon", "price": 9.99, "measurement": 300, "unit": "grams", "image": "https://www.tobermoryfish.co.uk/wp-content/uploads/2018/08/smoked-salmon-sliced.jpeg" },
-            { "name": "Shrimp", "price": 12.99, "measurement": 500, "unit": "grams", "image": "https://www.allrecipes.com/thmb/q21bV8G0nonK3rD6_299KjWhrvk=/0x512/filters:no_upscale():max_bytes(150000):strip_icc()/220597-Simple-garlic-shrimp-beauty3x4_38539-63f687e1ec6a41e88dfb5a9c9021e194.jpg" }
+            { "name": "Salmon", "price": 9.99, "measurement": 300, "unit": "grams", "image": "https://www.tasteofhome.com/wp-content/uploads/2023/01/GettyImages-958307980-e1674241057463.jpg" },
+            { "name": "Shrimp", "price": 12.99, "measurement": 500, "unit": "grams", "image": "https://spanishsabores.com/wp-content/uploads/2023/09/Boiled-Shrimp-Featured.jpg" }
         ]
     },
     "Dairy": {
@@ -54,5 +56,32 @@
             { "name": "Cheddar", "price": 5.99, "measurement": 250, "unit": "grams", "image": "https://cdn.britannica.com/60/217660-050-DBCC409A/cheddar-cheese-wedge.jpg" },
             { "name": "Mozzarella", "price": 6.49, "measurement": 250, "unit": "grams", "image": "https://www.thespruceeats.com/thmb/foj5j6DX53tnifpXL6K8oslbpho=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/fresh-mozzarella-slices-154947518-582dd1b55f9b58d5b172bbc3.jpg" }
         ]
+    },
+    "HerbsAndSpices": {
+        "Herbs": [
+            { "name": "Basil", "price": 2.99, "measurement": 50, "unit": "grams", "image": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRZKQpr_kANSIJKU7S7D121L6kmW423NzmPe8n3DDFSsWlicd_P" },
+            { "name": "Rosemary", "price": 3.49, "measurement": 50, "unit": "grams", "image": "https://www.verywellfit.com/thmb/4Lp3ukJMJvI8bJTExMHyyZ-TyTs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/rosemary-crop-8944a7c7d8e14910b5501f93c124f445.jpg" },
+            { "name": "Parsley", "price": 2.49, "measurement": 50, "unit": "grams", "image": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRm5koC87E5HfZu7xr21GRAqdyI5ViezIddiWFJBDGIcq8sHd5Cyps-bTw1IjMKNpY9m-ZI6aibKjWE1kfvRIAvTg" },
+            { "name": "Cilantro", "price": 2.79, "measurement": 50, "unit": "grams", "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGT7j0OmA288jA_aqGkQDG3wvtQsplDUUvxxPdT0Lk2rB6haV8P2cyc7Ljws-3hN2-AiHM3KHBKY0wLdWXMz_VnA" }
+        ],
+        "Spices": [
+            { "name": "Black Pepper", "price": 4.99, "measurement": 100, "unit": "grams", "image": "https://lh3.googleusercontent.com/proxy/ix7t3-GaEzFoq7YauZMyGSyrvrAuv7Ci6_F0spwb9PrS6kEmsCfLSmHhEgoveanz3_bowoktbxRdHKcWtKhYCKYTRz706vCwtankVzkXeIaj7dEeaXgAM_kw5i2o7F8zrwNaLBAvzanwYpVOHFUDBHd8o9T-LGtZP9DDut8_Zsc_z3ZUx71mM1PUjfpN" },
+            { "name": "Cumin", "price": 3.99, "measurement": 100, "unit": "grams", "image": "https://images.squarespace-cdn.com/content/v1/52bc612ae4b038e4d94a53e6/6189786f-95c0-402a-9662-aa0743dd5796/Cumin+%284%29.JPG" },
+            { "name": "Cinnamon", "price": 4.49, "measurement": 100, "unit": "grams", "image": "https://cdn.britannica.com/07/123107-050-1520881F/bark-Cinnamomum-cassia-plant-spice.jpg" },
+            { "name": "Paprika", "price": 3.79, "measurement": 100, "unit": "grams", "image": "https://tildaricelive.s3.eu-central-1.amazonaws.com/wp-content/uploads/2021/04/25153812/Paprika.jpg" }
+        ]        
+    },
+    "NutsAndSeeds": {
+        "Nuts": [
+            { "name": "Almonds", "price": 7.99, "measurement": 250, "unit": "grams", "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmWOA0NTmNysR7Jb2INjb_KKFl41ZqBQ9c3g&s" },
+            { "name": "Walnuts", "price": 6.99, "measurement": 250, "unit": "grams", "image": "https://m.media-amazon.com/images/I/51rJzT6SmHL._AC_UF1000,1000_QL80_.jpg" },
+            { "name": "Pistachios", "price": 9.99, "measurement": 250, "unit": "grams", "image": "https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F507571ab-6f41-44cf-84b5-b37b869444f2_3620x2656.jpeg" },
+            { "name": "Hazelnuts", "price": 7.49, "measurement": 250, "unit": "grams", "image": "https://cdn.britannica.com/75/174375-050-BC6968AE/Hazelnuts-fruit-compound-ovary-seed.jpg" }
+        ],
+        "Seeds": [
+            { "name": "Chia Seeds", "price": 5.99, "measurement": 250, "unit": "grams", "image": "https://www.drweil.com/wp-content/uploads/2018/05/Can-Chia-Help-With-Weight-Loss_-531657339.jpg" },
+            { "name": "Pumpkin Seeds", "price": 6.49, "measurement": 250, "unit": "grams", "image": "https://media.post.rvohealth.io/wp-content/uploads/2022/05/pumpkin-seeds-overhead-732-549-feature-thumb-732x549.jpg" },
+            { "name": "Sunflower Seeds", "price": 4.79, "measurement": 250, "unit": "grams", "image": "https://www.andersonintl.com/wp-content/uploads/2022/08/Sunflower-1024x575.jpg" }
+        ]    
     }
 }
