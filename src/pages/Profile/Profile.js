@@ -25,6 +25,9 @@ const ProfileCustomer = ({ onLogout }) => {
   const [packages, setPackages] = useState([]);
   const [quantities, setQuantities] = useState({});
   const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedAddress, setEditedAddress] = useState("");
+  const [editedCompany, setEditedCompany] = useState("");
 
   /**
    * Fetch user profile data when the active page is "profile".
@@ -44,6 +47,47 @@ const ProfileCustomer = ({ onLogout }) => {
       fetchCart();
     }
   }, [activePage]);
+
+  const handleEditClick = () => {
+    setEditedAddress(profileData?.address || "");
+    setEditedCompany(profileData?.company || "");
+    setIsEditing(true);
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+  };
+
+  const handleSave = async () => {
+    try {
+      const accessToken = Cookies.get("access_token");
+      const response = await fetch("http://localhost:8000/auth/profile/update/", {
+        method: "PATCH",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          address: editedAddress,
+          company: editedCompany,
+        }),
+      });
+  
+      if (!response.ok) throw new Error("Update failed");
+      
+      // Update local profile data
+      setProfileData(prev => ({
+        ...prev,
+        address: editedAddress,
+        company: editedCompany,
+      }));
+      setIsEditing(false);
+      toast.success("Profile updated successfully!");
+    } catch (error) {
+      console.error("Update error:", error);
+      toast.error("Failed to update profile");
+    }
+  };  
 
   /**
    * Fetch purchase history data from the API.
@@ -464,11 +508,45 @@ const ProfileCustomer = ({ onLogout }) => {
         </div>
         <div className="info-group">
           <div className="info-label">Shipping Address</div>
-          <div className="info-value">{profileData?.address || "N/A"}</div>
+          {isEditing ? (
+            <input
+              type="text"
+              value={editedAddress}
+              onChange={(e) => setEditedAddress(e.target.value)}
+              className="edit-input"
+            />
+          ) : (
+            <div className="info-value">{profileData?.address || "N/A"}</div>
+          )}
         </div>
         <div className="info-group">
-          <div className="info-label">Payment Method</div>
-          <div className="info-value">{profileData?.payment_method || "N/A"}</div>
+          <div className="info-label">Company</div>
+          {isEditing ? (
+            <input
+              type="text"
+              value={editedCompany}
+              onChange={(e) => setEditedCompany(e.target.value)}
+              className="edit-input"
+            />
+          ) : (
+            <div className="info-value">{profileData?.company || "N/A"}</div>
+          )}
+        </div>
+        <div className="button-group">
+          {!isEditing ? (
+            <button className="edit-button" onClick={handleEditClick}>
+              Edit Profile
+            </button>
+          ) : (
+            <div className="edit-buttons">
+              <button className="save-button" onClick={handleSave}>
+                Save
+              </button>
+              <button className="cancel-button" onClick={handleCancel}>
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <button className="logout-button" onClick={handleLogout}>Logout</button>

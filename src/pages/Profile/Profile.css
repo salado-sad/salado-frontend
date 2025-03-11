@@ -502,3 +502,56 @@
 .order-status strong {
   font-weight: bold;
 }
+
+/* Edit Input Styling */
+.edit-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Button Group Styling */
+.button-group {
+  margin-top: 25px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.edit-button, .save-button, .cancel-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.edit-button {
+  background-color: #2196F3;
+  color: white;
+}
+
+.save-button {
+  background-color: #4CAF50;
+  color: white;
+  margin-right: 10px;
+}
+
+.cancel-button {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.edit-button:hover {
+  background-color: #1976D2;
+}
+
+.save-button:hover {
+  background-color: #45a049;
+}
+
+.cancel-button:hover {
+  background-color: #bdbdbd;
+}
