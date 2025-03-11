@@ -94,12 +94,6 @@ const PackageList = () => {
         {packages.length > 0 ? (
           packages.map((pkg) => (
             <div key={pkg.id} className="package-card">
-              <button
-                className="delete-button"
-                onClick={() => handleDelete(pkg.id)}
-              >
-                &times;
-              </button>
               <div className="package-image">
                 <img src={pkg.image || defaultImage} alt={pkg.name} />
               </div>
