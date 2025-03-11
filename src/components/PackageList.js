@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './PackageList.css';
 import defaultImage from '../assets/salad.png';
+import product_data from '../data/products.json';
 
 /**
  * PackageList component to display and manage packages.
@@ -105,7 +106,6 @@ const PackageList = () => {
                 {pkg.products.map((product, idx) => (
                   <li key={idx} className="product-item">
                     <span>{product.name}: {product.quantity}</span>
-                    <button onClick={() => handleQuantityIncrease(pkg.id, product.quantity)}>Increase Quantity</button>
                   </li>
                 ))}
               </ul>
