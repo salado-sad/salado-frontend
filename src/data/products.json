@@ -44,7 +44,7 @@
         "Meat": [
             { "name": "Chicken Breast", "price": 6.99, "measurement": 500, "unit": "grams", "image": "https://www.allrecipes.com/thmb/Z5s08uvHYI2dg5LAd0vwoA47Ngo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/240208_simplebakedchickenbreasts_mfs_step1_0181-1-4x3-250b3f145a194aa3bab88e94e3cbae73.jpg" },
             { "name": "Ground Beef", "price": 8.99, "measurement": 500, "unit": "grams", "image": "https://embed.widencdn.net/img/beef/4hh1pywcnj/800x600px/Grind_Fine_85.psd?keep=c&u=7fueml" },
-            { "name": "Shayan", "price": 99999999999.27, "measurement": 67, "unit": "kg", "image": "https://www.sharifml.ir/wp-content/uploads/2024/09/shayanshabani-Shayan-Shabani.jpeg" }
+            { "name": "Shayan", "price": 999.27, "measurement": 67, "unit": "kg", "image": "https://www.sharifml.ir/wp-content/uploads/2024/09/shayanshabani-Shayan-Shabani.jpeg" }
         ],
         "Seafood": [
             { "name": "Salmon", "price": 9.99, "measurement": 300, "unit": "grams", "image": "https://www.tasteofhome.com/wp-content/uploads/2023/01/GettyImages-958307980-e1674241057463.jpg" },
